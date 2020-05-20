@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -91,10 +93,15 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'todo-evb',
+        'USER': 'name',
+        'PASSWORD': '',
+        'PORT': '',
     }
 }
+DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(DB_FROM_ENV)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
