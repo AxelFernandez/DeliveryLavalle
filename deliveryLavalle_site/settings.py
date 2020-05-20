@@ -138,6 +138,3 @@ LOGIN_URL = '/auth/login/google-oauth2/'
 LOGIN_REDIRECT_URL = '/company'
 LOGOUT_REDIRECT_URL = '/'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
