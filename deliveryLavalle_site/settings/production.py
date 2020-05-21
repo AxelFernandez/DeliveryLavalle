@@ -17,7 +17,7 @@ import dj_database_url
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'U8WDeC2DqmOzAN5qV7NFme3H'
@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'todo-evb',
+        'NAME': 'delivery-lavalle',
         'USER': 'name',
         'PASSWORD': '',
         'PORT': '',
