@@ -104,7 +104,7 @@ DATABASES = {
 DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_FROM_ENV)
 
-STATIC_URL = '/static/'
+STATIC_URL = 'https://deliveryLavalle_site.urls/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
