@@ -30,7 +30,7 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SECRET_KEY = '9e+mjri=s6f0ttenw4wkligc3o!i%s__9()rv6uykt%krkp(j7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com']
 
@@ -104,7 +104,7 @@ DATABASES = {
 DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_FROM_ENV)
 
-STATIC_URL = 'https://deliveryLavalle_site.urls/static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
