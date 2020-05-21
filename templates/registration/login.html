@@ -1,38 +1,40 @@
-{% load bootstrap4 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
-{% load crispy_forms_tags %}
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src='main.js'></script>
-</head>
-<body class="container-fluid justify-content-center bg-light" style="background-image: url('http://blog.hostbaby.com/wp-content/uploads/2014/03/Trees_1400x900.png')">
-	<h1 class="text-center mt-5">Login</h1>
-	<div class="row d-flex justify-content-center">
-		<div class="col-md-4 border border-dark rounded">
-			<form style="margin:2em auto;" method="post">
-				{% csrf_token %}
-				{{ form|crispy }}
-				<div class="text-center">
-					<button type="submit" class="btn btn-outline-dark">Login</button>
-				</div>
-			</form>
-			<div class="border-top border-dark pt-3">
-				<small class="text-muted">
-					<a class="btn btn-primary" href="{% url 'social:begin' 'google-oauth2' %}">Login With Google</a>
-
-				</small>
-			</div>
-
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	{% load static %}
+	<style>
+		body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+		body {font-size: 16px;}
+		img {margin-bottom: -8px;}
+		.mySlides {display: none;}
+	</style>
+	<body class="w3-content w3-black" style="max-width:1500px;">
+	<div class="w3-padding-64 w3-center w3-white">
+	  <h1 class="w3-jumbo"><b>Inicia Sesion</b></h1>
+	  <p class="w3-large">Registrate si sos una empresa o descarga la app.</p>
+	  <div class="w3-row-padding" style="margin-top:64px">
+		<div class="w3-half w3-section">
+		  <ul class="w3-ul w3-card w3-hover-shadow">
+			<li class="w3-dark-grey w3-xlarge w3-padding-32">Soy usuario</li>
+			</li>
+			<li class="w3-light-grey w3-padding-24">
+			  <a class="w3-button w3-black w3-padding-large" href="{%url 'login'%}"></i> Descarga de Play Store</a>
+			</li>
+		  </ul>
 		</div>
+		<div class="w3-half w3-section">
+		  <ul class="w3-ul w3-card w3-hover-shadow">
+			<li class="w3-red w3-xlarge w3-padding-32">Soy Empresa</li>
+			<li class="w3-light-grey w3-padding-24">
+				<a class="w3-button w3-black w3-padding-large" href="{% url 'social:begin' 'google-oauth2' %}">Ingresa con <i class="fa fa-google"></i>oogle </a>
+			</li>
+		  </ul>
+		</div>
+	  </div>
+	  <br>
 	</div>
-	
-</body>
+	</body>
 </html>
