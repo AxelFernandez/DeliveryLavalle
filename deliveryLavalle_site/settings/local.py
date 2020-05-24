@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
 
+from utils.env import get_env_variable
+
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,7 +37,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.1:8000']
 
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
-DROPBOX_OAUTH2_TOKEN = 'CMRmPQ7NVnAAAAAAAAAAkXUUUoMXDp_-x1sXAeuLj_-4e9PpAQ0ng5NDBVwfTMSj'
+DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 
 # Application definition
 
