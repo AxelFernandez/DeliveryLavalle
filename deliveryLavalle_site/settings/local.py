@@ -34,6 +34,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1','127.0.0.1:8000']
 
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DROPBOX_OAUTH2_TOKEN = 'CMRmPQ7NVnAAAAAAAAAAkXUUUoMXDp_-x1sXAeuLj_-4e9PpAQ0ng5NDBVwfTMSj'
 
 # Application definition
 

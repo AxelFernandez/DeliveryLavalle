@@ -4,8 +4,6 @@ from django.db import models
 # Create your models here.
 
 
-class Photos(models.Model):
-    photo = models.ImageField()
 
 
 class Company(models.Model):
@@ -13,15 +11,15 @@ class Company(models.Model):
     description = models.CharField(max_length=150)
     phone = models.CharField(max_length=50)
     available_now = models.BooleanField(default=True)
-    id_photo = models.ForeignKey(Photos, on_delete=models.CASCADE)
+    photo = models.FileField(upload_to='DeliveryLavalle')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Products(models.Model):
     name = models.CharField(max_length=50)
     is_available = models.BooleanField(default=True)
-    id_photo = models.ForeignKey(Photos, on_delete=models.CASCADE)
-    id_company = models.ForeignKey(Company ,on_delete=models.CASCADE)
+    photo = models.FileField(upload_to='DeliveryLavalle')
+    id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 
 class PaymentMethod(models.Model):

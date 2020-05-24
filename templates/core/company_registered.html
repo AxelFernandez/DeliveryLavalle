@@ -1,0 +1,38 @@
+{% include 'base.html' %}
+<div class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a href="#" class="navbar-brand">Delivery Lavalle</a>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                 <a class="nav-link" style="text-align:center;" href="#">Bienvenido {{user.get_full_name}}</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="container-sm">
+
+    <div class="alert alert-success" style="margin-top:20px" role="alert">
+        <h4 class="alert-heading">Bienvenido a Delivery Lavalle!</h4>
+        <p>Aww Yeah, Te has registrado correctamente y ya podés empezar a crear tus productos para empezar a vender</p>
+        <p>Aqui abajo encontraras los datos de tu registro, recorda que tu telefono será visible una vez que hayan creado un pedido</p>
+        <hr>
+        <p class="mb-0">Cualquier cosa que necesites, contactame a axel.fernandez0145@gmail.com para recibir ayuda.</p>
+    </div>
+    <div class="card" style="margin-top: 60px;">
+      <div class="navbar navbar-light" style="background-color: #e3f2fd;">
+          <h3>Aqui estan los datos de tu empresa</h3>
+      </div>
+        <ul class="list-group">
+            <li class="list-group-item">Nombre de tu empresa : {{company.name}}</li>
+            <li class="list-group-item">Descripcion de tu empresa: {{company.description}}</li>
+            <li class="list-group-item">Telefono: {{company.phone}}</li>
+            <li class="list-group-item">Usuario: {{user.get_full_name}}</li>
+        </ul>
+        <button type="button" class="btn btn-success">Cargar Productos</button>
+
+    </div>
+</div>

@@ -22,6 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'U8WDeC2DqmOzAN5qV7NFme3H'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/

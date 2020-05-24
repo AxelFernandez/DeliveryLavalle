@@ -1,0 +1,29 @@
+{% include 'base.html' %}
+<div class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a href="#" class="navbar-brand">Delivery Lavalle</a>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                 <a class="nav-link" style="text-align:center;" href="#">Bienvenido {{user.get_full_name}}</a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="container-sm">
+    <div class="card" style="margin-top: 60px;">
+      <div class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <h3>Ok...Comencemos Registrando tu Empresa</h3>
+      </div>
+
+      <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
+          {{ form.as_p }}
+        <input class="btn btn-success" type="submit" value="Registrar Compañia">
+
+      </form>
+    </div>
+</div>
+
