@@ -23,6 +23,7 @@ class Migration(migrations.Migration):
                 ('phone', models.CharField(max_length=50)),
                 ('available_now', models.BooleanField(default=True)),
                 ('photo', models.FileField(upload_to='DeliveryLavalle')),
+                ('limits', models.CharField(max_length=1000)),
                 ('id_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -59,17 +60,6 @@ class Migration(migrations.Migration):
                 ('id_company', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.Company')),
                 ('id_state', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.State')),
                 ('product', models.ManyToManyField(to='core.Products', verbose_name='List to Products to Order')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Limits',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('limit_NE', models.FloatField()),
-                ('limit_NO', models.FloatField()),
-                ('limit_SE', models.FloatField()),
-                ('limit_SO', models.FloatField()),
-                ('company_id', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core.Company')),
             ],
         ),
         migrations.CreateModel(

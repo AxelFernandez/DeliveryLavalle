@@ -7,7 +7,7 @@ from core.models import Company
 class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'phone', 'available_now', 'photo']
+        fields = ['name', 'description', 'phone', 'available_now', 'photo', 'limits']
 
         widgets = {
             'name': forms.TextInput(

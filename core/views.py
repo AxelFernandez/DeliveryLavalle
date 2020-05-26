@@ -24,7 +24,7 @@ def register(request):
     return render(request, 'core/create_user.html', {'form': form})
 
 
-class RegistryCompany(CreateView):
+class RegistryCompany(LoginRequiredMixin,CreateView):
     template_name = 'core/create_company.html'
     model = Company
     success_url = reverse_lazy('company_registered')
@@ -41,7 +41,7 @@ class RegistryCompany(CreateView):
             self.object.id_user = self.request.user
             return super().form_valid(form)
         else:
-            reverse_lazy('login')
+            reverse('login')
 
     def get_success_url(self):
         return reverse('company_registered', args=(self.object.id,))
@@ -50,3 +50,4 @@ class RegistryCompany(CreateView):
 class CompanyRegistered(LoginRequiredMixin, DetailView):
     template_name = 'core/company_registered.html'
     model = Company
+

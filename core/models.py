@@ -13,6 +13,7 @@ class Company(models.Model):
     available_now = models.BooleanField(default=True)
     photo = models.FileField(upload_to='DeliveryLavalle')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    limits = models.CharField(max_length=1000)
 
 
 class Products(models.Model):
@@ -28,15 +29,6 @@ class PaymentMethod(models.Model):
 
 class State(models.Model):
     description = models.CharField(max_length=50)
-
-
-class Limits(models.Model):
-    limit_NE = models.FloatField()
-    limit_NO = models.FloatField()
-    limit_SE = models.FloatField()
-    limit_SO = models.FloatField()
-    company_id = models.ForeignKey(Company,on_delete=models.CASCADE)
-
 
 class Order(models.Model):
     product = models.ManyToManyField(Products, verbose_name='List to Products to Order')
