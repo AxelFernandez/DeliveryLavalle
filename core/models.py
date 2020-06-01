@@ -1,10 +1,6 @@
 from django.conf import settings
 from django.db import models
 
-# Create your models here.
-
-
-
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
@@ -18,6 +14,7 @@ class Company(models.Model):
 
 class Products(models.Model):
     name = models.CharField(max_length=50)
+    description = models.CharField(max_length=250)
     is_available = models.BooleanField(default=True)
     photo = models.FileField(upload_to='DeliveryLavalle')
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)

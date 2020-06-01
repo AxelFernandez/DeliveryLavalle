@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from core.models import Company
+from core.models import Company, Products
 
 
 class FormCompany(forms.ModelForm):
@@ -37,7 +37,12 @@ class FormCompany(forms.ModelForm):
             'description': 'Que es lo que vendés?',
             'phone': 'Dejá tu numero de telefono para contactos',
             'available_now': 'Estás disponible para empezar a vender ahora?',
-            'photo': 'Subí el logo de tu empresa'
+            'photo': 'Subí el logo de tu empresa',
+            'limits': ''
         }
 
+class FormProducts(forms.ModelForm):
+    class Meta:
+        model = Products
+        fields = ['name', 'description', 'is_available', 'photo']
 

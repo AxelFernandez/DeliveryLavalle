@@ -1,5 +1,6 @@
      var drawingManager;
       var all_overlays = [];
+      var all_overlays_pure = [];
       var selectedShape;
       var colors = ['#1E90FF'];
       var selectedColor;
@@ -30,7 +31,12 @@
         {
           all_overlays[i].overlay.setMap(null);
         }
+
         all_overlays = [];
+        all_overlays_pure = [];
+        $("#drawing-finished").hide()
+        $("#drawing-start-again").show()
+
       }
 
       function selectColor(color) {
@@ -40,23 +46,8 @@
           colorButtons[currColor].style.border = currColor == color ? '2px solid #789' : '2px solid #fff';
         }
 
-        // Retrieves the current options from the drawing manager and replaces the
-        // stroke or fill color as appropriate.
-        var polylineOptions = drawingManager.get('polylineOptions');
-        polylineOptions.strokeColor = color;
-        drawingManager.set('polylineOptions', polylineOptions);
-
-        var rectangleOptions = drawingManager.get('rectangleOptions');
-        rectangleOptions.fillColor = color;
-        drawingManager.set('rectangleOptions', rectangleOptions);
-
-        var circleOptions = drawingManager.get('circleOptions');
-        circleOptions.fillColor = color;
-        drawingManager.set('circleOptions', circleOptions);
-
         var polygonOptions = drawingManager.get('polygonOptions');
         polygonOptions.fillColor = color;
-        drawingManager.set('polygonOptions', polygonOptions);
       }
 
       function setSelectedShapeColor(color) {
@@ -124,20 +115,29 @@
 
         google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
             all_overlays.push(e);
-            if (e.type != google.maps.drawing.OverlayType.MARKER) {
-            // Switch back to non-drawing mode after drawing a shape.
-            drawingManager.setDrawingMode(null);
-
-            // Add an event listener that selects the newly-drawn shape when the user
-            // mouses down on it.
-            var newShape = e.overlay;
-            newShape.type = e.type;
-            google.maps.event.addListener(newShape, 'click', function() {
-              setSelection(newShape);
             });
-            setSelection(newShape);
-          }
-        });
+
+      google.maps.event.addListener(drawingManager, 'polygoncomplete', function(e) {
+           all_overlays_pure.push(e)
+           var path = e.getPath()
+           var coordinates = [];
+
+           for (var i = 0 ; i < path.length ; i++) {
+              var point = []
+              point.push(
+                path.getAt(i).lat(),
+                path.getAt(i).lng()
+              );
+              coordinates.push(point)
+            }
+            coordinates.push([path.getAt(0).lat(), path.getAt(0).lng()])
+            all_overlays_pure = coordinates;
+            $("#fade").show()
+            $("#warning-draw").hide()
+            $("#drawing-finished").show()
+
+      });
+
 
         // Clear the current selection when the drawing mode is changed, or when the
         // map is clicked.
@@ -147,6 +147,46 @@
         google.maps.event.addDomListener(document.getElementById('delete-all-button'), 'click', deleteAllShape);
 
         buildColorPalette();
-      }
       google.maps.event.addDomListener(window, 'load', initialize);
+      }
+
+    $(document).ready(function() {
+        $("#cont").hide()
+        $("#id_limits").hide()
+        $("#fade").hide()
+        $("#drawing-finished").hide()
+        $("#drawing-start-again").hide()
+
+
+
+
+    $("#fade").click(function(){
+         $("#map").fadeOut("slow");
+         $("#map_message").fadeOut("slow");
+         $("#map_panel").fadeOut("slow");
+         $("#fade").fadeOut("slow");
+         $("#cont").fadeIn("slow")
+         var limits = (getLimitsAsString(all_overlays_pure))
+         document.getElementById("id_limits").value = limits;
+
+    })
+    });
+
+
+    function getLimitsAsString(all_overlays){
+        var result = "["
+        for (var i = 0 ; i < all_overlays.length ; i++) {
+            var lat = all_overlays[i][0]
+            var long = all_overlays[i][1]
+            result += "["+ long + "," + lat + "]"
+
+            if (i != all_overlays.length-1){
+                result += ","
+            }
+        }
+        result += "]"
+        return result
+
+    }
+
 

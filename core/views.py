@@ -3,13 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
 
-# Create your views here.
 from django.urls import reverse_lazy, reverse
-from django.views import View
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.views.generic import CreateView, DetailView
 
-from core.form import FormCompany
-from core.models import Company
+from core.form import FormCompany, FormProducts
+from core.models import Company, Products
 
 
 def register(request):
@@ -50,4 +48,29 @@ class RegistryCompany(LoginRequiredMixin,CreateView):
 class CompanyRegistered(LoginRequiredMixin, DetailView):
     template_name = 'core/company_registered.html'
     model = Company
+
+
+class CreateProducts(LoginRequiredMixin, CreateView):
+    template_name = 'core/create_products.html'
+    model = Products
+    success_url = reverse_lazy('products_list')
+    form_class = FormProducts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            self.object = form.save(commit=False)
+            self.object.id_company = self.request.user
+            return super().form_valid(form)
+        else:
+            reverse('login')
+
+    def get_success_url(self):
+        return reverse('product-list', args=(self.object.id_company,))
+
+
 

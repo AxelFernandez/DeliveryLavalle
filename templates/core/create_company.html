@@ -5,7 +5,7 @@
 <div class="navbar navbar-expand-lg navbar-light bg-light">
 
     <a href="#" class="navbar-brand">Delivery Lavalle</a>
-    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <div class="navbar-collapse w-100 order-3 dual-collapse2">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                  <a class="nav-link" style="text-align:center;" href="#">Bienvenido {{user.get_full_name}}</a>
@@ -15,27 +15,38 @@
 
 </div>
 
-<div id="map_message" class="container">
+<div  style="margin-top:20px;" id="map_message" class="container">
     <div class="navbar navbar-light" style="background-color: #e3f2fd;">
         <h3>Definiremos ahora, hasta donde entregaras tu delivery</h3>
     </div>
+    <div id="warning-draw" class="alert alert-warning" role="alert">
+         Comienza a dibujar sobre el mapa, y cierra la zona haciendo click en el primer punto que dibujaste,
+        una vez que la zona se haya cerrado correctamente, veras el boton para continuar.
+        Si te equivocaste, cierra la zona, y presiona el boton, volver a dibujar
+    </div>
+    <div id="drawing-finished" class="alert alert-success" role="alert">
+         Se ve bien!, pulsa en Continuar
+    </div>
+    <div id="drawing-start-again" class="alert alert-warning" role="alert">
+        Okay, no hay problema, volvemos a empezar
+    </div>
 </div>
 
-<div id="map" ></div>
+<div style="margin-top:20px;" id="map" ></div>
 
-<div id="map_panel" >
+<div id="map_panel" class="container-sm" >
     <div style="display: none;" id="color-palette"></div>
     <div>
         <button style="display: none;" id="delete-button">Delete Selected Shape</button>
-        <button class="btn btn-warning" id="delete-all-button">Delete All Shapes</button>
+        <button style="margin-top:10px;" class="btn btn-warning" id="delete-all-button">Volver a Dibujar</button>
     </div>
 </div>
 
 <script src="{% static 'js/maps.js' %}" type="text/javascript"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAOsoCYtrP6BzMNPtmih5_1hNBrXJgmW4&libraries=drawing&callback=initialize" async defer></script>
-<button id="fade" class="btn btn-success">Continuar</button>
-
-
+<div class="container-sm" style="margin-top:10px;">
+    <button id="fade" class="btn btn-success">Continuar</button>
+</div>
 <div class="container-sm" id="cont">
     <div class="card" style="margin-top: 60px;">
         <div class="navbar navbar-light" style="background-color: #e3f2fd;">
@@ -44,11 +55,10 @@
 
         <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
             {{ form.as_p }}
-            <input class="btn btn-success" type="submit" value="Registrar Compañia">
+            <button class="btn btn-success" type="submit" value="Registrar Compañia">Registrar Compañia</button>
 
         </form>
     </div>
 
 
 </div>
-<script src="{% static 'js/form_company.js' %}" type="text/javascript"></script>
