@@ -156,6 +156,8 @@
         $("#fade").hide()
         $("#drawing-finished").hide()
         $("#drawing-start-again").hide()
+        $("#id_photo").attr('accept', 'image/x-png,image/jpeg');
+
 
 
 

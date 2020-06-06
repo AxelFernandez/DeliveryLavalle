@@ -1,12 +1,14 @@
 from django.conf import settings
 from django.db import models
 
+from core import YES_NO_CHOICES
+
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     phone = models.CharField(max_length=50)
-    available_now = models.BooleanField(default=True)
+    available_now = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
     photo = models.FileField(upload_to='DeliveryLavalle')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
@@ -15,7 +17,7 @@ class Company(models.Model):
 class Products(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
-    is_available = models.BooleanField(default=True)
+    is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
     photo = models.FileField(upload_to='DeliveryLavalle')
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 

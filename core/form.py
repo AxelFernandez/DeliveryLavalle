@@ -8,7 +8,6 @@ class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
         fields = ['name', 'description', 'phone', 'available_now', 'photo', 'limits']
-
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -30,6 +29,12 @@ class FormCompany(forms.ModelForm):
                     'class': 'form-control form-control-lg',
                     'placeholder': '2613450277',
                 }
+            ),
+            'available_now': forms.Select(
+                attrs={
+                    'id': 'available_now',
+                    'class': 'form-control',
+                }
             )
         }
         labels = {
@@ -41,8 +46,37 @@ class FormCompany(forms.ModelForm):
             'limits': ''
         }
 
+
 class FormProducts(forms.ModelForm):
     class Meta:
         model = Products
         fields = ['name', 'description', 'is_available', 'photo']
+        widgets = {
+            'name': forms.TextInput(
+                attrs={
+                    'id': 'name',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Pizza',
+                }
+            ),
+            'description': forms.TextInput(
+                attrs={
+                    'id': 'description',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Pizza muzzarela y aceitunas',
+                }
+            ),
+            'is_available': forms.Select(
+                attrs={
+                    'id': 'available_now',
+                    'class': 'form-control',
+                }
+            )
+        }
+        labels = {
+            'name': 'Nombre de tu Producto',
+            'description': 'Una descripcion de tu producto',
+            'is_available': 'Tenes Stock disponible?',
+            'photo': 'Foto de tu Producto',
 
+        }

@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, ListView
 
 from core.form import FormCompany, FormProducts
 from core.models import Company, Products
@@ -64,13 +64,14 @@ class CreateProducts(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         if self.request.user.is_authenticated:
             self.object = form.save(commit=False)
-            self.object.id_company = self.request.user
+            self.object.id_company = Company.objects.get(id_user=self.request.user)
             return super().form_valid(form)
         else:
             reverse('login')
 
     def get_success_url(self):
-        return reverse('product-list', args=(self.object.id_company,))
+        return reverse('product-list') # args=(self.object.id_company,))
 
 
-
+class Products(LoginRequiredMixin, ListView):
+    model = Products
