@@ -1,0 +1,15 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+<div class="container-sm" id="cont">
+    <div class="card" style="margin-top: 60px;">
+        <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
+            <p>Estas Seguro que queres eliminar "{{ object.name }}"?</p>
+            <input class="btn btn-success" type="submit" value="Confirm">
+            <a class="btn btn-danger" href='{% url "product-list"%}'>Volver</a>
+        </form>
+    </div>
+</body>
+</html>

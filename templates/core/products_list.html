@@ -1,0 +1,54 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+<div class="container-sm" id="cont">
+    <div class="card" style="margin-top: 60px;">
+           <a class="btn btn-success" href="{% url 'create-products'%}">Crear Producto</a>
+       <div class="container">
+  <div class="row">
+    <div class="col-12">
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col">Foto</th>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Descripcion</th>
+		      <th scope="col">Tenes Stock? (Presiona para cambiar)</th>
+		      <th scope="col"></th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+          {% for product in object_list %}
+		    <tr>
+		      <td>
+			      <img style="width:100px; height:100px;" src="{{product.photo.url}}" class="img-fluid img-thumbnail">
+		      </td>
+				<td>{{product.name}}</td>
+				<td>{{product.description}}</td>
+		      <td class="row justify-content">
+				  <form method="POST" class="form-grid" action='{% url "change-stock-status" pk=product.id %}'>
+                            {% csrf_token %}
+                                {% if product.is_available == "SI" %}
+                                <button type="submit" name='active' class="btn btn-success" value="deactivate">Si</button>
+                                {% else %}
+                                <button type="submit" name='active' class="btn btn-danger" value="activate">No</button>
+                                {% endif %}
+                    </form>
+			  </td>
+		      <td><a class="btn btn-warning" href='{% url "product-edit" pk=product.id %}'>Editar</a></td>
+		      <td><a class="btn btn-danger" href='{% url "product-delete" pk=product.id %}'>Eliminar</a></td>
+
+		    </tr>
+          {% endfor %}
+
+		  </tbody>
+		</table>
+    </div>
+  </div>
+</div>
+    </div>
+</body>
+</html>

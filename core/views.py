@@ -1,18 +1,18 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
-
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView
 
+import core
 from core.form import FormCompany, FormProducts
-from core.models import Company, Products
+from core.models import Company, Products as Prod, Products
 
 
 def register(request):
     if request.method == "POST":
-
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
@@ -30,6 +30,9 @@ class RegistryCompany(LoginRequiredMixin,CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        had_company = Company.objects.filter(id_user=self.request.user.id).first()
+        if had_company is not None:
+            return reverse('home')
         context['user'] = self.request.user
         return context
 
@@ -53,7 +56,6 @@ class CompanyRegistered(LoginRequiredMixin, DetailView):
 class CreateProducts(LoginRequiredMixin, CreateView):
     template_name = 'core/create_products.html'
     model = Products
-    success_url = reverse_lazy('products_list')
     form_class = FormProducts
 
     def get_context_data(self, **kwargs):
@@ -70,8 +72,38 @@ class CreateProducts(LoginRequiredMixin, CreateView):
             reverse('login')
 
     def get_success_url(self):
-        return reverse('product-list') # args=(self.object.id_company,))
+        return reverse('product-list')  # args=(self.object.id_company,))
 
 
-class Products(LoginRequiredMixin, ListView):
+class ProductsList(LoginRequiredMixin, ListView):
     model = Products
+    template_name = 'core/products_list.html'
+
+    def get_queryset(self,**kwargs):
+        company_id = Company.objects.get(id_user=self.request.user)
+        return Prod.objects.filter(id_company=company_id)
+
+
+def change_stock_status(request, pk):
+    new_status = request.POST.get('active')
+    product = get_object_or_404(Prod, id=pk)
+    if new_status == 'activate':
+        product.is_available= "SI"
+    elif new_status == 'deactivate':
+        product.is_available = "NO"
+    product.save()
+    return HttpResponseRedirect(reverse('product-list'))
+
+
+class ProductEdit(LoginRequiredMixin,UpdateView):
+    model = Products
+    template_name = 'core/edit_products.html'
+    success_url = reverse_lazy('product-list')
+    form_class = FormProducts
+
+
+class ProductDelete(LoginRequiredMixin, DeleteView):
+    model = Products
+    success_url = reverse_lazy('product-list')
+    template_name = 'core/delete_products.html'
+

@@ -29,6 +29,7 @@ class PaymentMethod(models.Model):
 class State(models.Model):
     description = models.CharField(max_length=50)
 
+
 class Order(models.Model):
     product = models.ManyToManyField(Products, verbose_name='List to Products to Order')
     id_company = models.ForeignKey(Company,on_delete=models.CASCADE)
