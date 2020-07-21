@@ -28,7 +28,7 @@
 		      </td>
 				<td>{{product.name}}</td>
 				<td>{{product.description}}</td>
-		      <td class="row justify-content">
+		      <td class="justify-content">
 				  <form method="POST" class="form-grid" action='{% url "change-stock-status" pk=product.id %}'>
                             {% csrf_token %}
                                 {% if product.is_available == "SI" %}
@@ -51,4 +51,5 @@
 </div>
     </div>
 </body>
+{% include 'footer.html' %}
 </html>

@@ -22,6 +22,8 @@ class Products(models.Model):
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 
+
+
 class PaymentMethod(models.Model):
     description = models.CharField(max_length=50)
 
@@ -31,11 +33,16 @@ class State(models.Model):
 
 
 class Order(models.Model):
-    product = models.ManyToManyField(Products, verbose_name='List to Products to Order')
-    id_company = models.ForeignKey(Company,on_delete=models.CASCADE)
-    id_state = models.ForeignKey(State,on_delete=models.CASCADE)
+    id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    id_state = models.ForeignKey(State, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
-    location = models.FloatField()
+    location = models.CharField(max_length=100)
+
+
+class DetailOrder(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
 
 
 class Chat(models.Model):

@@ -1,0 +1,95 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+    <div class="container-sm" id="cont">
+        <div style="margin-top: 60px;">
+     <div style=margin: auto; class="row">
+          {% for order in object_list %}
+            <div class=" mb-4 ml-0">
+                <div class="card shadow bg-light" style="width: 70rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Estado: {{ order.id_state.description }}</h5>
+                  <p class="card-text">{{ order.date }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item bg-light">Entregar en: {{order.location}}</li>
+                    <li class="list-group-item bg-light">Recibido: {{order.date}}</li>
+                </ul>
+                 <div class="card-body">
+                     Productos Pedidos:
+                    <table style="margin-left: 30px" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Descripcion</th>
+                              <th scope="col">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in order.products %}
+                            <tr>
+                                <th> {{item.name}}</th>
+                                <th> {{item.description}}</th>
+                                <th> {{item.quantity}}</th>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <a href="">Edit</a>
+                    <a href="">Delete</a>
+                    <a href="">Reassign</a>
+                </div>
+                </div>
+            </div>
+         {% endfor %}
+     </div>
+
+ {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-primary" href="/order?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% endif %}
+                <span class="page-current">
+                    Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-primary" href="/order?page={{ page_obj.next_page_number }}">Siguiente</a>
+                {% endif %}
+            </span>
+        </div>
+ {% endif %}
+        </div>
+    </body>
+    <script type="text/javascript">
+           var orders_len = "{{orders_len}}";
+    $( document ).ready(function () {
+        setInterval(call,5000);
+    });
+
+    function call() {
+        var request = $.ajax({
+            url: "http://localhost:8000/order_ajax",
+            method: "GET",
+            dataType: "html"
+        });
+
+    request.done(function( msg ) {
+        if(parseInt(orders_len) < parseInt(msg)){
+            location.reload();
+        }
+    });
+
+    request.fail(function( jqXHR, textStatus ) {
+        alert( "Request failed: " + textStatus );
+    });
+}
+    </script>
+</html>
+{% include 'footer.html' %}
