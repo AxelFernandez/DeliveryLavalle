@@ -10,7 +10,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 
 import core
 from core.form import FormCompany, FormProducts
-from core.models import Company, Products as Prod, Products, Order as orders, Order, DetailOrder
+from core.models import Company, Products as Prod, Products, Order as orders, Order, DetailOrder, State
 
 
 class RegistryCompany(LoginRequiredMixin,CreateView):
@@ -101,7 +101,7 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
 
 def ajax_order_list(request):
     company_id = Company.objects.get(id_user=request.user)
-    return HttpResponse(len(Order.objects.filter(id_company=company_id)))
+    return HttpResponse((Order.objects.filter(id_company=company_id).count()))
 
 
 class OrderList(LoginRequiredMixin, ListView):
@@ -115,6 +115,7 @@ class OrderList(LoginRequiredMixin, ListView):
         context['orders_len'] = self.len_orders
         for order in context['object_list']:
             order.products = []
+
             query_order_products = DetailOrder.objects.filter(order_id=order.id)
             for ids in query_order_products:
                 product = Products.objects.get(pk=ids.product_id)
@@ -128,3 +129,8 @@ class OrderList(LoginRequiredMixin, ListView):
         self.len_orders = len(query_set)
         return query_set
 
+def next_state(request,pk):
+    pass
+
+def get_next_state(actual_state):
+    pass

@@ -22,6 +22,12 @@ class Products(models.Model):
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
 
+class Client(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    address = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)
+    photo = models.FileField(upload_to='DeliveryLavalle')
 
 
 class PaymentMethod(models.Model):
@@ -37,6 +43,7 @@ class Order(models.Model):
     id_state = models.ForeignKey(State, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     location = models.CharField(max_length=100)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
 
 class DetailOrder(models.Model):
