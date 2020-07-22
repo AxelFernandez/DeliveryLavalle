@@ -132,6 +132,5 @@ class OrderList(LoginRequiredMixin, ListView):
 def next_state(request,pk):
     pass
 
-
 def get_next_state(actual_state):
     pass
