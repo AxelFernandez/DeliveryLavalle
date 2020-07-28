@@ -1,0 +1,43 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+    <div class="container-sm" id="cont">
+        <div style="margin-top: 60px;">
+            <div>
+                {% for item in object_list %}
+                    <h2 class="card-title">
+                        {{item.name}}
+                    </h2>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-8 card shadow bg-light">
+                            <div style="margin-top: 10px" class="row text-muted col-sm">Descripcion</div>
+                            <div class="row text col-sm">{{item.description}}</div>
+                            <br>
+                            <div class="row text-muted col-sm">Telefono</div>
+                            <div class="row text col-sm">{{item.phone}}</div>
+                            <br>
+                            <div class="row text-muted col-sm">Estas Disponible para recibir pedidos?</div>
+                            {%if item.available_now == 'SI'%}
+                                <a href="{% url 'update-available-company' pk=item.id %}" style="max-width:80px" class="btn btn-success" >{{item.available_now}}</a>
+                            {%else%}
+                                <a href="{% url 'update-available-company' pk=item.id %}" style="max-width:80px" class="btn btn-danger">{{item.available_now}}</a>
+                            {%endif%}
+                            <br>
+                            <div class="row text-muted col-sm">Usuario de Google Asociado</div>
+                            <div class="row text col-sm">{{item.id_user.first_name}} {{item.id_user.last_name}}</div>
+                            <br>
+                        </div>
+                        <div class="col-6 col-md-4 ">
+                            <img style=" max-width: 100%; max-height: 100%; margin:30px" src="{{item.photo.url}}">
+                        </div>
+                    </div>
+                    <a class="btn btn-success" style="margin : 30px" href="{% url 'configuration-update' pk=item.id %}">Actualizar Informacion</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+
+</body>

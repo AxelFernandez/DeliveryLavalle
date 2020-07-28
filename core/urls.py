@@ -1,6 +1,7 @@
 from django.urls import include, path
 from .views import RegistryCompany, CompanyRegistered, CreateProducts, ProductsList, ProductEdit, ProductDelete, \
-    change_stock_status, OrderList, ajax_order_list, next_state
+    change_stock_status, OrderList, ajax_order_list, get_next_state, ConfigurationCompany, ConfigurationUpdate, \
+    update_available_company
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls'), name="login"),
@@ -14,5 +15,8 @@ urlpatterns = [
     path('change-user-status/<pk>', change_stock_status, name='change-stock-status'),
     path('order', OrderList.as_view(), name='orders'),
     path('order_ajax', ajax_order_list, name='orders-ajax'),
-    path('next_state/<pk>', next_state, name='next-state'),
+    path('next_state/<pk>', get_next_state, name='next-state'),
+    path('configuration', ConfigurationCompany.as_view(), name='configuration'),
+    path('configuration_update/<pk>', ConfigurationUpdate.as_view(), name='configuration-update'),
+    path('configuration_update_available/<pk>', update_available_company, name='update-available-company'),
 ]

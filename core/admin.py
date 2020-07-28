@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from core.models import Company, Order, Products, PaymentMethod, State, Chat, DetailOrder, Client
+from core.models import Company, Order, Products, PaymentMethod, Chat, DetailOrder, Client, State
 
 admin.site.register(Company)
 admin.site.register(Order)

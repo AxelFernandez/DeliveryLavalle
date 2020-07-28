@@ -26,6 +26,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'U8WDeC2DqmOzAN5qV7NFme3H'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
+AJAX_ACTIVE = get_env_variable('AJAX_ACTIVE')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -34,7 +35,7 @@ DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 SECRET_KEY = '9e+mjri=s6f0ttenw4wkligc3o!i%s__9()rv6uykt%krkp(j7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com']
 

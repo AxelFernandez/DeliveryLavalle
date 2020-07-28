@@ -1,0 +1,16 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+<div class="container-sm" id="cont">
+    <div class="card" style="margin-top: 60px;">
+        <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success" type="submit">Actualizar Configuracion</button>
+            <a class="btn btn-danger" href="{% url 'configuration' %}">Volver</a>
+        </form>
+    </div>
+</body>
+{% include 'footer.html' %}
+</html>

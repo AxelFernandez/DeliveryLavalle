@@ -10,7 +10,7 @@
             <div class=" mb-4 ml-0">
                 <div class="card shadow bg-light" style="width: 70rem;">
                 <div class="card-body">
-                  <h5 class="card-title">Estado: {{ order.id_state.description }}</h5>
+                  <h5 class="card-title">Estado: {{ order.state.description }}</h5>
                   <p class="card-text">Entregar a: {{ order.client.user.first_name }} {{order.client.user.last_name}}</p>
                   <p class="card-text">Telefono de Contacto: {{ order.client.phone }}</p>
                 </div>
@@ -41,9 +41,11 @@
                         </tbody>
                     </table>
                 </div>
+                {%if order.state != 'Entregado'%}
                 <div class="card-body">
-                    <a class="btn btn-success">Pasar a {{item.next_state}}</a>
+                    <a  href='{% url "next-state"  pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
                 </div>
+                {%endif%}
                 </div>
             </div>
          {% endfor %}
@@ -68,8 +70,11 @@
     </body>
     <script type="text/javascript">
            var orders_len = "{{orders_len}}";
+           var ajax_active = {{ajax_active}};
     $( document ).ready(function () {
-        //setInterval(call,20000); //TODO: Replace with an enviroment variable
+        if (ajax_active == 'true'){
+            setInterval(call,20000); //TODO: Replace with an enviroment variable
+        }
     });
 
     function call() {

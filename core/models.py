@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 
-from core import YES_NO_CHOICES
+from core import YES_NO_CHOICES, STATES
 
 
 class Company(models.Model):
@@ -40,7 +40,7 @@ class State(models.Model):
 
 class Order(models.Model):
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    id_state = models.ForeignKey(State, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now=True)
     location = models.CharField(max_length=100)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
