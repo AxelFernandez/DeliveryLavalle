@@ -35,7 +35,7 @@ AJAX_ACTIVE = get_env_variable('AJAX_ACTIVE')
 SECRET_KEY = '9e+mjri=s6f0ttenw4wkligc3o!i%s__9()rv6uykt%krkp(j7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com']
 
