@@ -1,0 +1,48 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+    <div class="container-sm" id="cont">
+        <div style="margin-top: 60px;">
+     <div style=margin: auto; class="row">
+            <div class=" mb-4 ml-0">
+                <div class="card shadow bg-light" style="width: 70rem;">
+                <div class="card-body">
+                  <h5 class="card-title">Estado: {{ order.state.description }}</h5>
+                  <p class="card-text">Entregar a: {{ order.client.user.first_name }} {{order.client.user.last_name}}</p>
+                  <p class="card-text">Telefono de Contacto: {{ order.client.phone }}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item bg-light">Punto a entregar en: <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a> </li>
+                    <li class="list-group-item bg-light">Recibido: {{order.date|date:"d/m/Y H:i"}}</li>
+                </ul>
+                 <div class="card-body">
+                     Productos Pedidos:
+                    <table style="margin-left: 30px" class="table">
+                        <thead class="thead-light">
+                            <tr>
+                              <th scope="col">Nombre</th>
+                              <th scope="col">Descripcion</th>
+                              <th scope="col">Cantidad</th>
+                              <th scope="col">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in order.products %}
+                            <tr>
+                                <th> {{item.name}}</th>
+                                <th> {{item.description}}</th>
+                                <th> {{item.quantity}}</th>
+                                <th> ${{item.price}}</th>
+
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+     </div>

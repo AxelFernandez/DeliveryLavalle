@@ -50,7 +50,7 @@ class FormCompany(forms.ModelForm):
 class FormProducts(forms.ModelForm):
     class Meta:
         model = Products
-        fields = ['name', 'description', 'is_available', 'photo']
+        fields = ['name', 'description', 'price', 'is_available', 'photo']
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -71,12 +71,20 @@ class FormProducts(forms.ModelForm):
                     'id': 'available_now',
                     'class': 'form-control',
                 }
-            )
+            ),
+            'price': forms.TextInput(
+                attrs={
+                    'id': 'price',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': '$',
+                }
+            ),
         }
         labels = {
             'name': 'Nombre de tu Producto',
             'description': 'Una descripcion de tu producto',
             'is_available': 'Tenes Stock disponible?',
             'photo': 'Foto de tu Producto',
+            'price': 'Precio de tu Producto',
 
         }

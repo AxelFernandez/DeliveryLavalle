@@ -1,7 +1,9 @@
+from django import template
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.defaultfilters import register
 
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView, TemplateView
@@ -32,6 +34,7 @@ class RegistryCompany(LoginRequiredMixin, CreateView):
         if self.request.user.is_authenticated:
             self.object = form.save(commit=False)
             self.object.id_user = self.request.user
+            self.object.account_debit = 0.0
             return super().form_valid(form)
         else:
             reverse('login')
@@ -122,14 +125,19 @@ class OrderList(LoginRequiredMixin, ListView):
             for ids in query_order_products:
                 product = Products.objects.get(pk=ids.product_id)
                 order.products.append(
-                    {'quantity': ids.quantity, 'name': product.name, 'description': product.description})
+                    {'quantity': ids.quantity, 'name': product.name, 'description': product.description, 'price': product.price})
         return context
 
     def get_queryset(self):
         company_id = Company.objects.get(id_user=self.request.user)
-        query_set = Order.objects.filter(id_company=company_id).exclude(state=4).order_by('-date')
+        query_set = Order.objects.filter(id_company=company_id).exclude(state=4).exclude(state=5).order_by('-date')
         self.len_orders = len(query_set)
         return query_set
+
+
+class OrderDetail(LoginRequiredMixin,DetailView):
+    model = Order
+    template_name = 'core/order_detail.html'
 
 
 def get_next_state(request,pk):
@@ -137,6 +145,13 @@ def get_next_state(request,pk):
     if order.state.id != core.STATES[4]:  # If the order is not in the last state, add one state
         order.state = State.objects.get(pk=order.state.id+1)
         order.save()
+    return HttpResponseRedirect(reverse('orders'))
+
+
+def cancel_order(request, pk):
+    order = Order.objects.get(pk=pk)
+    order.state = State.objects.get(pk=5)
+    order.save()
     return HttpResponseRedirect(reverse('orders'))
 
 
@@ -161,6 +176,28 @@ class ConfigurationCompany(LoginRequiredMixin,ListView):
 
 class ConfigurationUpdate(LoginRequiredMixin, UpdateView):
     model = Company
-    template_name = 'core/configuration_update.html'
+    template_name = 'core/create_company.html'
     success_url = reverse_lazy('product-list')
-    form_class = FormProducts
+    form_class = FormCompany
+
+
+class Sales(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'core/sales_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        company_id = Company.objects.get(id_user=self.request.user)
+        query_set = Order.objects.filter(id_company=company_id, state__in=[4,  5]).order_by('-date')
+        return query_set
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(Sales, self).get_context_data()
+
+        return context
+
+
+@register.simple_tag()
+def get_debit_mouth(user):
+    return Company.objects.get(id_user=user).account_debit
+

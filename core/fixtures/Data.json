@@ -26,5 +26,12 @@
         "fields": {
             "description": "Entregado"
         }
+    },
+    {
+        "model": "core.state",
+        "pk": 5,
+        "fields": {
+            "description": "Cancelado"
+        }
     }
 ]

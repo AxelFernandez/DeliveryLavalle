@@ -1,0 +1,51 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+<body>
+<div class="container-sm" id="cont">
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-hover">
+			  <thead>
+				<tr>
+				  <th scope="col">Cliente</th>
+				  <th scope="col">Fecha</th>
+				  <th scope="col">Estado</th>
+				  <th scope="col">Lugar Entregado</th>
+				  <th scope="col">Total</th>
+				  <th scope="col"></th>
+				</tr>
+			  </thead>
+			  <tbody>
+			  {% for order in object_list %}
+				<tr>
+					<td>{{order.client.user.first_name}} {{order.client.user.last_name}}</td>
+					<td>{{order.date|date:"d/m/Y H:i"}}</td>
+					<td>{{order.state.description}}</td>
+					<td> <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a></td>
+					<td>${{order.total}}</td>
+					<td><a class="btn btn-primary" href="{% url 'order-detail' order.pk %}">Ver Orden</a></td>
+				</tr>
+			  {% endfor %}
+			  </tbody>
+			</table>
+		</div>
+	  </div>
+
+ {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-primary" href="/sales?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% endif %}
+                <span class="page-current">
+                    Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-primary" href="/sales?page={{ page_obj.next_page_number }}">Siguiente</a>
+                {% endif %}
+            </span>
+        </div>
+ {% endif %}
+</div>
+</body>

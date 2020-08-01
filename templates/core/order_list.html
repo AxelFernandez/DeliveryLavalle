@@ -13,11 +13,12 @@
                   <h5 class="card-title">Estado: {{ order.state.description }}</h5>
                   <p class="card-text">Entregar a: {{ order.client.user.first_name }} {{order.client.user.last_name}}</p>
                   <p class="card-text">Telefono de Contacto: {{ order.client.phone }}</p>
+                  <b class="card-text">Total del Pedido: ${{ order.total }}</b>
                 </div>
                 <ul class="list-group list-group-flush">
 
                     <li class="list-group-item bg-light">Punto a entregar en: <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a> </li>
-                    <li class="list-group-item bg-light">Recibido: {{order.date}}</li>
+                    <li class="list-group-item bg-light">Recibido: {{order.date|date:"d/m/Y H:i"}}</li>
                 </ul>
                  <div class="card-body">
                      Productos Pedidos:
@@ -27,6 +28,7 @@
                               <th scope="col">Nombre</th>
                               <th scope="col">Descripcion</th>
                               <th scope="col">Cantidad</th>
+                              <th scope="col">Precio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,19 +37,34 @@
                                 <th> {{item.name}}</th>
                                 <th> {{item.description}}</th>
                                 <th> {{item.quantity}}</th>
-
+                                <th> ${{item.price}}</th>
                             </tr>
+
                         {% endfor %}
                         </tbody>
                     </table>
-                </div>
-                {%if order.state != 'Entregado'%}
+                 </div>
+
+                {%if order.state.description != 'Entregado'%}
                 <div class="card-body">
-                    <a  href='{% url "next-state"  pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
+                    <a  href='{% url "next-state" pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
+                </div>
+                {%endif%}
+                {%if order.state.description == 'Pendiente'%}
+                <div class="card-body">
+                    <a  href='{% url "cancel-order" pk=order.id %}' class="btn btn-danger">Cancelar Pedido</a>
                 </div>
                 {%endif%}
                 </div>
             </div>
+            {% empty %}
+                <div class="card shadow bg-light" style="width: 70rem;">
+                    <div class="card-body">
+                      <h5 class="card-title">Nada por aqui :(</h5>
+                      <p class="card-text">Te avisaremos si hay algo nuevo</p>
+                      <img style="wight:150px; height:150px" src="https://thypix.com/wp-content/uploads/sad-cat-71-600x600.jpg" >
+                    </div>
+                </div>
          {% endfor %}
      </div>
 
