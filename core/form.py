@@ -7,27 +7,35 @@ from core.models import Company, Products
 class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'phone', 'available_now', 'photo', 'limits']
+        fields = ['name', 'description', 'address',  'phone', 'available_now', 'photo', 'limits']
         widgets = {
             'name': forms.TextInput(
                 attrs={
                     'id': 'name',
                     'class': 'form-control form-control-lg',
-                    'placeholder': 'Mi super Empresa',
+                    'placeholder': 'Nombre de la empresa ',
                 }
             ),
             'description': forms.TextInput(
                 attrs={
                     'id': 'description',
                     'class': 'form-control form-control-lg',
-                    'placeholder': 'Venta de super Panchos y Empanadas',
+                    'placeholder': '¿Que es lo que vendés?',
+                }
+            ),
+            'address': forms.TextInput(
+                attrs={
+                    'id': 'address',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Direccion',
+
                 }
             ),
             'phone': forms.TextInput(
                 attrs={
                     'id': 'phone',
                     'class': 'form-control form-control-lg',
-                    'placeholder': '2613450277',
+                    'placeholder': 'Telefono',
                 }
             ),
             'available_now': forms.Select(
@@ -38,10 +46,11 @@ class FormCompany(forms.ModelForm):
             )
         }
         labels = {
-            'name': 'Como se llama tu empresa?',
-            'description': 'Que es lo que vendés?',
-            'phone': 'Dejá tu numero de telefono para contactos',
-            'available_now': 'Estás disponible para empezar a vender ahora?',
+            'name': '',
+            'description': '',
+            'address': '',
+            'phone': '',
+            'available_now': '¿Estás disponible para empezar a vender ahora?',
             'photo': 'Subí el logo de tu empresa',
             'limits': ''
         }
@@ -56,14 +65,14 @@ class FormProducts(forms.ModelForm):
                 attrs={
                     'id': 'name',
                     'class': 'form-control form-control-lg',
-                    'placeholder': 'Pizza',
+                    'placeholder': 'Nombre de tu Producto',
                 }
             ),
             'description': forms.TextInput(
                 attrs={
                     'id': 'description',
                     'class': 'form-control form-control-lg',
-                    'placeholder': 'Pizza muzzarela y aceitunas',
+                        'placeholder': 'Descripcion de tu producto',
                 }
             ),
             'is_available': forms.Select(
@@ -75,16 +84,16 @@ class FormProducts(forms.ModelForm):
             'price': forms.TextInput(
                 attrs={
                     'id': 'price',
-                    'class': 'form-control form-control-lg',
-                    'placeholder': '$',
+                    'class': 'form-control-lg',
+                    'placeholder': 'Precio',
                 }
             ),
         }
         labels = {
-            'name': 'Nombre de tu Producto',
-            'description': 'Una descripcion de tu producto',
+            'name': '',
+            'description': '',
             'is_available': 'Tenes Stock disponible?',
             'photo': 'Foto de tu Producto',
-            'price': 'Precio de tu Producto',
+            'price': '$',
 
         }

@@ -33,5 +33,19 @@
         "fields": {
             "description": "Cancelado"
         }
+    },
+    {
+        "model": "core.paymentmethod",
+        "pk": 1,
+        "fields": {
+            "description": "Efectivo"
+        }
+    },
+    {
+        "model": "core.paymentmethod",
+        "pk": 2,
+        "fields": {
+            "description": "Mercado Pago"
+        }
     }
 ]

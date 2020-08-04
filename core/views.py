@@ -10,7 +10,7 @@ from django.views.generic import CreateView, DetailView, ListView, UpdateView, D
 
 import core
 from core.form import FormCompany, FormProducts
-from core.models import Company, Products as Prod, Products, Order, DetailOrder, State
+from core.models import Company, Products as Prod, Products, Order, DetailOrder, State, MeliLinks
 
 
 class RegistryCompany(LoginRequiredMixin, CreateView):
@@ -122,6 +122,13 @@ class OrderList(LoginRequiredMixin, ListView):
             order.products = []
             order.next_state = core.STATES[order.state.id + 1]
             query_order_products = DetailOrder.objects.filter(order_id=order.id)
+            order.is_MP = False
+            if order.payment_method.description == 'Mercado Pago':
+                order.is_MP = True
+                if len(MeliLinks.objects.filter(order=order)) == 0:
+                    order.is_MeliLink_sent = False
+                else:
+                    order.is_MeliLink_sent = True
             for ids in query_order_products:
                 product = Products.objects.get(pk=ids.product_id)
                 order.products.append(
@@ -133,6 +140,9 @@ class OrderList(LoginRequiredMixin, ListView):
         query_set = Order.objects.filter(id_company=company_id).exclude(state=4).exclude(state=5).order_by('-date')
         self.len_orders = len(query_set)
         return query_set
+
+class SendMeliLink(LoginRequiredMixin, CreateView):
+    model = MeliLinks
 
 
 class OrderDetail(LoginRequiredMixin,DetailView):

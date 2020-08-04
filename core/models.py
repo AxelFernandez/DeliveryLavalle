@@ -1,18 +1,22 @@
 from django.conf import settings
 from django.db import models
 
-from core import YES_NO_CHOICES, STATES
+from core import YES_NO_CHOICES
 
 
 class Company(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
     phone = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
     available_now = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = models.FileField(upload_to='DeliveryLavalle')
+    photo = models.FileField(upload_to='company_storage')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
     account_debit = models.IntegerField()
+
+    def __str__(self):
+        return self.name
 
 
 class Products(models.Model):
@@ -20,8 +24,11 @@ class Products(models.Model):
     description = models.CharField(max_length=250)
     price = models.IntegerField()
     is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = models.FileField(upload_to='DeliveryLavalle')
+    photo = models.FileField(upload_to='products_storage')
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Client(models.Model):
@@ -29,15 +36,24 @@ class Client(models.Model):
     address = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
-    photo = models.FileField(upload_to='DeliveryLavalle')
+    photo = models.FileField(upload_to='client_storage')
+
+    def __str__(self):
+        return "{} + ' '+ {}".format(self.user.first_name, self.user.last_name)
 
 
 class PaymentMethod(models.Model):
     description = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.description
+
 
 class State(models.Model):
     description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
 
 
 class Order(models.Model):
@@ -46,7 +62,13 @@ class Order(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     location = models.CharField(max_length=100)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
     total = models.IntegerField()
+
+
+class MeliLinks(models.Model):
+    link = models.CharField(max_length=1024)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 
 class DetailOrder(models.Model):

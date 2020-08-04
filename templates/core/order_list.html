@@ -13,6 +13,11 @@
                   <h5 class="card-title">Estado: {{ order.state.description }}</h5>
                   <p class="card-text">Entregar a: {{ order.client.user.first_name }} {{order.client.user.last_name}}</p>
                   <p class="card-text">Telefono de Contacto: {{ order.client.phone }}</p>
+                    <p class="card-text">Metodo de Pago: <b>{{ order.payment_method }}</b>
+                      {%if order.is_MP%}
+                      <i data-toggle="tooltip" data-placement="top" title="Deberas enviar el link de pago al cliente para que pueda pagarte" class="fa fa-info-circle"></i>
+                      {%endif%}
+                  </p>
                   <b class="card-text">Total del Pedido: ${{ order.total }}</b>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -39,21 +44,30 @@
                                 <th> {{item.quantity}}</th>
                                 <th> ${{item.price}}</th>
                             </tr>
-
                         {% endfor %}
                         </tbody>
                     </table>
                  </div>
-
+                {%if order.is_MP %}
+                    {%if not order.is_MeliLink_sent%}
+                        <div class="card-body">
+                            <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Enviar Link de Pago</a>
+                        </div>
+                    {%else%}
+                        <div class="card-body">
+                            <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Ver Link de Pago</a>
+                        </div>
+                    {%endif%}
+                {%endif%}
                 {%if order.state.description != 'Entregado'%}
-                <div class="card-body">
-                    <a  href='{% url "next-state" pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
-                </div>
+                    <div class="card-body">
+                        <a  href='{% url "next-state" pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
+                    </div>
                 {%endif%}
                 {%if order.state.description == 'Pendiente'%}
-                <div class="card-body">
-                    <a  href='{% url "cancel-order" pk=order.id %}' class="btn btn-danger">Cancelar Pedido</a>
-                </div>
+                    <div class="card-body">
+                        <a  href='{% url "cancel-order" pk=order.id %}' class="btn btn-danger">Cancelar Pedido</a>
+                    </div>
                 {%endif%}
                 </div>
             </div>
@@ -89,6 +103,8 @@
            var orders_len = "{{orders_len}}";
            var ajax_active = {{ajax_active}};
     $( document ).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+
         if (ajax_active == 'true'){
             setInterval(call,20000); //TODO: Replace with an enviroment variable
         }
