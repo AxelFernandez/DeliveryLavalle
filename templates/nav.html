@@ -16,9 +16,13 @@
     </ul>
 
     <ul class="navbar-nav ml-auto">
-        {% get_debit_mouth user as usage %}
-        <a class="nav-link" style="text-align:center;" href="#">Uso este mes: ${{usage}} </a>
-        <a class="nav-link" style="text-align:center;" href="#">Bienvenido {{user.get_full_name}}</a>
+        {% get_company user as company %}
+        {%if company.available_now == 'SI'%}
+            <a href="{% url 'update-available-company' pk=company.id redirect=request.resolver_match.url_name%}" style="max-width:240px" class="btn btn-success" >Estas Abierto a Ordenes</a>
+        {%else%}
+            <a href="{% url 'update-available-company' pk=company.id redirect=request.resolver_match.url_name %}" style="max-width:240px" class="btn btn-danger">Has Cerrado</a>
+        {%endif%}
+        <a class="nav-link" style="text-align:center;" href="#">Uso de {{company.name}} ${{company.account_debit}} </a>
     </ul>
 
 

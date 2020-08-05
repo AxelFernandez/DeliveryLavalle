@@ -1,7 +1,15 @@
 from django.conf import settings
 from django.db import models
+from django_resized import ResizedImageField
 
 from core import YES_NO_CHOICES
+
+
+class PaymentMethod(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
 
 
 class Company(models.Model):
@@ -10,10 +18,11 @@ class Company(models.Model):
     phone = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
     available_now = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = models.FileField(upload_to='company_storage')
+    photo = ResizedImageField(size=[500, 300], quality=90, upload_to='company_storage')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
     account_debit = models.IntegerField()
+    payment_method = models.ManyToManyField(PaymentMethod)
 
     def __str__(self):
         return self.name
@@ -24,7 +33,7 @@ class Products(models.Model):
     description = models.CharField(max_length=250)
     price = models.IntegerField()
     is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = models.FileField(upload_to='products_storage')
+    photo = ResizedImageField(size=[500, 300], quality=90, upload_to='products_storage')
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -40,13 +49,6 @@ class Client(models.Model):
 
     def __str__(self):
         return "{} + ' '+ {}".format(self.user.first_name, self.user.last_name)
-
-
-class PaymentMethod(models.Model):
-    description = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.description
 
 
 class State(models.Model):
@@ -69,6 +71,7 @@ class Order(models.Model):
 class MeliLinks(models.Model):
     link = models.CharField(max_length=1024)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    creation_date = models.DateTimeField(auto_now_add=True)
 
 
 class DetailOrder(models.Model):

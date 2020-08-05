@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import register
 
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse, resolve
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView, TemplateView
 
 import core
@@ -143,7 +143,7 @@ class OrderList(LoginRequiredMixin, ListView):
 
 class SendMeliLink(LoginRequiredMixin, CreateView):
     model = MeliLinks
-
+    template_name = 'core/meli_link.html'
 
 class OrderDetail(LoginRequiredMixin,DetailView):
     model = Order
@@ -165,7 +165,7 @@ def cancel_order(request, pk):
     return HttpResponseRedirect(reverse('orders'))
 
 
-def update_available_company(request,pk):
+def update_available_company(request, pk, redirect = None):
     company = Company.objects.get(pk=pk)
     if company.available_now == "SI":
         company.available_now = 'NO'
@@ -173,7 +173,7 @@ def update_available_company(request,pk):
     else:
         company.available_now = 'SI'
         company.save()
-    return HttpResponseRedirect(reverse('configuration'))
+    return HttpResponseRedirect(reverse(redirect))
 
 
 class ConfigurationCompany(LoginRequiredMixin,ListView):
@@ -183,6 +183,14 @@ class ConfigurationCompany(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Company.objects.filter(id_user=self.request.user.id)
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ConfigurationCompany, self).get_context_data()
+        company = context['object_list'].first()
+        payment_method = []
+        for method in company.payment_method.all():
+            payment_method.append(method)
+        context['payment_method'] = payment_method
+        return context
 
 class ConfigurationUpdate(LoginRequiredMixin, UpdateView):
     model = Company
@@ -208,6 +216,7 @@ class Sales(LoginRequiredMixin, ListView):
 
 
 @register.simple_tag()
-def get_debit_mouth(user):
-    return Company.objects.get(id_user=user).account_debit
+def get_company(user):
+    return Company.objects.get(id_user=user)
+
 

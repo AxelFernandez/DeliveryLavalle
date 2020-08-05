@@ -20,6 +20,6 @@ urlpatterns = [
     path('next_state/<pk>', get_next_state, name='next-state'),
     path('configuration', ConfigurationCompany.as_view(), name='configuration'),
     path('configuration_update/<pk>', ConfigurationUpdate.as_view(), name='configuration-update'),
-    path('configuration_update_available/<pk>', update_available_company, name='update-available-company'),
+    path('configuration_update_available/<pk>/<redirect>', update_available_company, name='update-available-company'),
     path('sales', Sales.as_view(), name='sales'),
 ]

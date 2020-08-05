@@ -1,13 +1,13 @@
 from django.forms import ModelForm
 from django import forms
 
-from core.models import Company, Products
+from core.models import Company, Products, PaymentMethod
 
 
 class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'address',  'phone', 'available_now', 'photo', 'limits']
+        fields = ['name', 'description', 'address',  'phone', 'payment_method', 'available_now', 'photo', 'limits']
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -43,6 +43,12 @@ class FormCompany(forms.ModelForm):
                     'id': 'available_now',
                     'class': 'form-control',
                 }
+            ),
+            'payment_method': forms.CheckboxSelectMultiple(
+                attrs={
+                    'id': 'payment_method',
+                    'label': 'hola'
+                }
             )
         }
         labels = {
@@ -50,6 +56,7 @@ class FormCompany(forms.ModelForm):
             'description': '',
             'address': '',
             'phone': '',
+            'payment_method': 'Selecciona los metodos de pago que Aceptas',
             'available_now': '¿Estás disponible para empezar a vender ahora?',
             'photo': 'Subí el logo de tu empresa',
             'limits': ''
@@ -86,6 +93,12 @@ class FormProducts(forms.ModelForm):
                     'id': 'price',
                     'class': 'form-control-lg',
                     'placeholder': 'Precio',
+                }
+            ),
+            'photo': forms.FileInput(
+                attrs={
+                    'id': 'photo',
+                    'onchange': "previewFile()",
                 }
             ),
         }
