@@ -177,8 +177,7 @@
                 <div class="col-md-6 d-md-flex align-items-md-stretch">
                   <div class="count-box">
                     <i class="icofont-simple-smile"></i>
-                    {% get_all_users as users %}
-                    <span data-toggle="counter-up">{{users}}}</span>
+                    <span data-toggle="counter-up">{% get_all_users %}</span>
                     <p><strong>Usuarios Felices</strong></p>
                   </div>
                 </div>
@@ -186,8 +185,7 @@
                 <div class="col-md-6 d-md-flex align-items-md-stretch">
                   <div class="count-box">
                     <i class="icofont-shopping-cart"></i>
-                    {% get_all_orders as orders %}
-                    <span data-toggle="counter-up">{{orders}}}</span>
+                    <span data-toggle="counter-up">{% get_all_orders %}</span>
                     <p><strong>Pedidos concretados</strong> </p>
                   </div>
                 </div>
@@ -195,8 +193,7 @@
                 <div class="col-md-6 d-md-flex align-items-md-stretch">
                   <div class="count-box">
                     <i class="icofont-briefcase-2"></i>
-                    {% get_all_company as company %}
-                    <span data-toggle="counter-up">{{comapny}}}</span>
+                    <span data-toggle="counter-up">{% get_all_company %}</span>
                     <p><strong>Emprendedores registrados</strong></p>
                   </div>
                 </div>
@@ -204,8 +201,8 @@
                 <div class="col-md-6 d-md-flex align-items-md-stretch">
                   <div class="count-box">
                     <i class="icofont-tag"></i>
-                    {% get_all_products as products %}
-                    <span data-toggle="counter-up">{{products}}}</span>
+
+                    <span data-toggle="counter-up">{% get_all_products %}</span>
                     <p><strong>Productos a la Venta</strong></p>
                   </div>
                 </div>
