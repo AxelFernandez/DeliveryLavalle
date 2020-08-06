@@ -44,14 +44,15 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="#index.html">Inicio</a></li>
-          <li><a href="#about">Informacion</a></li>
+          <li class="active"><a href="#hero">Inicio</a></li>
+          <li><a href="#about">Información</a></li>
           <li><a href="#services">Servicios</a></li>
           <li><a href="#team">Equipo</a></li>
           <li><a href="#pricing">Precio</a></li>
           <li><a href="#contact">Contacto</a></li>
 
           <li class="get-started"><a href="#pricing">Comienza Ahora</a></li>
+          <li class="btn-learn-more"><a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar Sesion</a></li>
         </ul>
       </nav><!-- .nav-menu -->
 
@@ -137,17 +138,17 @@
           </div>
           <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
             <p>
-              Si sos comerciante podes empezar gratis a vender tus productos, podés ofrecer pagar con
+              Si sos comerciante podes empezar gratis a vender tus productos, ofrecer pagar con
               efectivo o Mercado Pago mediante un link de pago.
             </p>
             <p>
-              Con Delivery Lavalle podes ampliar tus ventas y estas son algunas ventajas
+              Con Delivery Lavalle también ampliarás tus ventas y estas son algunas ventajas
             </p>
              <ul>
               <li><i class="ri-check-double-line"></i> Tenés nuevos clientes </li>
               <li><i class="ri-check-double-line"></i> Tus pedidos están ordenados y le avisás al cliente los avances </li>
               <li><i class="ri-check-double-line"></i> Chat integrado con tu cliente</li>
-              <li><i class="ri-check-double-line"></i> Podes enviar un Link de pago de Mercado Pago para cobros online</li>
+              <li><i class="ri-check-double-line"></i> Enviar un Link de pago de Mercado Pago para cobros online</li>
               <li><i class="ri-check-double-line"></i> Sin intermediaros.</li>
             </ul>
             <a href="#" class="btn-learn-more">Más Información</a>
@@ -161,9 +162,9 @@
     <section id="counts" class="counts">
       <div class="container">
          <div class="section-title" data-aos="fade-up">
-          <h2>Algunos Numeros</h2>
+          <h2>Algunos Números</h2>
             <p>
-              Estos numeros se actualizan en tiempo real
+              Estos números se actualizan en tiempo real
             </p>
         </div>
         <div class="row">
@@ -227,8 +228,8 @@
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
             <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
               <div class="icon"><i class='bx bx-message-rounded-error'></i></div>
-              <h4 class="title"><a href="">Facil control de Stock</a></h4>
-              <p class="description">Una Simple pregunta, Tenes Stock? Activa y desactiva con un click, sin preguntas.</p>
+              <h4 class="title"><a href="">Fácil control de Stock</a></h4>
+              <p class="description">Una Simple pregunta, ¿Tenés Stock? Activá y desactivá con un click, sin preguntas.</p>
             </div>
           </div>
 
@@ -236,7 +237,7 @@
             <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
               <div class="icon"><i class='bx bx-devices' ></i></div>
               <h4 class="title"><a href="">Soporte para Web y App</a></h4>
-              <p class="description">Podes ver tus pedidos en la App o tambien en la Web para mayor comodidad</p>
+              <p class="description">Tus pedidos en la App o también en la Web para mayor comodidad</p>
             </div>
           </div>
 
@@ -252,7 +253,7 @@
             <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
               <div class="icon"><i class='bx bxs-check-circle'></i></div>
               <h4 class="title"><a href="">Disponibilidad a un click</a></h4>
-              <p class="description">Le avisas a tus clientes cuando podes recibir o no pedidos nuevos</p>
+              <p class="description">Le avisás a tus clientes cuando querés recibir o no pedidos nuevos</p>
             </div>
           </div>
 
@@ -369,7 +370,7 @@
                 <h4>Axel Fernandez</h4>
                 <h5>CEO y Desarrollador</h5>
                 <span>Desarrollador de Horarios Lavalle, ha participado de varios proyectos para el Departamento.
-                Actualmente trabaja en Evenbrite</span>
+                Actualmente trabaja en Eventbrite</span>
               </div>
             </div>
           </div>
@@ -379,43 +380,6 @@
 
       </div>
     </section><!-- End Team Section -->
-
-    <!-- ======= Pricing Section ======= -->
-    <section id="pricing" class="pricing">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Precios</h2>
-          <p>Pagás solo por el uso, si costos fijos, ni contratos</p>
-        </div>
-
-        <div class="row justify-content-md-center">
-
-
-
-          <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
-            <div class="box recommended" data-aos="zoom-in" data-aos-delay="100">
-              <h3>Solo</h3>
-              <h4><sup>%</sup>4<span> / venta</span></h4>
-              <ul>
-                <li>Pago mensual</li>
-                <li>Sin contrato ni costo fijo</li>
-                <li>Pago por Mercado Pago</li>
-                <li>Detalles del consumo en el mes</li>
-                <li>Podés empezar ya, y sin tarjeta</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Comenzar Ahora</a>
-              </div>
-            </div>
-          </div>
-
-
-
-        </div>
-
-      </div>
-    </section><!-- End Pricing Section -->
 
     <!-- ======= F.A.Q Section ======= -->
     <section id="faq" class="faq">
@@ -491,6 +455,43 @@
 
       </div>
     </section><!-- End F.A.Q Section -->
+
+    <!-- ======= Pricing Section ======= -->
+    <section id="pricing" class="pricing">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Precio</h2>
+          <p>Pagás solo por el uso, si costos fijos, ni contratos</p>
+        </div>
+
+        <div class="row justify-content-md-center">
+
+
+
+          <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+            <div class="box recommended" data-aos="zoom-in" data-aos-delay="100">
+              <h3>Empezá con un</h3>
+              <h4>4<sup>%</sup><span> / venta</span></h4>
+              <ul>
+                <li>Pago mensual</li>
+                <li>Sin contrato ni costo fijo</li>
+                <li>Pago por Mercado Pago</li>
+                <li>Detalles del consumo en el mes</li>
+                <li>Podés empezar ya, y sin tarjeta</li>
+              </ul>
+              <div class="btn-wrap">
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Registrate con Google</a>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+      </div>
+    </section><!-- End Pricing Section -->
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
