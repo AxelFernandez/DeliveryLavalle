@@ -1,162 +1,566 @@
 <!DOCTYPE html>
-<html>
-<title>Delivery Lavalle</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{% load static %}
-<style>
-body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
-body {font-size: 16px;}
-img {margin-bottom: -8px;}
-.mySlides {display: none;}
-</style>
-<body class="w3-content w3-black" style="max-width:1500px;">
+{%load static%}
+<html lang="en">
 
-<!-- Header with Slideshow -->
-<header class="w3-display-container w3-center">
-  <button class="w3-button w3-block w3-green w3-hide-large w3-hide-medium" onclick="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button>
-  <div class="mySlides w3-animate-opacity">
-    <img class="w3-image" src="{% static 'images/port1.jpg' %}" alt="hola" style="min-width:500px" width="1500" height="1000">
-    <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-      <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-        <h1 class="w3-xlarge">Delivery Lavalle</h1>
-        <hr class="w3-opacity">
-        <p>Conectamos a nuestra gente </p>
-        <p><a class="w3-button w3-block w3-green w3-round" href="{%url 'login' %}">Registra tu Compañia</a></p>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Delivery Lavalle</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <div class="logo mr-auto">
+        <h1 class="text-light"><a href="#" class="navbar-brand"><b class="text-success">Delivery</b> <b>Lavalle</b></a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li class="active"><a href="#index.html">Inicio</a></li>
+          <li><a href="#about">Informacion</a></li>
+          <li><a href="#services">Servicios</a></li>
+          <li><a href="#team">Equipo</a></li>
+          <li><a href="#pricing">Precio</a></li>
+          <li><a href="#contact">Contacto</a></li>
+
+          <li class="get-started"><a href="#pricing">Comienza Ahora</a></li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1 data-aos="fade-up">Algo más que un simple Delivery</h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">Pensado para nuestros emprendedores en cuarentena</h2>
+          <div data-aos="fade-up" data-aos-delay="800">
+            <a href="#about" class="btn-get-started scrollto">Más información</a>
+          </div>
+        </div>
+        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
+          <img src="{% static 'assets/img/hero-img.jpg' %}" class="img-fluid animated" alt="">
+        </div>
       </div>
     </div>
-  </div>
-  <div class="mySlides w3-animate-opacity">
-    <img class="w3-image" src="/w3images/app2.jpg" alt="Image 2" style="min-width:500px" width="1500" height="1000">
-    <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-      <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-        <h1 class="w3-xlarge w3-text-red"><b>CLICK!</b> Fast and Easy</h1>
-        <hr class="w3-opacity">
-        <p>Choose from thousands of features</p>
-        <p><button class="w3-button w3-block w3-red w3-round" onclick="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button></p>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= Clients Section ======= -->
+    <section id="clients" class="clients clients">
+      <div class="container">
+
+        <div class="row">
+<!--
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="" data-aos="zoom-in">
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-2.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-3.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="200">
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-4.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="300">
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-5.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="400">
+          </div>
+
+          <div class="col-lg-2 col-md-4 col-6">
+            <img src="assets/img/clients/client-6.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="500">
+          </div>
+ -->
+        </div>
+
+      </div>
+    </section><!-- End Clients Section -->
+
+    <!-- ======= About Us Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>De nuestra gente, para nuestra gente</h2>
+        </div>
+
+        <div class="row content">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
+            <p>
+              Como Cliente, desde Delivery Lavalle vas a poder pedir lo que sea que venda la gente a tu alrededor.
+              Creas una orden, y pagas cuando el repartidor llegue a tu casa
+            </p>
+            <ul>
+              <li><i class="ri-check-double-line"></i> Es Seguro</li>
+              <li><i class="ri-check-double-line"></i> Podés pagar con los medios de pago que acepte el comercio</li>
+              <li><i class="ri-check-double-line"></i> Los comercios de siempre, y nuevos...</li>
+            </ul>
+          </div>
+          <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <p>
+              Si sos comerciante podes empezar gratis a vender tus productos, podés ofrecer pagar con
+              efectivo o Mercado Pago mediante un link de pago.
+            </p>
+            <p>
+              Con Delivery Lavalle podes ampliar tus ventas y estas son algunas ventajas
+            </p>
+             <ul>
+              <li><i class="ri-check-double-line"></i> Tenés nuevos clientes </li>
+              <li><i class="ri-check-double-line"></i> Tus pedidos están ordenados y le avisás al cliente los avances </li>
+              <li><i class="ri-check-double-line"></i> Chat integrado con tu cliente</li>
+              <li><i class="ri-check-double-line"></i> Podes enviar un Link de pago de Mercado Pago para cobros online</li>
+              <li><i class="ri-check-double-line"></i> Sin intermediaros.</li>
+            </ul>
+            <a href="#" class="btn-learn-more">Más Información</a>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Us Section -->
+
+    <!-- ======= Counts Section ======= -->
+    <section id="counts" class="counts">
+      <div class="container">
+         <div class="section-title" data-aos="fade-up">
+          <h2>Algunos Numeros</h2>
+            <p>
+              Estos numeros se actualizan en tiempo real
+            </p>
+        </div>
+        <div class="row">
+          <div class="image col-xl-5 d-flex align-items-stretch justify-content-center justify-content-xl-start" data-aos="fade-right" data-aos-delay="150">
+            <img src="{% static 'assets/img/counts-img.svg' %}" alt="" class="img-fluid">
+          </div>
+
+          <div class="col-xl-7 d-flex align-items-stretch pt-4 pt-xl-0" data-aos="fade-left" data-aos-delay="300">
+            <div class="content d-flex flex-column justify-content-center">
+              <div class="row">
+                <div class="col-md-6 d-md-flex align-items-md-stretch">
+                  <div class="count-box">
+                    <i class="icofont-simple-smile"></i>
+                    {% get_all_users as users %}
+                    <span data-toggle="counter-up">{{users}}}</span>
+                    <p><strong>Usuarios Felices</strong></p>
+                  </div>
+                </div>
+
+                <div class="col-md-6 d-md-flex align-items-md-stretch">
+                  <div class="count-box">
+                    <i class="icofont-shopping-cart"></i>
+                    {% get_all_orders as orders %}
+                    <span data-toggle="counter-up">{{orders}}}</span>
+                    <p><strong>Pedidos concretados</strong> </p>
+                  </div>
+                </div>
+
+                <div class="col-md-6 d-md-flex align-items-md-stretch">
+                  <div class="count-box">
+                    <i class="icofont-briefcase-2"></i>
+                    {% get_all_company as company %}
+                    <span data-toggle="counter-up">{{comapny}}}</span>
+                    <p><strong>Emprendedores registrados</strong></p>
+                  </div>
+                </div>
+
+                <div class="col-md-6 d-md-flex align-items-md-stretch">
+                  <div class="count-box">
+                    <i class="icofont-tag"></i>
+                    {% get_all_products as products %}
+                    <span data-toggle="counter-up">{{products}}}</span>
+                    <p><strong>Productos a la Venta</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div><!-- End .content-->
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Counts Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Para Emprendedores o Comercios</h2>
+          <p>En Delivery Lavalle te ofrecemos los siguientes servicios para ampliar tus ventas</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+              <div class="icon"><i class='bx bx-message-rounded-error'></i></div>
+              <h4 class="title"><a href="">Facil control de Stock</a></h4>
+              <p class="description">Una Simple pregunta, Tenes Stock? Activa y desactiva con un click, sin preguntas.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+              <div class="icon"><i class='bx bx-devices' ></i></div>
+              <h4 class="title"><a href="">Soporte para Web y App</a></h4>
+              <p class="description">Podes ver tus pedidos en la App o tambien en la Web para mayor comodidad</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="">Única en Lavalle</a></h4>
+              <p class="description">Todos los clientes en una sola plataforma</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
+              <div class="icon"><i class='bx bxs-check-circle'></i></div>
+              <h4 class="title"><a href="">Disponibilidad a un click</a></h4>
+              <p class="description">Le avisas a tus clientes cuando podes recibir o no pedidos nuevos</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Testimonials Section =======
+    <section id="testimonials" class="testimonials section-bg">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Testimonials</h2>
+          <p>Magnam dolores commodi suscipit eum quidem consectetur velit</p>
+        </div>
+
+        <div class="owl-carousel testimonials-carousel" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="testimonial-wrap">
+            <div class="testimonial-item">
+              <img src="assets/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+              <h3>Saul Goodman</h3>
+              <h4>Ceo &amp; Founder</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+
+          <div class="testimonial-wrap">
+            <div class="testimonial-item">
+              <img src="assets/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+              <h3>Sara Wilsson</h3>
+              <h4>Designer</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Export tempor illum tamen malis malis eram quae irure esse labore quem cillum quid cillum eram malis quorum velit fore eram velit sunt aliqua noster fugiat irure amet legam anim culpa.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+
+          <div class="testimonial-wrap">
+            <div class="testimonial-item">
+              <img src="assets/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+              <h3>Jena Karlis</h3>
+              <h4>Store Owner</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Enim nisi quem export duis labore cillum quae magna enim sint quorum nulla quem veniam duis minim tempor labore quem eram duis noster aute amet eram fore quis sint minim.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+
+          <div class="testimonial-wrap">
+            <div class="testimonial-item">
+              <img src="assets/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+              <h3>Matt Brandon</h3>
+              <h4>Freelancer</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos export minim fugiat minim velit minim dolor enim duis veniam ipsum anim magna sunt elit fore quem dolore labore illum veniam.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+
+          <div class="testimonial-wrap">
+            <div class="testimonial-item">
+              <img src="assets/img/testimonials/testimonials-5.jpg" class="testimonial-img" alt="">
+              <h3>John Larson</h3>
+              <h4>Entrepreneur</h4>
+              <p>
+                <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                Quis quorum aliqua sint quem legam fore sunt eram irure aliqua veniam tempor noster veniam enim culpa labore duis sunt culpa nulla illum cillum fugiat legam esse veniam culpa fore nisi cillum quid.
+                <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>  -->
+
+
+    <!-- ======= Team Section ======= -->
+    <section id="team" class="team section-bg">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Conoce al Equipo</h2>
+          <p>Estas son las personas que estan detras de este proyecto</p>
+        </div>
+
+        <div class="row justify-content-md-center">
+
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="100">
+              <div class="member-img">
+                <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
+                <div class="social">
+                  <a href="https://www.facebook.com/A3ron"><i class="icofont-facebook"></i></a>
+                  <a href="https://www.instagram.com/acel_fernandez"><i class="icofont-instagram"></i></a>
+                  <a href="https://www.linkedin.com/in/Axel-Fernandez"><i class="icofont-linkedin"></i></a>
+                  <a href="https://www.github.com/AxelFernandez"><i class="icofont-github"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Axel Fernandez</h4>
+                <h5>CEO y Desarrollador</h5>
+                <span>Desarrollador de Horarios Lavalle, ha participado de varios proyectos para el Departamento.
+                Actualmente trabaja en Evenbrite</span>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </section><!-- End Team Section -->
+
+    <!-- ======= Pricing Section ======= -->
+    <section id="pricing" class="pricing">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Precios</h2>
+          <p>Pagás solo por el uso, si costos fijos, ni contratos</p>
+        </div>
+
+        <div class="row justify-content-md-center">
+
+
+
+          <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+            <div class="box recommended" data-aos="zoom-in" data-aos-delay="100">
+              <h3>Solo</h3>
+              <h4><sup>%</sup>4<span> / venta</span></h4>
+              <ul>
+                <li>Pago mensual</li>
+                <li>Sin contrato ni costo fijo</li>
+                <li>Pago por Mercado Pago</li>
+                <li>Detalles del consumo en el mes</li>
+                <li>Podés empezar ya, y sin tarjeta</li>
+              </ul>
+              <div class="btn-wrap">
+                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Comenzar Ahora</a>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+      </div>
+    </section><!-- End Pricing Section -->
+
+    <!-- ======= F.A.Q Section ======= -->
+    <section id="faq" class="faq">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Preguntas frecuentes</h2>
+        </div>
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>¿Me van a cobrar por registrarme?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              Absolutamente no, nosotros creemos en vos como un socio, por lo que solo cobramos por venta realizada en la plataforma
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>¿El delivery viene incluido en la App?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              No, el delivery debe hacerlo el comercio que ofrece los servicios, por eso al registrarte, delimitas la zona a la que podés entregar
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>¿Como recibo el Dinero de mis ventas?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              El dinero lo podes cobrar al momento de entregar el pedido en efectivo, o mediante Mercado Pago
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+         <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>¿Puedo Ofrecer Mercado Pago?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              Claro que si, para evitar intermediarios, hemos decidido implementar los Links de pago. Es la forma de cobrar
+              directamente al cliente y que el dinero llegue directamente a vos en el momento, requiere unos pasos extras
+              pero no es dificil, te lo explicamos en este link.
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+       <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+          <div class="col-lg-5">
+            <i class="ri-question-line"></i>
+            <h4>¿Como le pago a Delivery Lavalle?</h4>
+          </div>
+          <div class="col-lg-7">
+            <p>
+              La plataforma lleva una cuenta por cada venta que realices, y entre el 1 y 10 de cada mes,
+              podras pagar mediante una integracion a Mercado Pago con cualquier metodo de pago de Argentina.
+              Esto incluye Tarjetas de Debito, Credito, o incluso efectivo en RapiPago o Pago Facil
+            </p>
+          </div>
+        </div><!-- End F.A.Q Item-->
+
+      </div>
+    </section><!-- End F.A.Q Section -->
+
+    <!-- ======= Contact Section ======= -->
+    <section id="contact" class="contact">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Contacto</h2>
+        </div>
+
+        <div class="row justify-content-md-center">
+
+
+          <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
+            <div class="info">
+              <div>
+                <i class="ri-mail-send-line"></i>
+                <p>axel.fernandez0145@gmail.com</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="row d-flex align-items-center">
+        <div class="col-lg-6 text-lg-left text-center">
+          <div class="copyright">
+            &copy; Copyright <strong>Delivery Lavalle</strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            Hecho con <3 by Axel Fernandez
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+            <a href="#hero" class="scrollto">Inicio</a>
+            <a href="#about" class="scrollto">Acerca</a>
+          </nav>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="mySlides w3-animate-opacity">
-    <img class="w3-image" src="/w3images/app4.jpg" alt="Image 3" style="min-width:500px" width="1500" height="1000">
-    <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-      <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-        <h1 class="w3-xlarge">Smart Design</h1>
-        <hr class="w3-opacity">
-        <p>Customize photos as you go</p>
-        <p><button class="w3-button w3-block w3-indigo w3-round" onclick="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button></p>
-      </div>
-    </div>
-  </div>
-</header>
+  </footer><!-- End Footer -->
 
-<!-- The App Section -->
-<div class="w3-padding-64 w3-white">
-  <div class="w3-row-padding">
-    <div class="w3-col l8 m6">
-      <h1 class="w3-jumbo"><b class="w3-text-green">Delivery</b> <b>Lavalle</b></h1>
-      <h1 class="w3-xxxlarge w3-text-green"><b>Algo más que un simple delivery</b></h1>
-      <p><span class="w3-xlarge">Pensado para nuestra gente.</span> Delivery Lavalle funciona con la gente de tu zona, nosotros hacemos el contacto, elegis lo que vas a pedir, y lo pagas en tu casa!. Baja la app para usarlo</p>
-      <button class="w3-button w3-light-grey w3-padding-large w3-section w3-hide-small">
-        <i class="fa fa-download"></i> Descargar en Play Store
-      </button>
-      <p>Available for <i class="fa fa-android w3-xlarge w3-text-green"></i></p>
-    </div>
-    <div class="w3-col l4 m6">
-      <img src="{% static 'images/port2.jpg' %}" class="w3-image w3-right w3-hide-small" width="335" height="471">
-      <div class="w3-center w3-hide-large w3-hide-medium">
-        <button class="w3-button w3-block w3-padding-large" onclick="document.getElementById('download').style.display='block'">
-          <i class="fa fa-download"></i> Download Application
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
-<!-- Clarity Section -->
-<div class="w3-padding-64 w3-light-grey">
-  <div class="w3-row-padding">
-    <div class="w3-col l4 m6">
-      <img class="w3-image w3-round-large w3-hide-small w3-grayscale" src="{% static 'images/port3.jpg' %}" alt="App" width="335" height="471">
-    </div>
-    <div class="w3-col l8 m6">
-      <h1 class="w3-jumbo"><b class="w3-text-red">Delivery Para</b> <b>Vendedores</b></h1>
-      <h1 class="w3-xxxlarge w3-text"><b>Pensado para nuestros emprendedores en cuarentena</b></h1>
-      <p><span class="w3-xlarge">Podes enviar lo que quieras.</span> Aparte de ser gratis, podes ofrecer lo que sea que tu negocio realice.</p>
-    </div>
-  </div>
-</div>
-<!-- Pricing Section -->
-<div class="w3-padding-64 w3-center w3-white">
-  <h1 class="w3-jumbo"><b>Precios</b></h1>
-  <p class="w3-large">No hace falta que pagues nada podes comenzar totalmente gratis.</p>
-  <div class="w3-row-padding" style="margin-top:64px">
-    <div class="w3-half w3-section">
-      <ul class="w3-ul w3-card w3-hover-shadow">
-        <li class="w3-dark-grey w3-xlarge w3-padding-32">Basico</li>
-        <li class="w3-padding-16"><b>Pedidos</b> Ilimitados</li>
-        <li class="w3-padding-16"><b>Recibí pedidos en la web y App</b></li>
-        <li class="w3-padding-16"><b>Sin Publicidad</b></li>
-        <li class="w3-padding-16">
-          <h2 class="w3-opacity">Gratis</h2>
-        </li>
-        <li class="w3-light-grey w3-padding-24">
-          <a class="w3-button w3-black w3-padding-large" href="{%url 'login'%}"></i> Registrate</a>
-        </li>
-      </ul>
-    </div>
-    <div class="w3-half w3-section">
-      <ul class="w3-ul w3-card w3-hover-shadow">
-        <li class="w3-red w3-xlarge w3-padding-32">Premium</li>
-        <li class="w3-padding-16"><b>Notificaciones</b> Push a tus clientes</li>
-        <li class="w3-padding-16"><b>Mails</b> para promociones</li>
-        <li class="w3-padding-16"><b>Soporte</b> Tecnico personalizado</li>
-        <li class="w3-padding-16">
-          <h2 class="w3-opacity">$ 99</h2>
-        </li>
-        <li class="w3-light-grey w3-padding-24">
-          <a class="w3-button w3-black w3-padding-large"  href="{%url 'login'%}"> </i> Registrate</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-  <br>
-</div>
+  <!-- Vendor JS Files -->
+  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/counterup/counterup.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/venobox/venobox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
 
-<!-- Footer -->
-<footer class="w3-container w3-padding-32 w3-light-grey w3-center w3-xlarge">
-  <div class="w3-section">
-    <a class="fa fa-facebook-official w3-hover-opacity" href="https://www.facebook.com/A3ron"></a>
-    <a class="fa fa-instagram w3-hover-opacity" href="https://www.instagram.com/acel_fernandez/"></a>
-    <a class="fa fa-github w3-hover-opacity" href="https://www.github.com/AxelFernandez"></a>
-    <a class="fa fa-linkedin w3-hover-opacity" href="https://www.linkedin.com/in/Axel-Fernandez"></a>
-  </div>
-  <p class="w3-medium">Hecho con <3 por <a href="https://www.linkedin.com/in/Axel-Fernandez" target="_blank" class="w3-hover-text-green">Axel Fernandez</a></p>
-</footer>
-
-<script>
-// Slideshow
-var slideIndex = 1;
-showDivs(slideIndex);
-
-function plusDivs(n) {
-  showDivs(slideIndex += n);
-}
-
-function showDivs(n) {
-  var i;
-  var x = document.getElementsByClassName("mySlides");
-  if (n > x.length) {slideIndex = 1}
-  if (n < 1) {slideIndex = x.length}
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";  
-  }
-  x[slideIndex-1].style.display = "block";  
-}
-</script>
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
 
 </body>
+
 </html>
