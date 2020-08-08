@@ -52,3 +52,15 @@ class Test(TestCase):
         response = self.client.post(reverse('create-products'), data=message, follow=True)
         self.assertContains(response, message['name'])
 
+    def test_configuration_of_company(self):
+        self.client.force_login(self.user)
+        self.client.post("/company/", data=get_company_form(self.image))
+        response = self.client.get(reverse('configuration'))
+        self.assertContains(response, get_company_form(None)['description'])
+
+    def test_orders_empty(self):
+        self.client.force_login(self.user)
+        self.client.post("/company/", data=get_company_form(self.image))
+        response = self.client.get(reverse('orders'))
+        self.assertContains(response, 'Nada por aqui :(')
+
