@@ -52,6 +52,23 @@
   </div>
 </div>
     </div>
+
+ {% if is_paginated %}
+	<br>
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a class="btn btn-primary" href="/products?page={{ page_obj.previous_page_number }}">Anterior</a>
+                {% endif %}
+                <span class="page-current">
+                    Pagina {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a class="btn btn-primary" href="/products?page={{ page_obj.next_page_number }}">Siguiente</a>
+                {% endif %}
+            </span>
+        </div>
+ {% endif %}
 </body>
 {% include 'footer.html' %}
 </html>

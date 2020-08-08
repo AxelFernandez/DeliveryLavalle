@@ -73,6 +73,7 @@ class CreateProducts(LoginRequiredMixin, CreateView):
 class ProductsList(LoginRequiredMixin, ListView):
     model = Products
     template_name = 'core/products_list.html'
+    paginate_by = 5
 
     def get_queryset(self,**kwargs):
         company_id = Company.objects.get(id_user=self.request.user)
@@ -141,9 +142,11 @@ class OrderList(LoginRequiredMixin, ListView):
         self.len_orders = len(query_set)
         return query_set
 
+
 class SendMeliLink(LoginRequiredMixin, CreateView):
     model = MeliLinks
     template_name = 'core/meli_link.html'
+
 
 class OrderDetail(LoginRequiredMixin,DetailView):
     model = Order

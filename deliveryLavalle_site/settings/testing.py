@@ -21,22 +21,25 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'U8WDeC2DqmOzAN5qV7NFme3H'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9e+mjri=s6f0ttenw4wkligc3o!i%s__9()rv6uykt%krkp(j7'
+SECRET_KEY = 'testpepe'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
-DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+ALLOWED_HOSTS = [
+    'testserver',
+]
+
+
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 AJAX_ACTIVE = get_env_variable('AJAX_ACTIVE')
 
@@ -96,11 +99,12 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+ALLOWED_HOSTS = ['localhost']
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlitetesting3'),  # noqa
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
