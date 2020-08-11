@@ -1,7 +1,7 @@
 from django.urls import include, path
 from .views import RegistryCompany, CompanyRegistered, CreateProducts, ProductsList, ProductEdit, ProductDelete, \
     change_stock_status, OrderList, ajax_order_list, get_next_state, ConfigurationCompany, ConfigurationUpdate, \
-    update_available_company, Sales, cancel_order, OrderDetail, SendMeliLink
+    update_available_company, Sales, cancel_order, OrderDetail, SendMeliLink, UpdateMeliLink
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls'), name="login"),
@@ -34,6 +34,7 @@ urlpatterns = [
     path('sales', Sales.as_view(), name='sales'),
 
     # Mercado Pago Links
-    path('send_links_Meli/<pk>', SendMeliLink.as_view(), name='send-link-meli'),
+    path('send_link_Meli/<pk>', SendMeliLink.as_view(), name='send-meli-link'),
+    path('update_link_meli/<pk>', UpdateMeliLink.as_view(), name='update-meli-link'),
 
 ]

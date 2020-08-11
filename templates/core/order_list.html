@@ -52,11 +52,11 @@
                     {%if order.is_MP %}
                         {%if not order.is_MeliLink_sent%}
                             <div class="card-body">
-                                <a  href='{% url "send-link-meli" pk=order.id %}' class="btn btn-primary">Enviar Link de Pago</a>
+                                <a  href='{% url "send-meli-link" pk=order.id %}' class="btn btn-primary">Enviar Link de Pago</a>
                             </div>
                         {%else%}
                             <div class="card-body">
-                                <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Ver Link de Pago</a>
+                                <a  href='{% url "update-meli-link" pk=order.id %}' class="btn btn-primary">Ver Link de Pago</a>
                             </div>
                         {%endif%}
                     {%endif%}

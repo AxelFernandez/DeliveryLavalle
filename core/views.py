@@ -160,6 +160,15 @@ class SendMeliLink(LoginRequiredMixin, CreateView):
         return reverse('orders')
 
 
+class UpdateMeliLink(LoginRequiredMixin, UpdateView):
+    model = MeliLinks
+    template_name = 'core/meli_link.html'
+    form_class = FormMeliLinks
+
+    def get_success_url(self):
+        return reverse('orders')
+
+
 class OrderDetail(LoginRequiredMixin,DetailView):
     model = Order
     template_name = 'core/order_detail.html'
