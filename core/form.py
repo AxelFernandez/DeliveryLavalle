@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 
-from core.models import Company, Products, PaymentMethod
+from core.models import Company, Products, PaymentMethod, MeliLinks
 
 
 class FormCompany(forms.ModelForm):
@@ -109,4 +109,23 @@ class FormProducts(forms.ModelForm):
             'photo': 'Foto de tu Producto',
             'price': '$',
 
+        }
+
+
+class FormMeliLinks(forms.ModelForm):
+    class Meta:
+        model = MeliLinks
+        fields = ['link']
+        widgets = {
+            'link': forms.TextInput(
+                attrs={
+                    'id': 'link',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Link de Pago',
+                }
+            ),
+
+        }
+        labels = {
+            'link': '',
         }

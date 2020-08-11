@@ -48,27 +48,28 @@
                         </tbody>
                     </table>
                  </div>
-                {%if order.is_MP %}
-                    {%if not order.is_MeliLink_sent%}
+                <div style="margin:auto" class="row justify-content-md-center">
+                    {%if order.is_MP %}
+                        {%if not order.is_MeliLink_sent%}
+                            <div class="card-body">
+                                <a  href='{% url "send-link-meli" pk=order.id %}' class="btn btn-primary">Enviar Link de Pago</a>
+                            </div>
+                        {%else%}
+                            <div class="card-body">
+                                <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Ver Link de Pago</a>
+                            </div>
+                        {%endif%}
+                    {%endif%}
+                    {%if order.state.description != 'Entregado'%}
                         <div class="card-body">
-                            <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Enviar Link de Pago</a>
-                        </div>
-                    {%else%}
-                        <div class="card-body">
-                            <a  href='{% url "next-state" pk=order.id %}' class="btn btn-primary">Ver Link de Pago</a>
+                            <a  href='{% url "next-state" pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
                         </div>
                     {%endif%}
-                {%endif%}
-                {%if order.state.description != 'Entregado'%}
-                    <div class="card-body">
-                        <a  href='{% url "next-state" pk=order.id %}' class="btn btn-success">{{order.next_state}}</a>
-                    </div>
-                {%endif%}
-                {%if order.state.description == 'Pendiente'%}
-                    <div class="card-body">
-                        <a  href='{% url "cancel-order" pk=order.id %}' class="btn btn-danger">Cancelar Pedido</a>
-                    </div>
-                {%endif%}
+                    {%if order.state.description == 'Pendiente'%}
+                        <div class="card-body">
+                            <a  href='{% url "cancel-order" pk=order.id %}' class="btn btn-danger">Cancelar Pedido</a>
+                        </div>
+                    {%endif%}
                 </div>
             </div>
             {% empty %}
@@ -129,4 +130,3 @@
 }
     </script>
 </html>
-{% include 'footer.html' %}

@@ -1,3 +1,34 @@
 {% include 'base.html' %}
 {% include 'nav.html' %}
 {% load static %}
+<body>
+
+<div class="container-sm">
+
+    <div class="alert alert-success" style="margin-top:20px" role="alert">
+        <h4 class="alert-heading">Pago con Mercado Pago</h4>
+        <p>Tu cliente ha solicitado el pago por Mercado Pago</p>
+        <p>
+            Deberaás enviarle el link de pago, Si vas a cobrarle con Posnet a su domicilio, asegurate de tener una conexion a internet.
+        </p>
+        <hr>
+        <p class="mb-0">Las comisiones de Mercado Pago excentan de Delivery Lavalle.</p>
+    </div>
+    <div class="card" style="margin-top: 60px;">
+      <div class="navbar navbar-light" style="background-color: #e3f2fd;">
+          <h3>Link de Mercado Pago</h3>
+      </div>
+        <ul class="list-group">
+            <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-success" type="submit">Enviar Link</button>
+            </form>
+        </ul>
+        <a href="{% url 'orders'%}" type="button" class="btn btn-success">Voy a llevar mi Postnet</a>
+
+    </div>
+</div>
+
+
+
+</body>

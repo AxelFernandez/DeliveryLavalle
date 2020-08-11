@@ -9,7 +9,7 @@ from django.urls import reverse_lazy, reverse, resolve
 from django.views.generic import CreateView, DetailView, ListView, UpdateView, DeleteView, TemplateView
 
 import core
-from core.form import FormCompany, FormProducts
+from core.form import FormCompany, FormProducts, FormMeliLinks
 from core.models import Company, Products as Prod, Products, Order, DetailOrder, State, MeliLinks
 
 
@@ -146,6 +146,18 @@ class OrderList(LoginRequiredMixin, ListView):
 class SendMeliLink(LoginRequiredMixin, CreateView):
     model = MeliLinks
     template_name = 'core/meli_link.html'
+    form_class = FormMeliLinks
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            self.object = form.save(commit=False)
+            self.object.order = Order.objects.get(pk=self.kwargs['pk'])
+            return super().form_valid(form)
+        else:
+            reverse('login')
+
+    def get_success_url(self):
+        return reverse('orders')
 
 
 class OrderDetail(LoginRequiredMixin,DetailView):
