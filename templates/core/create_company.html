@@ -35,6 +35,9 @@
         <div class="navbar navbar-light" style="background-color: #e3f2fd;">
             <h3>Ok...Comencemos Registrando tu Empresa</h3>
         </div>
+        <div style="display: none" id="warning-image" class="alert alert-warning" role="alert">
+             La imagen es mayor a 1MB. No recomendamos imagenes que no sean mayor a 500x500. Sube una imagen mas chica
+        </div>
 
         <form class="form-group" enctype="multipart/form-data" method="post" style="margin-top: 10px; margin-left:10px; margin-right:10px">{% csrf_token %}
             {{ form.as_p }}
@@ -45,4 +48,3 @@
 
 
 </div>
-{% include 'footer.html' %}

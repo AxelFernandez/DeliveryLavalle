@@ -32,12 +32,12 @@
 				<td>${{product.price}}</td>
 		      <td class="justify-content">
 				  <form method="POST" class="form-grid" action='{% url "change-stock-status" pk=product.id %}'>
-                            {% csrf_token %}
-                                {% if product.is_available == "SI" %}
-                                <button type="submit" name='active' class="btn btn-success" value="deactivate">Si</button>
-                                {% else %}
-                                <button type="submit" name='active' class="btn btn-danger" value="activate">No</button>
-                                {% endif %}
+                    {% csrf_token %}
+                    {% if product.is_available == "SI" %}
+                    <button type="submit" name='active' class="btn btn-success" value="deactivate">Si</button>
+                    {% else %}
+                    <button type="submit" name='active' class="btn btn-danger" value="activate">No</button>
+                    {% endif %}
                     </form>
 			  </td>
 		      <td><a class="btn btn-warning" href='{% url "product-edit" pk=product.id %}'>Editar</a></td>
@@ -70,5 +70,4 @@
         </div>
  {% endif %}
 </body>
-{% include 'footer.html' %}
 </html>

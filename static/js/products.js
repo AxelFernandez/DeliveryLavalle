@@ -13,7 +13,15 @@ function previewFile() {
     }
 
     if (file) {
-        reader.readAsDataURL(file);
+        var FileSize = file.size / 1024 / 1024; // in MB
+        if (FileSize > 1) {
+            preview.src = "";
+            $("#warning-image").show()
+
+
+        }else{
+            reader.readAsDataURL(file);
+        }
     } else {
         preview.src = "";
     }

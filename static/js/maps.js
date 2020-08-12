@@ -85,4 +85,17 @@ function showNewRect() {
 
     }
 
+function checkSize() {
+
+    var preview = document.querySelector('img');
+    var file    = document.querySelector('input[type=file]').files[0];
+    var reader  = new FileReader();
+
+    if (file) {
+        var FileSize = file.size / 1024 / 1024; // in MB
+        if (FileSize > 1) {
+            $("#warning-image").show()
+        }
+    }
+}
 
