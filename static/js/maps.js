@@ -1,12 +1,28 @@
+if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(success, error);
+}
 let rectangle;
 let map;
 let infoWindow;
+let currentLat = -32.758236;
+let currentLong = -68.402477;
+
+function success(position) {
+    currentLat = position.coords.latitude;
+    currentLong = position.coords.longitude;
+    initMap();
+
+}
+function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
 
 function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: -32.758236, lng: -68.402477 },
-        zoom: 16
+        center: { lat: parseFloat(currentLat) , lng: parseFloat(currentLong) },
+        zoom: 15
     });
     var limits = document.getElementById("id_limits").value
     if (limits != ""){
@@ -16,10 +32,10 @@ function initMap() {
         var eastJson = json.east;
         var westJson = json.west;
     }else{
-        var northJson = -32.754954;
-        var southJson = -32.758975;
-        var eastJson = -68.399872;
-        var westJson =  -68.404060;
+        var northJson = currentLat + 0.0010;
+        var southJson = currentLat - 0.0010;
+        var eastJson = currentLong + 0.0010;
+        var westJson = currentLong - 0.0010;
 
     }
     const bounds = {
