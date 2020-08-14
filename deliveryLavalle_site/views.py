@@ -1,3 +1,4 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.template.defaultfilters import register
@@ -6,7 +7,11 @@ from core.models import Company, Client, Order, Products
 
 
 def home(request):
-    return render(request, 'deliveryLavalle_site/index.html')
+    context = {}
+    if request.user.is_authenticated:
+        company = Company.objects.filter(id_user=request.user.id).first()
+        context = {'company': company}
+    return render(request, 'deliveryLavalle_site/index.html', context)
 
 
 @register.simple_tag()
@@ -27,3 +32,9 @@ def get_all_orders():
 @register.simple_tag()
 def get_all_products():
     return Products.objects.all().count()
+
+
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+    return render(request, 'deliveryLavalle_site/index.html')

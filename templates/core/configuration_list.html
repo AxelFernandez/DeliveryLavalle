@@ -38,6 +38,7 @@
                         </div>
                     </div>
                     <a class="btn btn-success" style="margin : 30px" href="{% url 'configuration-update' pk=item.id %}">Actualizar Informacion</a>
+                    <a class="btn btn-danger" style="margin : 30px" href="{% url 'logout' %}">Cerrar Sesion</a>
                 {% endfor %}
             </div>
         </div>

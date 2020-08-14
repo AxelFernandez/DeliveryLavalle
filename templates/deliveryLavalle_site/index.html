@@ -3,263 +3,268 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Delivery Lavalle</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <title>Delivery Lavalle</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
-  <!-- Favicons -->
-  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
-  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <!-- Favicons -->
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
-  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/owl.carousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/venobox/venobox.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center">
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex align-items-center">
 
-      <div class="logo mr-auto">
-        <h1 class="text-light"><a href="#" class="navbar-brand"><b class="text-success">Delivery</b> <b>Lavalle</b></a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
+        <div class="logo mr-auto">
+            <h1 class="text-light"><a href="#" class="navbar-brand"><b class="text-success">Delivery</b> <b>Lavalle</b></a></h1>
+            <!-- Uncomment below if you prefer to use an image logo -->
+            <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+        </div>
 
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li class="active"><a href="#hero">Inicio</a></li>
-          <li><a href="#about">Información</a></li>
-          <li><a href="#services">Servicios</a></li>
-          <li><a href="#team">Equipo</a></li>
-          <li><a href="#pricing">Precio</a></li>
-          <li><a href="#contact">Contacto</a></li>
+        <nav class="nav-menu d-none d-lg-block">
+            <ul>
+                <li class="active"><a href="#hero">Inicio</a></li>
+                <li><a href="#about">Información</a></li>
+                <li><a href="#services">Servicios</a></li>
+                <li><a href="#team">Equipo</a></li>
+                <li><a href="#pricing">Precio</a></li>
+                <li><a href="#contact">Contacto</a></li>
+                {% if request.user.is_authenticated %}
+                    <li class="get-started"><a href="{% url 'orders' %}">Bienvenido {{company.name}}</a></li>
+                    <li class="get-started"><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
 
-          <li class="get-started"><a href="#pricing">Comienza Ahora</a></li>
-          <li class="btn-learn-more"><a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar Sesion</a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
+                {%else%}
+
+                    <li class="get-started"><a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar Sesion</a></li>
+                {%endif%}
+            </ul>
+        </nav><!-- .nav-menu -->
 
     </div>
-  </header><!-- End Header -->
+</header><!-- End Header -->
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero" class="d-flex align-items-center">
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="d-flex align-items-center">
 
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <h1 data-aos="fade-up">Algo más que un simple Delivery</h1>
-          <h2 data-aos="fade-up" data-aos-delay="400">Pensado para nuestros emprendedores en cuarentena</h2>
-          <div data-aos="fade-up" data-aos-delay="800">
-            <a href="#about" class="btn-get-started scrollto">Más información</a>
-          </div>
+        <div class="row">
+            <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
+                <h1 data-aos="fade-up">Algo más que un simple Delivery</h1>
+                <h2 data-aos="fade-up" data-aos-delay="400">Pensado para nuestros emprendedores en cuarentena</h2>
+                <div data-aos="fade-up" data-aos-delay="800">
+                    <a href="#about" class="btn-get-started scrollto">Más información</a>
+                </div>
+            </div>
+            <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
+                <img src="{% static 'assets/img/hero-img.jpg' %}" class="img-fluid animated" alt="">
+            </div>
         </div>
-        <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="{% static 'assets/img/hero-img.jpg' %}" class="img-fluid animated" alt="">
-        </div>
-      </div>
     </div>
 
-  </section><!-- End Hero -->
+</section><!-- End Hero -->
 
-  <main id="main">
+<main id="main">
 
     <!-- ======= Clients Section ======= -->
     <section id="clients" class="clients clients">
-      <div class="container">
+        <div class="container">
 
-        <div class="row">
-<!--
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="" data-aos="zoom-in">
-          </div>
+            <div class="row">
+                <!--
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-1.png" class="img-fluid" alt="" data-aos="zoom-in">
+                          </div>
 
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-2.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
-          </div>
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-2.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+                          </div>
 
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-3.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="200">
-          </div>
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-3.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="200">
+                          </div>
 
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-4.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="300">
-          </div>
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-4.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="300">
+                          </div>
 
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-5.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="400">
-          </div>
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-5.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="400">
+                          </div>
 
-          <div class="col-lg-2 col-md-4 col-6">
-            <img src="assets/img/clients/client-6.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="500">
-          </div>
- -->
+                          <div class="col-lg-2 col-md-4 col-6">
+                            <img src="assets/img/clients/client-6.png" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="500">
+                          </div>
+                 -->
+            </div>
+
         </div>
-
-      </div>
     </section><!-- End Clients Section -->
 
     <!-- ======= About Us Section ======= -->
     <section id="about" class="about">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title" data-aos="fade-up">
-          <h2>De nuestra gente, para nuestra gente</h2>
+            <div class="section-title" data-aos="fade-up">
+                <h2>De nuestra gente, para nuestra gente</h2>
+            </div>
+
+            <div class="row content">
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
+                    <p>
+                        Como Cliente, desde Delivery Lavalle vas a poder pedir lo que sea que venda la gente a tu alrededor.
+                        Creas una orden, y pagas cuando el repartidor llegue a tu casa
+                    </p>
+                    <ul>
+                        <li><i class="ri-check-double-line"></i> Es Seguro</li>
+                        <li><i class="ri-check-double-line"></i> Podés pagar con los medios de pago que acepte el comercio</li>
+                        <li><i class="ri-check-double-line"></i> Los comercios de siempre, y nuevos...</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
+                    <p>
+                        Si sos comerciante podes empezar gratis a vender tus productos, ofrecer pagar con
+                        efectivo o Mercado Pago mediante un link de pago.
+                    </p>
+                    <p>
+                        Con Delivery Lavalle también ampliarás tus ventas y estas son algunas ventajas
+                    </p>
+                    <ul>
+                        <li><i class="ri-check-double-line"></i> Tenés nuevos clientes </li>
+                        <li><i class="ri-check-double-line"></i> Tus pedidos están ordenados y le avisás al cliente los avances </li>
+                        <li><i class="ri-check-double-line"></i> Chat integrado con tu cliente</li>
+                        <li><i class="ri-check-double-line"></i> Enviar un Link de pago de Mercado Pago para cobros online</li>
+                        <li><i class="ri-check-double-line"></i> Sin intermediaros.</li>
+                    </ul>
+                    <a href="#" class="btn-learn-more">Más Información</a>
+                </div>
+            </div>
+
         </div>
-
-        <div class="row content">
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="150">
-            <p>
-              Como Cliente, desde Delivery Lavalle vas a poder pedir lo que sea que venda la gente a tu alrededor.
-              Creas una orden, y pagas cuando el repartidor llegue a tu casa
-            </p>
-            <ul>
-              <li><i class="ri-check-double-line"></i> Es Seguro</li>
-              <li><i class="ri-check-double-line"></i> Podés pagar con los medios de pago que acepte el comercio</li>
-              <li><i class="ri-check-double-line"></i> Los comercios de siempre, y nuevos...</li>
-            </ul>
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0" data-aos="fade-up" data-aos-delay="300">
-            <p>
-              Si sos comerciante podes empezar gratis a vender tus productos, ofrecer pagar con
-              efectivo o Mercado Pago mediante un link de pago.
-            </p>
-            <p>
-              Con Delivery Lavalle también ampliarás tus ventas y estas son algunas ventajas
-            </p>
-             <ul>
-              <li><i class="ri-check-double-line"></i> Tenés nuevos clientes </li>
-              <li><i class="ri-check-double-line"></i> Tus pedidos están ordenados y le avisás al cliente los avances </li>
-              <li><i class="ri-check-double-line"></i> Chat integrado con tu cliente</li>
-              <li><i class="ri-check-double-line"></i> Enviar un Link de pago de Mercado Pago para cobros online</li>
-              <li><i class="ri-check-double-line"></i> Sin intermediaros.</li>
-            </ul>
-            <a href="#" class="btn-learn-more">Más Información</a>
-          </div>
-        </div>
-
-      </div>
     </section><!-- End About Us Section -->
 
     <!-- ======= Counts Section ======= -->
     <section id="counts" class="counts">
-      <div class="container">
-         <div class="section-title" data-aos="fade-up">
-          <h2>Algunos Números</h2>
-            <p>
-              Estos números se actualizan en tiempo real
-            </p>
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Algunos Números</h2>
+                <p>
+                    Estos números se actualizan en tiempo real
+                </p>
+            </div>
+            <div class="row">
+                <div class="image col-xl-5 d-flex align-items-stretch justify-content-center justify-content-xl-start" data-aos="fade-right" data-aos-delay="150">
+                    <img src="{% static 'assets/img/counts-img.svg' %}" alt="" class="img-fluid">
+                </div>
+
+                <div class="col-xl-7 d-flex align-items-stretch pt-4 pt-xl-0" data-aos="fade-left" data-aos-delay="300">
+                    <div class="content d-flex flex-column justify-content-center">
+                        <div class="row">
+                            <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                <div class="count-box">
+                                    <i class="icofont-simple-smile"></i>
+                                    <span data-toggle="counter-up">{% get_all_users %}</span>
+                                    <p><strong>Usuarios Felices</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                <div class="count-box">
+                                    <i class="icofont-shopping-cart"></i>
+                                    <span data-toggle="counter-up">{% get_all_orders %}</span>
+                                    <p><strong>Pedidos concretados</strong> </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                <div class="count-box">
+                                    <i class="icofont-briefcase-2"></i>
+                                    <span data-toggle="counter-up">{% get_all_company %}</span>
+                                    <p><strong>Emprendedores registrados</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-md-flex align-items-md-stretch">
+                                <div class="count-box">
+                                    <i class="icofont-tag"></i>
+
+                                    <span data-toggle="counter-up">{% get_all_products %}</span>
+                                    <p><strong>Productos a la Venta</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- End .content-->
+                </div>
+            </div>
+
         </div>
-        <div class="row">
-          <div class="image col-xl-5 d-flex align-items-stretch justify-content-center justify-content-xl-start" data-aos="fade-right" data-aos-delay="150">
-            <img src="{% static 'assets/img/counts-img.svg' %}" alt="" class="img-fluid">
-          </div>
-
-          <div class="col-xl-7 d-flex align-items-stretch pt-4 pt-xl-0" data-aos="fade-left" data-aos-delay="300">
-            <div class="content d-flex flex-column justify-content-center">
-              <div class="row">
-                <div class="col-md-6 d-md-flex align-items-md-stretch">
-                  <div class="count-box">
-                    <i class="icofont-simple-smile"></i>
-                    <span data-toggle="counter-up">{% get_all_users %}</span>
-                    <p><strong>Usuarios Felices</strong></p>
-                  </div>
-                </div>
-
-                <div class="col-md-6 d-md-flex align-items-md-stretch">
-                  <div class="count-box">
-                    <i class="icofont-shopping-cart"></i>
-                    <span data-toggle="counter-up">{% get_all_orders %}</span>
-                    <p><strong>Pedidos concretados</strong> </p>
-                  </div>
-                </div>
-
-                <div class="col-md-6 d-md-flex align-items-md-stretch">
-                  <div class="count-box">
-                    <i class="icofont-briefcase-2"></i>
-                    <span data-toggle="counter-up">{% get_all_company %}</span>
-                    <p><strong>Emprendedores registrados</strong></p>
-                  </div>
-                </div>
-
-                <div class="col-md-6 d-md-flex align-items-md-stretch">
-                  <div class="count-box">
-                    <i class="icofont-tag"></i>
-
-                    <span data-toggle="counter-up">{% get_all_products %}</span>
-                    <p><strong>Productos a la Venta</strong></p>
-                  </div>
-                </div>
-              </div>
-            </div><!-- End .content-->
-          </div>
-        </div>
-
-      </div>
     </section><!-- End Counts Section -->
 
     <!-- ======= Services Section ======= -->
     <section id="services" class="services">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title" data-aos="fade-up">
-          <h2>Para Emprendedores o Comercios</h2>
-          <p>En Delivery Lavalle te ofrecemos los siguientes servicios para ampliar tus ventas</p>
+            <div class="section-title" data-aos="fade-up">
+                <h2>Para Emprendedores o Comercios</h2>
+                <p>En Delivery Lavalle te ofrecemos los siguientes servicios para ampliar tus ventas</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class='bx bx-message-rounded-error'></i></div>
+                        <h4 class="title"><a href="">Fácil control de Stock</a></h4>
+                        <p class="description">Una Simple pregunta, ¿Tenés Stock? Activá y desactivá con un click, sin preguntas.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+                        <div class="icon"><i class='bx bx-devices' ></i></div>
+                        <h4 class="title"><a href="">Soporte para Web y App</a></h4>
+                        <p class="description">Tus pedidos en la App o también en la Web para mayor comodidad</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
+                        <div class="icon"><i class="bx bx-tachometer"></i></div>
+                        <h4 class="title"><a href="">Única en Lavalle</a></h4>
+                        <p class="description">Todos los clientes en una sola plataforma</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
+                        <div class="icon"><i class='bx bxs-check-circle'></i></div>
+                        <h4 class="title"><a href="">Disponibilidad a un click</a></h4>
+                        <p class="description">Le avisás a tus clientes cuando querés recibir o no pedidos nuevos</p>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-
-        <div class="row">
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
-              <div class="icon"><i class='bx bx-message-rounded-error'></i></div>
-              <h4 class="title"><a href="">Fácil control de Stock</a></h4>
-              <p class="description">Una Simple pregunta, ¿Tenés Stock? Activá y desactivá con un click, sin preguntas.</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
-              <div class="icon"><i class='bx bx-devices' ></i></div>
-              <h4 class="title"><a href="">Soporte para Web y App</a></h4>
-              <p class="description">Tus pedidos en la App o también en la Web para mayor comodidad</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
-              <div class="icon"><i class="bx bx-tachometer"></i></div>
-              <h4 class="title"><a href="">Única en Lavalle</a></h4>
-              <p class="description">Todos los clientes en una sola plataforma</p>
-            </div>
-          </div>
-
-          <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0">
-            <div class="icon-box" data-aos="fade-up" data-aos-delay="400">
-              <div class="icon"><i class='bx bxs-check-circle'></i></div>
-              <h4 class="title"><a href="">Disponibilidad a un click</a></h4>
-              <p class="description">Le avisás a tus clientes cuando querés recibir o no pedidos nuevos</p>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
     </section><!-- End Services Section -->
 
     <!-- ======= Testimonials Section =======
@@ -346,218 +351,218 @@
 
     <!-- ======= Team Section ======= -->
     <section id="team" class="team section-bg">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title" data-aos="fade-up">
-          <h2>Conoce al Equipo</h2>
-          <p>Estas son las personas que estan detras de este proyecto</p>
-        </div>
-
-        <div class="row justify-content-md-center">
-
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-            <div class="member" data-aos="fade-up" data-aos-delay="100">
-              <div class="member-img">
-                <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
-                <div class="social">
-                  <a href="https://www.facebook.com/A3ron"><i class="icofont-facebook"></i></a>
-                  <a href="https://www.instagram.com/acel_fernandez"><i class="icofont-instagram"></i></a>
-                  <a href="https://www.linkedin.com/in/Axel-Fernandez"><i class="icofont-linkedin"></i></a>
-                  <a href="https://www.github.com/AxelFernandez"><i class="icofont-github"></i></a>
-                </div>
-              </div>
-              <div class="member-info">
-                <h4>Axel Fernandez</h4>
-                <h5>CEO y Desarrollador</h5>
-                <span>Desarrollador de Horarios Lavalle, ha participado de varios proyectos para el Departamento.
-                Actualmente trabaja en Eventbrite</span>
-              </div>
+            <div class="section-title" data-aos="fade-up">
+                <h2>Conoce al Equipo</h2>
+                <p>Estas son las personas que estan detras de este proyecto</p>
             </div>
-          </div>
 
+            <div class="row justify-content-md-center">
+
+                <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                    <div class="member" data-aos="fade-up" data-aos-delay="100">
+                        <div class="member-img">
+                            <img src="{% static 'assets/img/team/team-1.jpg' %}" class="img-fluid" alt="">
+                            <div class="social">
+                                <a href="https://www.facebook.com/A3ron"><i class="icofont-facebook"></i></a>
+                                <a href="https://www.instagram.com/acel_fernandez"><i class="icofont-instagram"></i></a>
+                                <a href="https://www.linkedin.com/in/Axel-Fernandez"><i class="icofont-linkedin"></i></a>
+                                <a href="https://www.github.com/AxelFernandez"><i class="icofont-github"></i></a>
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h4>Axel Fernandez</h4>
+                            <h5>CEO y Desarrollador</h5>
+                            <span>Desarrollador de Horarios Lavalle, ha participado de varios proyectos para el Departamento.
+                Actualmente trabaja en Eventbrite</span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
 
         </div>
-
-      </div>
     </section><!-- End Team Section -->
 
     <!-- ======= F.A.Q Section ======= -->
     <section id="faq" class="faq">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title" data-aos="fade-up">
-          <h2>Preguntas frecuentes</h2>
+            <div class="section-title" data-aos="fade-up">
+                <h2>Preguntas frecuentes</h2>
+            </div>
+
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-lg-5">
+                    <i class="ri-question-line"></i>
+                    <h4>¿Me van a cobrar por registrarme?</h4>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        Absolutamente no, nosotros creemos en vos como un socio, por lo que solo cobramos por venta realizada en la plataforma
+                    </p>
+                </div>
+            </div><!-- End F.A.Q Item-->
+
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-lg-5">
+                    <i class="ri-question-line"></i>
+                    <h4>¿El delivery viene incluido en la App?</h4>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        No, el delivery debe hacerlo el comercio que ofrece los servicios, por eso al registrarte, delimitas la zona a la que podés entregar
+                    </p>
+                </div>
+            </div><!-- End F.A.Q Item-->
+
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
+                <div class="col-lg-5">
+                    <i class="ri-question-line"></i>
+                    <h4>¿Como recibo el Dinero de mis ventas?</h4>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        El dinero lo podes cobrar al momento de entregar el pedido en efectivo, o mediante Mercado Pago
+                    </p>
+                </div>
+            </div><!-- End F.A.Q Item-->
+
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-lg-5">
+                    <i class="ri-question-line"></i>
+                    <h4>¿Puedo Ofrecer Mercado Pago?</h4>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        Claro que si, para evitar intermediarios, hemos decidido implementar los Links de pago. Es la forma de cobrar
+                        directamente al cliente y que el dinero llegue directamente a vos en el momento, requiere unos pasos extras
+                        pero no es dificil, te lo explicamos en este link.
+                    </p>
+                </div>
+            </div><!-- End F.A.Q Item-->
+
+            <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-lg-5">
+                    <i class="ri-question-line"></i>
+                    <h4>¿Como le pago a Delivery Lavalle?</h4>
+                </div>
+                <div class="col-lg-7">
+                    <p>
+                        La plataforma lleva una cuenta por cada venta que realices, y entre el 1 y 10 de cada mes,
+                        podras pagar mediante una integracion a Mercado Pago con cualquier metodo de pago de Argentina.
+                        Esto incluye Tarjetas de Debito, Credito, o incluso efectivo en RapiPago o Pago Facil
+                    </p>
+                </div>
+            </div><!-- End F.A.Q Item-->
+
         </div>
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-          <div class="col-lg-5">
-            <i class="ri-question-line"></i>
-            <h4>¿Me van a cobrar por registrarme?</h4>
-          </div>
-          <div class="col-lg-7">
-            <p>
-              Absolutamente no, nosotros creemos en vos como un socio, por lo que solo cobramos por venta realizada en la plataforma
-            </p>
-          </div>
-        </div><!-- End F.A.Q Item-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-          <div class="col-lg-5">
-            <i class="ri-question-line"></i>
-            <h4>¿El delivery viene incluido en la App?</h4>
-          </div>
-          <div class="col-lg-7">
-            <p>
-              No, el delivery debe hacerlo el comercio que ofrece los servicios, por eso al registrarte, delimitas la zona a la que podés entregar
-            </p>
-          </div>
-        </div><!-- End F.A.Q Item-->
-
-        <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="500">
-          <div class="col-lg-5">
-            <i class="ri-question-line"></i>
-            <h4>¿Como recibo el Dinero de mis ventas?</h4>
-          </div>
-          <div class="col-lg-7">
-            <p>
-              El dinero lo podes cobrar al momento de entregar el pedido en efectivo, o mediante Mercado Pago
-            </p>
-          </div>
-        </div><!-- End F.A.Q Item-->
-
-         <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-          <div class="col-lg-5">
-            <i class="ri-question-line"></i>
-            <h4>¿Puedo Ofrecer Mercado Pago?</h4>
-          </div>
-          <div class="col-lg-7">
-            <p>
-              Claro que si, para evitar intermediarios, hemos decidido implementar los Links de pago. Es la forma de cobrar
-              directamente al cliente y que el dinero llegue directamente a vos en el momento, requiere unos pasos extras
-              pero no es dificil, te lo explicamos en este link.
-            </p>
-          </div>
-        </div><!-- End F.A.Q Item-->
-
-       <div class="row faq-item d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-          <div class="col-lg-5">
-            <i class="ri-question-line"></i>
-            <h4>¿Como le pago a Delivery Lavalle?</h4>
-          </div>
-          <div class="col-lg-7">
-            <p>
-              La plataforma lleva una cuenta por cada venta que realices, y entre el 1 y 10 de cada mes,
-              podras pagar mediante una integracion a Mercado Pago con cualquier metodo de pago de Argentina.
-              Esto incluye Tarjetas de Debito, Credito, o incluso efectivo en RapiPago o Pago Facil
-            </p>
-          </div>
-        </div><!-- End F.A.Q Item-->
-
-      </div>
     </section><!-- End F.A.Q Section -->
 
     <!-- ======= Pricing Section ======= -->
     <section id="pricing" class="pricing">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title">
-          <h2>Precio</h2>
-          <p>Pagás solo por el uso, si costos fijos, ni contratos</p>
-        </div>
-
-        <div class="row justify-content-md-center">
-
-
-
-          <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
-            <div class="box recommended" data-aos="zoom-in" data-aos-delay="100">
-              <h3>Empezá con un</h3>
-              <h4>4<sup>%</sup><span> / venta</span></h4>
-              <ul>
-                <li>Pago mensual</li>
-                <li>Sin contrato ni costo fijo</li>
-                <li>Pago por Mercado Pago</li>
-                <li>Detalles del consumo en el mes</li>
-                <li>Podés empezar ya, y sin tarjeta</li>
-              </ul>
-              <div class="btn-wrap">
-                <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Registrate con Google</a>
-              </div>
+            <div class="section-title">
+                <h2>Precio</h2>
+                <p>Pagás solo por el uso, si costos fijos, ni contratos</p>
             </div>
-          </div>
+
+            <div class="row justify-content-md-center">
 
 
+
+                <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+                    <div class="box recommended" data-aos="zoom-in" data-aos-delay="100">
+                        <h3>Empezá con un</h3>
+                        <h4>4<sup>%</sup><span> / venta</span></h4>
+                        <ul>
+                            <li>Pago mensual</li>
+                            <li>Sin contrato ni costo fijo</li>
+                            <li>Pago por Mercado Pago</li>
+                            <li>Detalles del consumo en el mes</li>
+                            <li>Podés empezar ya, y sin tarjeta</li>
+                        </ul>
+                        <div class="btn-wrap">
+                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Registrate con Google</a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
 
         </div>
-
-      </div>
     </section><!-- End Pricing Section -->
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
-      <div class="container">
+        <div class="container">
 
-        <div class="section-title" data-aos="fade-up">
-          <h2>Contacto</h2>
-        </div>
-
-        <div class="row justify-content-md-center">
-
-
-          <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
-            <div class="info">
-              <div>
-                <i class="ri-mail-send-line"></i>
-                <p>axel.fernandez0145@gmail.com</p>
-              </div>
-
+            <div class="section-title" data-aos="fade-up">
+                <h2>Contacto</h2>
             </div>
-          </div>
-        </div>
 
-      </div>
+            <div class="row justify-content-md-center">
+
+
+                <div class="col-lg-3 col-md-6 mt-4 mt-md-0" data-aos="fade-up" data-aos-delay="200">
+                    <div class="info">
+                        <div>
+                            <i class="ri-mail-send-line"></i>
+                            <p>axel.fernandez0145@gmail.com</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </section><!-- End Contact Section -->
 
-  </main><!-- End #main -->
+</main><!-- End #main -->
 
-  <!-- ======= Footer ======= -->
-  <footer id="footer">
+<!-- ======= Footer ======= -->
+<footer id="footer">
     <div class="container">
-      <div class="row d-flex align-items-center">
-        <div class="col-lg-6 text-lg-left text-center">
-          <div class="copyright">
-            &copy; Copyright <strong>Delivery Lavalle</strong>. All Rights Reserved
-          </div>
-          <div class="credits">
-            Hecho con <3 by Axel Fernandez
-          </div>
+        <div class="row d-flex align-items-center">
+            <div class="col-lg-6 text-lg-left text-center">
+                <div class="copyright">
+                    &copy; Copyright <strong>Delivery Lavalle</strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+                    Hecho con <3 by Axel Fernandez
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
+                    <a href="#hero" class="scrollto">Inicio</a>
+                    <a href="#about" class="scrollto">Acerca</a>
+                </nav>
+            </div>
         </div>
-        <div class="col-lg-6">
-          <nav class="footer-links text-lg-right text-center pt-2 pt-lg-0">
-            <a href="#hero" class="scrollto">Inicio</a>
-            <a href="#about" class="scrollto">Acerca</a>
-          </nav>
-        </div>
-      </div>
     </div>
-  </footer><!-- End Footer -->
+</footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
-  <!-- Vendor JS Files -->
-  <script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
-  <script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/counterup/counterup.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/venobox/venobox.min.js' %}"></script>
-  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+<!-- Vendor JS Files -->
+<script src="{% static 'assets/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+<script src="{% static 'assets/vendor/waypoints/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'assets/vendor/counterup/counterup.min.js' %}"></script>
+<script src="{% static 'assets/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+<script src="{% static 'assets/vendor/venobox/venobox.min.js' %}"></script>
+<script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
 
-  <!-- Template Main JS File -->
-  <script src="{% static 'assets/js/main.js' %}"></script>
+<!-- Template Main JS File -->
+<script src="{% static 'assets/js/main.js' %}"></script>
 
 </body>
 

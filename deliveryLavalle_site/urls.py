@@ -24,6 +24,7 @@ from deliveryLavalle_site import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
+    path('logout/', views.logout_view, name='logout'),
     path('', include(core_urls)),
 
 ]
