@@ -3,42 +3,58 @@
 {% load static %}
 <body>
 <div class="container-sm" id="cont">
+    {% if warning %}
+    <div class="alert alert-danger" style="margin-top:20px" role="alert">
+        <h4 class="alert-heading">Ha ocurrido un problema con tu facturacion</h4>
+        <p>No deberías estar viendo esto, No pages aún y contactame para ayudarte </p>
+        <hr>
+        <p class="mb-0">Enviame un mail a axel.fernandez0145@gmail.com para coordinar como seguir.</p>
+    </div>
+    {%endif%}
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Order Nro</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Comision por Venta</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in object_list %}
+                <tr>
+                    <td>{{order.pk}}</td>
+                    <td>{{order.date|date:"d/m/Y H:i"}}</td>
+                    <td>{{order.client}}</td>
+                    <td>${{order.total}}</td>
+                    <td>${{order.usage}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><h6>Total Vendido:</h6></td>
+                    <td>${{total}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><h4>Total a Pagar:</h4></td>
+                    <td></td>
+                    <td>${{usage}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <form action="/procesar-pago" method="POST">
+        <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js" data-preference-id="{preferences.id}">
 
-	<div class="row">
-		<div class="col-12">
-			<table class="table table-hover">
-			  <thead>
-				<tr>
-				  <th scope="col">Fecha</th>
-				  <th scope="col">Order Nro</th>
-				  <th scope="col">Total</th>
-				  <th scope="col">Comision por Venta</th>
-				</tr>
-			  </thead>
-			  <tbody>
-			  {% for order in object_list %}
-				<tr>
-					<td>{{order.date}}</td>
-					<td>{{order.pk}}</td>
-					<td>${{order.total}}</td>
-					<td>${{order.usage}}</td>
-				</tr>
-			  {% endfor %}
-              <tr>
-					<td></td>
-					<td><h6>Total Vendido:</h6></td>
-					<td>${{total}}</td>
-					<td></td>
-				</tr>
-              <tr>
-					<td></td>
-					<td><h4>Total a Pagar:</h4></td>
-					<td></td>
-					<td>${{usage}}</td>
-				</tr>
-			  </tbody>
-			</table>
-		</div>
-	  </div>
+        </script>
+    </form>
 </div>
 </body>

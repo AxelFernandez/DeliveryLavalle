@@ -7,6 +7,7 @@ from django.views.generic import ListView, DetailView
 import core
 from core.models import Company, Order, DetailOrder, MeliLinks, Products, State
 from core.views.Companyviews import get_company
+from core.views.SalesViews import apply_usage
 
 
 def ajax_order_list(request):
@@ -65,7 +66,7 @@ def get_next_state(request,pk):
 
 def add_debit(user, order):
     company = get_company(user)
-    debit = round(order.total * 0.04, 2)
+    debit = apply_usage(order.total)
     company.account_debit += debit
     company.save()
 

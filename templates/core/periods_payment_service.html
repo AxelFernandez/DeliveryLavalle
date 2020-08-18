@@ -14,27 +14,20 @@
 			<table class="table table-hover">
 			  <thead>
 				<tr>
-				  <th scope="col">Estado</th>
-				  <th scope="col">Monto</th>
 				  <th scope="col">Periodo</th>
+				  <th scope="col">Monto</th>
+				  <th scope="col">Estado</th>
 				  <th scope="col"></th>
-				  <th scope="col"></th>
+
 				</tr>
 			  </thead>
 			  <tbody>
 			  {% for payment in object_list %}
 				<tr>
-					<td>{{payment.payment_status}}</td>
-					<td>${{payment.mount}}</td>
 					<td>{{payment.period}}</td>
-					<td><a class="btn btn-info" href="{% url 'periods-detail' payment.pk %}">Ver Detalles</a></td>
-					{%if payment.payment_status == 'Pendiente'%}
-						<td><a class="btn btn-success" href="{% url 'periods' %}">Pagar</a></td>
-					{%else%}
-						<td><a class="btn btn-light">Pagado</a></td>
-					{%endif%}
-
-
+					<td>${{payment.mount}}</td>
+					<td class="btn-warning">{{payment.payment_status}}</td>
+					<td><a class="btn btn-info" href="{% url 'periods-detail' payment.pk %}">Ver Detalles o Pagar</a></td>
 				</tr>
 			  {% endfor %}
 			  </tbody>

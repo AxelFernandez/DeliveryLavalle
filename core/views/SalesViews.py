@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views.generic import ListView
+from mercadopago import mercadopago
 
 from core.models import Order, Company, PaymentService
 from core.views.Companyviews import get_company
@@ -54,6 +56,7 @@ class PeriodsPaymentServices(LoginRequiredMixin,ListView):
         return PaymentService.objects.filter(company=get_company(self.request.user)).order_by('-payment_date')
 
 
+
 class SalesInMonth(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'core/period_detail.html'
@@ -70,16 +73,32 @@ class SalesInMonth(LoginRequiredMixin, ListView):
         for order in self.object_list:
             total += order.total
             # TODO: Separate the usage formula in a separate function
-            order.usage = round(order.total * 0.04, 2)
+            order.usage = apply_usage(order.total)
             usage += order.usage
         context['total'] = total
-        context['usage'] = round(usage, 2)
+        context['usage'] = usage
 
         # TODO: Check if this is not necessary in the future, this is only for security
         payment_mount = PaymentService.objects.get(pk=self.kwargs['pk']).mount
         context['warning'] = False
         if payment_mount != context['usage']:
             context['warning'] = True
+
+        mp = mercadopago.MP("TEST-827120809846753-072903-ad45a0bfe1eb102e297cbeb0cdea4ce6-239190364")
+        preference = {
+            "items": [
+                {
+                    "title": "Servicio de Delivery Lavalle de {} por {}".format(get_company(self.request.user), usage),
+                    "quantity": 1,
+                    "unit_price": usage
+                }
+            ]
+        }
+        mp.create_preference(preference)
+        context['preference'] = preference
         return context
 
+
+def apply_usage(cost):
+    return round(cost * 0.04, 2)
 

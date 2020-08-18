@@ -5,7 +5,7 @@ from core.views.Companyviews import RegistryCompany, CompanyRegistered, Configur
 from core.views.MeliViews import SendMeliLink, UpdateMeliLink
 from core.views.OrdersViews import OrderList, OrderDetail, ajax_order_list, cancel_order, get_next_state
 from core.views.ProductsViews import CreateProducts, ProductsList, ProductEdit, ProductDelete
-from core.views.SalesViews import Sales, process_paid_cron_start, PeriodsPaymentServices, SalesInMonth
+from core.views.SalesViews import Sales, process_paid_cron_start, PeriodsPaymentServices, SalesInMonth, pay_service
 from core.views.UserViews import change_stock_status
 
 urlpatterns = [
