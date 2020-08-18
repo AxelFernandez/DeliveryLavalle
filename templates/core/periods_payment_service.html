@@ -3,28 +3,38 @@
 {% load static %}
 <body>
 <div class="container-sm" id="cont">
+	  <div class="alert alert-success" style="margin-top:20px" role="alert">
+        <p>Gracias por usar Delivery Lavalle, no olvides pagar entre el 1 y 10 de cada mes para seguir usando el servicio</p>
+        <p>Aceptamos Débito, o Crédito a través de Mercado Pago</p>
+        <hr>
+        <p class="mb-0">Cualquier cosa que necesites, contactame a axel.fernandez0145@gmail.com.</p>
+    </div>
 	<div class="row">
 		<div class="col-12">
 			<table class="table table-hover">
 			  <thead>
 				<tr>
-				  <th scope="col">Cliente</th>
-				  <th scope="col">Fecha</th>
 				  <th scope="col">Estado</th>
-				  <th scope="col">Lugar Entregado</th>
-				  <th scope="col">Total</th>
+				  <th scope="col">Monto</th>
+				  <th scope="col">Periodo</th>
+				  <th scope="col"></th>
 				  <th scope="col"></th>
 				</tr>
 			  </thead>
 			  <tbody>
-			  {% for order in object_list %}
+			  {% for payment in object_list %}
 				<tr>
-					<td>{{order.client.user.first_name}} {{order.client.user.last_name}}</td>
-					<td>{{order.date|date:"d/m/Y H:i"}}</td>
-					<td>{{order.state.description}}</td>
-					<td> <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a></td>
-					<td>${{order.total}}</td>
-					<td><a class="btn btn-primary" href="{% url 'order-detail' order.pk %}">Ver Orden</a></td>
+					<td>{{payment.payment_status}}</td>
+					<td>${{payment.mount}}</td>
+					<td>{{payment.period}}</td>
+					<td><a class="btn btn-info" href="{% url 'periods-detail' payment.pk %}">Ver Detalles</a></td>
+					{%if payment.payment_status == 'Pendiente'%}
+						<td><a class="btn btn-success" href="{% url 'periods' %}">Pagar</a></td>
+					{%else%}
+						<td><a class="btn btn-light">Pagado</a></td>
+					{%endif%}
+
+
 				</tr>
 			  {% endfor %}
 			  </tbody>
@@ -47,6 +57,5 @@
             </span>
         </div>
  {% endif %}
-	<a class="btn btn-primary" href="{% url 'periods' %}">Ver Periodos Facturados</a>
 </div>
 </body>

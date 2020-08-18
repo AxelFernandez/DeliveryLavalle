@@ -21,8 +21,9 @@ class Company(models.Model):
     photo = ResizedImageField(size=[500, 300], quality=90, upload_to='company_storage')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
-    account_debit = models.IntegerField()
+    account_debit = models.FloatField()
     payment_method = models.ManyToManyField(PaymentMethod)
+    creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -48,7 +49,7 @@ class Client(models.Model):
     photo = models.FileField(upload_to='client_storage')
 
     def __str__(self):
-        return "{} + ' '+ {}".format(self.user.first_name, self.user.last_name)
+        return "{} {}".format(self.user.first_name, self.user.last_name)
 
 
 class State(models.Model):
@@ -80,13 +81,6 @@ class DetailOrder(models.Model):
     quantity = models.IntegerField()
 
 
-class Chat(models.Model):
-    id_order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    message = models.CharField(max_length=50)
-    date = models.DateTimeField(auto_now_add=True)
-
-
 # Business Rule: this must run every first day in every mount
 class PaymentService(models.Model):
     company = models.ForeignKey(Company,on_delete=models.CASCADE)
@@ -95,6 +89,7 @@ class PaymentService(models.Model):
     mount = models.FloatField()
     transaction_date = models.DateField(null=True)
     description = models.CharField(max_length=45)
+    period = models.CharField(max_length=45)
 
 
 class MeLiTransaction(models.Model):

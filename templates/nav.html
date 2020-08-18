@@ -22,7 +22,7 @@
         {%else%}
             <a href="{% url 'update-available-company' pk=company.id redirect=request.resolver_match.url_name %}" style="max-width:240px" class="btn btn-danger">Has Cerrado</a>
         {%endif%}
-        <a class="nav-link" style="text-align:center;" href="#">Uso de {{company.name}} ${{company.account_debit}} </a>
+        <a class="nav-link" style="text-align:center;" href="{%url 'periods' %}">Uso de {{company.name}} ${{company.account_debit}} </a>
         <a class="nav-link" style="text-align:center;" href="{%url 'logout' %}">Salir</a>
     </ul>
 

@@ -1,7 +1,12 @@
 from django.urls import include, path
-from .views import RegistryCompany, CompanyRegistered, CreateProducts, ProductsList, ProductEdit, ProductDelete, \
-    change_stock_status, OrderList, ajax_order_list, get_next_state, ConfigurationCompany, ConfigurationUpdate, \
-    update_available_company, Sales, cancel_order, OrderDetail, SendMeliLink, UpdateMeliLink
+
+from core.views.Companyviews import RegistryCompany, CompanyRegistered, ConfigurationCompany, ConfigurationUpdate, \
+    update_available_company
+from core.views.MeliViews import SendMeliLink, UpdateMeliLink
+from core.views.OrdersViews import OrderList, OrderDetail, ajax_order_list, cancel_order, get_next_state
+from core.views.ProductsViews import CreateProducts, ProductsList, ProductEdit, ProductDelete
+from core.views.SalesViews import Sales, process_paid_cron_start, PeriodsPaymentServices, SalesInMonth
+from core.views.UserViews import change_stock_status
 
 urlpatterns = [
     path('', include('django.contrib.auth.urls'), name="login"),
@@ -32,9 +37,15 @@ urlpatterns = [
 
     # Sales
     path('sales', Sales.as_view(), name='sales'),
+    path('process_all_paid', process_paid_cron_start),
+    path('periods/', PeriodsPaymentServices.as_view(), name='periods'),
+    path('periods_detail/<pk>', SalesInMonth.as_view(), name='periods-detail'),
+
 
     # Mercado Pago Links
     path('send_link_Meli/<pk>', SendMeliLink.as_view(), name='send-meli-link'),
     path('update_link_meli/<pk>', UpdateMeliLink.as_view(), name='update-meli-link'),
+
+
 
 ]

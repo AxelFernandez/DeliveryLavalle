@@ -1,0 +1,44 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+<body>
+<div class="container-sm" id="cont">
+
+	<div class="row">
+		<div class="col-12">
+			<table class="table table-hover">
+			  <thead>
+				<tr>
+				  <th scope="col">Fecha</th>
+				  <th scope="col">Order Nro</th>
+				  <th scope="col">Total</th>
+				  <th scope="col">Comision por Venta</th>
+				</tr>
+			  </thead>
+			  <tbody>
+			  {% for order in object_list %}
+				<tr>
+					<td>{{order.date}}</td>
+					<td>{{order.pk}}</td>
+					<td>${{order.total}}</td>
+					<td>${{order.usage}}</td>
+				</tr>
+			  {% endfor %}
+              <tr>
+					<td></td>
+					<td><h6>Total Vendido:</h6></td>
+					<td>${{total}}</td>
+					<td></td>
+				</tr>
+              <tr>
+					<td></td>
+					<td><h4>Total a Pagar:</h4></td>
+					<td></td>
+					<td>${{usage}}</td>
+				</tr>
+			  </tbody>
+			</table>
+		</div>
+	  </div>
+</div>
+</body>
