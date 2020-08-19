@@ -27,6 +27,7 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 AJAX_ACTIVE = get_env_variable('AJAX_ACTIVE')
+MELI_TOKEN = get_env_variable('MELI_TOKEN')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
