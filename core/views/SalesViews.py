@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse
 from django.utils.datetime_safe import datetime
 from django.views.generic import ListView
@@ -56,7 +56,6 @@ class PeriodsPaymentServices(LoginRequiredMixin,ListView):
         return PaymentService.objects.filter(company=get_company(self.request.user)).order_by('-payment_date')
 
 
-
 class SalesInMonth(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'core/period_detail.html'
@@ -79,12 +78,12 @@ class SalesInMonth(LoginRequiredMixin, ListView):
         context['usage'] = usage
 
         # TODO: Check if this is not necessary in the future, this is only for security
-        payment_mount = PaymentService.objects.get(pk=self.kwargs['pk']).mount
+        payment = PaymentService.objects.get(pk=self.kwargs['pk'])
         context['warning'] = False
-        if payment_mount != context['usage']:
+        if payment.mount != context['usage']:
             context['warning'] = True
 
-        mp = mercadopago.MP("TEST-827120809846753-072903-ad45a0bfe1eb102e297cbeb0cdea4ce6-239190364")
+        mp = mercadopago.MP(settings.MELI_TOKEN)
         preference = {
             "items": [
                 {
@@ -92,10 +91,24 @@ class SalesInMonth(LoginRequiredMixin, ListView):
                     "quantity": 1,
                     "unit_price": usage
                 }
-            ]
+            ],
+            "payment_methods": {
+                "excluded_payment_types": [
+                    {
+                        "id": "ticket"
+                    },
+                    {
+                        "id": "bank_transfer"
+                    }
+                ],
+            },
+            "binary_mode": True,
+
         }
-        mp.create_preference(preference)
-        context['preference'] = preference
+        context_preference = mp.create_preference(preference)
+        context['preference'] = context_preference['response']['id']
+        context['payment'] = payment
+        context['payment_id'] = payment.id
         return context
 
 

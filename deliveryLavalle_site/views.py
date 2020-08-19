@@ -38,3 +38,10 @@ def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
     return render(request, 'deliveryLavalle_site/index.html')
+
+
+def tutorial_meli_link(request):
+    if request.user.is_authenticated:
+        return render(request, 'deliveryLavalle_site/tutorial_meli_link.html')
+    else:
+        return render(request, 'deliveryLavalle_site/index.html')

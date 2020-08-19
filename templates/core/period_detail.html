@@ -51,10 +51,12 @@
             </table>
         </div>
     </div>
-    <form action="/procesar-pago" method="POST">
-        <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js" data-preference-id="{preferences.id}">
+    {%if payment.payment_status == 'Pendiente'%}
+    <form action="/process_payment/{{payment_id}}" method="POST">{% csrf_token %}
+        <script src="https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js" data-preference-id="{{preference}}">
 
         </script>
     </form>
+    {%endif%}
 </div>
 </body>

@@ -2,7 +2,7 @@ from django.urls import include, path
 
 from core.views.Companyviews import RegistryCompany, CompanyRegistered, ConfigurationCompany, ConfigurationUpdate, \
     update_available_company
-from core.views.MeliViews import SendMeliLink, UpdateMeliLink
+from core.views.MeliViews import SendMeliLink, UpdateMeliLink, process_payment
 from core.views.OrdersViews import OrderList, OrderDetail, ajax_order_list, cancel_order, get_next_state
 from core.views.ProductsViews import CreateProducts, ProductsList, ProductEdit, ProductDelete
 from core.views.SalesViews import Sales, process_paid_cron_start, PeriodsPaymentServices, SalesInMonth
@@ -45,6 +45,7 @@ urlpatterns = [
     # Mercado Pago Links
     path('send_link_Meli/<pk>', SendMeliLink.as_view(), name='send-meli-link'),
     path('update_link_meli/<pk>', UpdateMeliLink.as_view(), name='update-meli-link'),
+    path('process_payment/<pk>', process_payment, name='process-payment'),
 
 
 

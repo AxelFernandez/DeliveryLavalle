@@ -1,28 +1,28 @@
-if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(success, error);
-}
+//if(navigator.geolocation){
+//    navigator.geolocation.getCurrentPosition(success, error);
+//}
 let rectangle;
 let map;
 let infoWindow;
-let currentLat = -32.758236;
-let currentLong = -68.402477;
+let currentLat = -32.743119;
+let currentLong =  -68.499653;
 
-function success(position) {
-    currentLat = position.coords.latitude;
-    currentLong = position.coords.longitude;
-    initMap();
-
-}
-function error(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
-}
+//function success(position) {
+//    currentLat = position.coords.latitude;
+//    currentLong = position.coords.longitude;
+//    initMap();
+//
+//}
+//function error(err) {
+//  console.warn(`ERROR(${err.code}): ${err.message}`);
+//}
 
 
 function initMap() {
 
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: parseFloat(currentLat) , lng: parseFloat(currentLong) },
-        zoom: 15
+        zoom: 12
     });
     var limits = document.getElementById("id_limits").value
     if (limits != ""){
@@ -32,10 +32,10 @@ function initMap() {
         var eastJson = json.east;
         var westJson = json.west;
     }else{
-        var northJson = currentLat + 0.0010;
-        var southJson = currentLat - 0.0010;
-        var eastJson = currentLong + 0.0010;
-        var westJson = currentLong - 0.0010;
+        var northJson = currentLat + 0.0100;
+        var southJson = currentLat - 0.0100;
+        var eastJson = currentLong + 0.0100;
+        var westJson = currentLong - 0.0100;
 
     }
     const bounds = {

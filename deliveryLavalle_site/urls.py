@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home),
     path('logout/', views.logout_view, name='logout'),
+    path('tutorial_meli_link/', views.tutorial_meli_link, name='tutorial-meli-link'),
     path('', include(core_urls)),
 
 ]

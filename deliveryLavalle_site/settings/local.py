@@ -39,6 +39,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1']
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 DROPBOX_OAUTH2_TOKEN = get_env_variable('DROPBOX_OAUTH2_TOKEN')
 AJAX_ACTIVE = get_env_variable('AJAX_ACTIVE')
+MELI_TOKEN = get_env_variable('MELI_TOKEN')
 
 # Application definition
 

@@ -93,10 +93,12 @@ class PaymentService(models.Model):
 
 
 class MeLiTransaction(models.Model):
-    collection_id = models.IntegerField()
-    collection_status = models.CharField(max_length=45)
-    payment_type = models.CharField(max_length=45)
-    merchant_order_id = models.IntegerField()
-    preference_id = models.IntegerField()
+    preference_id = models.CharField(max_length=100)
+    payment_id = models.CharField(max_length=45)
+    payment_status = models.CharField(max_length=45)
+    payment_status_detail = models.CharField(max_length=45)
+    merchant_order_id = models.CharField(max_length=45)
+    processing_mode = models.CharField(max_length=45)
+    creation_date = models.DateTimeField(auto_now_add=True)
     payment_service = models.ForeignKey(PaymentService, on_delete=models.CASCADE)
 

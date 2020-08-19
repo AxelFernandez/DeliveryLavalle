@@ -26,7 +26,11 @@
 				<tr>
 					<td>{{payment.period}}</td>
 					<td>${{payment.mount}}</td>
-					<td class="btn-warning">{{payment.payment_status}}</td>
+					{%if payment.payment_status == 'Pendiente'%}
+						<td class="btn-warning">{{payment.payment_status}}</td>
+					{%else%}
+						<td class="center btn-success">{{payment.payment_status}}</td>
+					{%endif%}
 					<td><a class="btn btn-info" href="{% url 'periods-detail' payment.pk %}">Ver Detalles o Pagar</a></td>
 				</tr>
 			  {% endfor %}
