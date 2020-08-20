@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'social_django',
     'crispy_forms',
     'bootstrap4',
+    'cloudinary',
     'core',
 
 ]

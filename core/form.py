@@ -38,12 +38,6 @@ class FormCompany(forms.ModelForm):
                     'placeholder': 'Telefono',
                 }
             ),
-            'photo': forms.FileInput(
-                attrs={
-                    'id': 'photo',
-                    'onchange': "checkSize()",
-                }
-            ),
             'available_now': forms.Select(
                 attrs={
                     'id': 'available_now',

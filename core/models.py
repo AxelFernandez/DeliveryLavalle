@@ -1,3 +1,4 @@
+from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.db import models
 from django_resized import ResizedImageField
@@ -18,7 +19,7 @@ class Company(models.Model):
     phone = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
     available_now = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = ResizedImageField(size=[500, 300], quality=90, upload_to='company_storage')
+    photo = CloudinaryField('image')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
     account_debit = models.FloatField()
@@ -34,7 +35,7 @@ class Products(models.Model):
     description = models.CharField(max_length=250)
     price = models.IntegerField()
     is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
-    photo = ResizedImageField(size=[500, 300], quality=90, upload_to='products_storage')
+    photo = CloudinaryField('image')
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -46,7 +47,7 @@ class Client(models.Model):
     address = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
-    photo = models.FileField(upload_to='client_storage')
+    photo = CloudinaryField('image')
 
     def __str__(self):
         return "{} {}".format(self.user.first_name, self.user.last_name)

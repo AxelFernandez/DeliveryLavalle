@@ -37,13 +37,6 @@ class Test(TestCase):
         # Contact mail
         self.assertContains(response, 'axel.fernandez0145@gmail.com')
 
-    def test_incorrect_create_product(self):
-        self.client.force_login(self.user)
-        message = get_company_form(SimpleUploadedFile("image.jpg", bytes(50)))
-        response = self.client.post("/company/", data=message,follow=True)
-        # Contact mail
-        self.assertContains(response, 'Upload a valid image.')
-
     def test_create_product(self):
         self.client.force_login(self.user)
         company = get_company_form(self.image)
