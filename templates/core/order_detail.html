@@ -14,7 +14,8 @@
                   <p class="card-text">Telefono de Contacto: {{ order.client.phone }}</p>
                 </div>
                 <ul class="list-group list-group-flush">
-
+                    <li class="list-group-item bg-light">Direccion de Entrega: {{order.address.street}} {{order.address.number}}, {{order.address.district}} {{order.address.floor}}</li>
+                    <li class="list-group-item bg-light">Referencia: {{order.address.reference}} </li>
                     <li class="list-group-item bg-light">Punto a entregar en: <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a> </li>
                     <li class="list-group-item bg-light">Recibido: {{order.date|date:"d/m/Y H:i"}}</li>
                 </ul>

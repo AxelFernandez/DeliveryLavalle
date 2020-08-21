@@ -44,13 +44,21 @@ class Products(models.Model):
 
 class Client(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)
-    photo = CloudinaryField('image')
+    phone = models.CharField(max_length=100, blank=True)
+    photo = models.CharField(max_length=4000)
 
     def __str__(self):
         return "{} {}".format(self.user.first_name, self.user.last_name)
+
+
+class AddressSaved(models.Model):
+    street = models.CharField(max_length=100)
+    number = models.CharField(max_length=100)
+    district = models.CharField(max_length=100)
+    floor = models.CharField(max_length=100, blank=True, default='')
+    reference = models.CharField(max_length=100, blank=True, default='')
+    location = models.CharField(max_length=100, blank=True, default='')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
 
 class State(models.Model):
@@ -63,8 +71,8 @@ class State(models.Model):
 class Order(models.Model):
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
+    address = models.ForeignKey(AddressSaved, on_delete= models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    location = models.CharField(max_length=100)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
     total = models.IntegerField()

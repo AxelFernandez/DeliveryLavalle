@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
     'django.contrib.auth.backends.ModelBackend',
 )
 MIDDLEWARE = [

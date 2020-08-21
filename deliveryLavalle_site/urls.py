@@ -19,6 +19,7 @@ from django.contrib.auth import logout
 from django.urls import path, include
 
 from core import urls as core_urls
+from api import urls as api_urls
 from deliveryLavalle_site import views
 
 urlpatterns = [
@@ -27,5 +28,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('tutorial_meli_link/', views.tutorial_meli_link, name='tutorial-meli-link'),
     path('', include(core_urls)),
+    path('api/', include(api_urls)),
 
 ]
