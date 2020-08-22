@@ -121,8 +121,6 @@ class CompanyApi(APIView):
                     'description': company.description,
                     'photo': company.photo.url,
                     'category': company.category.description,
-
-
                 }
                 company_array.append(company_response)
         return Response({'company_list': company_array})

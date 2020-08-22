@@ -58,16 +58,17 @@ class CategoryProductCreate(LoginRequiredMixin, CreateView):
     template_name = 'core/create_product_category.html'
     form_class = FormCategory
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.company = get_company(self.request.user)
+        return super().form_valid(form)
+
 class CategoryProductUpdate(LoginRequiredMixin, UpdateView):
     model = ProductCategories
     success_url = reverse_lazy('product-category-list')
     template_name = 'core/update_product_category.html'
     form_class = FormCategory
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.company_id = get_company(self.request.user)
-        return super().form_valid(form)
 
 
 class CategoryProductDelete(LoginRequiredMixin, DeleteView):
@@ -81,6 +82,9 @@ class CategoryProductList(LoginRequiredMixin,ListView):
     model = ProductCategories
     template_name = 'core/list_product_category.html'
     form_class = FormCategory
+
+    def get_queryset(self):
+        return ProductCategories.objects.filter(company=get_company(self.request.user))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(CategoryProductList, self).get_context_data()
