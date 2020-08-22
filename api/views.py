@@ -5,6 +5,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
+from django.utils.datetime_safe import datetime
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -13,7 +14,7 @@ import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
-from core.models import Client, Company
+from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder
 
 
 class ClientApi(APIView):
@@ -40,7 +41,10 @@ class ClientApi(APIView):
         phone = request.data.get("phone")
         if id is None or first_name is None or last_name is None or phone is None:
             return Response({'message': 'Not enought arguments  '
-                                        'Id {}, first Name is {}, last name is {}, phone is {}'.format(id, first_name, last_name, phone)}, status=400)
+                                        'Id {}, first Name is {}, last name is {}, phone is {}'.format(id, first_name,
+                                                                                                       last_name,
+                                                                                                       phone)},
+                            status=400)
         client = Client.objects.get(pk=id)
         client.phone = phone
         client.save()
@@ -117,13 +121,14 @@ class CompanyApi(APIView):
         for company in company_list:
             if company.available_now:
                 company_response = {
+                    'id': company.pk,
                     'name': company.name,
                     'description': company.description,
                     'photo': company.photo.url,
                     'category': company.category.description,
                 }
                 company_array.append(company_response)
-        return Response({'company_list': company_array})
+        return Response(company_array)
 
     def find_company_near(self, lat, long):
         company_all = Company.objects.all().order_by('category')
@@ -134,3 +139,136 @@ class CompanyApi(APIView):
                     and limits.get('east') > long > limits.get('west'):
                 company_list.append(company)
         return company_list
+
+
+class CompanyDetailApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        comapny_id = request.query_params.get('id')
+        company = Company.objects.get(pk=comapny_id)
+        company_response = {
+            'name': company.name,
+            'description': company.description,
+            'address': company.address,
+            'photo': company.photo.url,
+            'limits': company.limits,
+            'category': company.category.description,
+        }
+        return Response(company_response)
+
+
+class ProductApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        comapny_id = request.query_params.get('id')
+        products = Products.objects.filter(id_company=comapny_id)
+        products_array = []
+        for product in products:
+            if product.is_available:
+                item = {
+                    'name': product.name,
+                    'description': product.description,
+                    'price': product.price,
+                    'photo': product.photo.url,
+                    'category': product.category.description,
+                }
+                products_array.append(item)
+        return Response(products_array)
+
+
+class AddressApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        client = Client.objects.get(user=self.request.user)
+        addresses = AddressSaved.objects.filter(client=client)
+        address_array = []
+        for address in addresses:
+            item = {
+                'street': address.item,
+                'number': address.number,
+                'district': address.district,
+                'floor': address.floor,
+                'reference': address.reference,
+                'location': address.location,
+            }
+            address_array.append(item)
+        return Response(address_array)
+
+    def post(self, request):
+        street = request.data.get("street")
+        number = request.data.get("number")
+        district = request.data.get("district")
+        floor = request.data.get("floor")
+        reference = request.data.get("reference")
+        location = request.data.get("location")
+        address = AddressSaved()
+        address.street = street
+        address.number = number
+        address.district = district
+        address.floor = floor
+        address.reference = reference
+        address.location = location
+        address.client = Client.objects.get(user=self.request.user)
+        address.save()
+        return Response({
+            'address_id': address.pk
+        })
+
+
+class OrderApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        company = request.data.get("company")
+        address = request.data.get("address_id")
+        payment_method = request.data.get("payment_method")
+        total = request.data.get("total")
+        items = request.data.get("items")
+        if  payment_method is None \
+                or total is None or items is None:
+            return Response({'message': 'Some Atribute is not Found'}, status=400)
+        client = Client.objects.get(user=self.request.user)
+
+        order = Order()
+        order.id_company = Company.objects.get(pk=company)
+        order.state = State.objects.get(pk=1)
+        order.address = AddressSaved.objects.get(pk=address)
+        order.client = client
+        order.payment_method = PaymentMethod.objects.get(description=payment_method)
+        order.total = int(total)
+        order.save()
+
+        for item in items:
+            detail_order = DetailOrder()
+            detail_order.order = order
+            detail_order.product = Products.objects.get(pk=item.get('product_id'))
+            detail_order.quantity = item.get('quantity')
+            detail_order.save()
+
+        response = {'date_created': order.date,
+                    'order_id': order.pk,
+                    'state': order.state.description,
+                    }
+        return Response(response)
+
+    def get(self, request):
+        client = Client.objects.get(user=self.request.user)
+        orders = Order.objects.filter(client=client)
+        orders_array = []
+        for order in orders:
+            address = "{} {}, {}".format(order.address.street,
+                                         order.address.number,
+                                         order.address.district)
+            item = {
+                'company': order.id_company.name,
+                'state': order.state.description,
+                'address': address,
+                'payment_method': order.payment_method.description,
+                'total': order.total,
+            }
+            orders_array.append(item)
+
+        return Response(orders_array)

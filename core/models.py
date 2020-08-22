@@ -73,9 +73,9 @@ class AddressSaved(models.Model):
     street = models.CharField(max_length=100)
     number = models.CharField(max_length=100)
     district = models.CharField(max_length=100)
-    floor = models.CharField(max_length=100, blank=True, default='')
-    reference = models.CharField(max_length=100, blank=True, default='')
-    location = models.CharField(max_length=100, blank=True, default='')
+    floor = models.CharField(max_length=100, null=True, blank=True, default='')
+    reference = models.CharField(max_length=100, null=True, blank=True, default='')
+    location = models.CharField(max_length=100, null=True, blank=True, default='')
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
 

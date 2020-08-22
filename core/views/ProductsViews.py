@@ -12,6 +12,11 @@ class CreateProducts(LoginRequiredMixin, CreateView):
     model = Products
     form_class = FormProducts
 
+    def get_form(self, *args, **kwargs):
+        form = super(CreateProducts, self).get_form(*args, **kwargs)
+        form.fields['category'].queryset = ProductCategories.objects.filter(company=get_company(self.request.user))
+        return form
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['user'] = self.request.user
