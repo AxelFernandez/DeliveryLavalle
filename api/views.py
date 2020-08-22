@@ -1,3 +1,5 @@
+import ast
+
 from django.shortcuts import render
 
 # Create your views here.
@@ -11,7 +13,7 @@ import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
-from core.models import Client
+from core.models import Client, Company
 
 
 class ClientApi(APIView):
@@ -68,22 +70,25 @@ class GoogleView(APIView):
 
         if 'error' in data:
             content = {'message': 'wrong google token / this google token is already expired.'}
-            return Response(content,status=400)
+            return Response(content, status=400)
 
         # create user if not exist
         is_new = False
         try:
             user = User.objects.get(email=data['email'])
-            client = Client.objects.get(user=user)
         except User.DoesNotExist:
             user = User()
             user.username = data['email']
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = data['email']
+            user.first_name = data['given_name']
+            user.last_name = data['family_name']
             is_new = True
             user.save()
-
+        try:
+            client = Client.objects.get(user=user)
+        except Client.DoesNotExist:
             client = Client()
             client.user = user
             client.photo = data['picture']
@@ -98,3 +103,36 @@ class GoogleView(APIView):
                     }
         return Response(response)
 
+
+class CompanyApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        lat = float(request.query_params.get('lat'))
+        long = float(request.query_params.get('long'))
+        if lat is None or long is None:
+            return Response({'message': 'Latitude or Longitude not Found'}, status=400)
+        company_list = self.find_company_near(lat, long)
+        company_array = []
+        for company in company_list:
+            if company.available_now:
+                company_response = {
+                    'name': company.name,
+                    'description': company.description,
+                    'photo': company.photo.url,
+                    'category': company.category.description,
+
+
+                }
+                company_array.append(company_response)
+        return Response({'company_list': company_array})
+
+    def find_company_near(self, lat, long):
+        company_all = Company.objects.all().order_by('category')
+        company_list = []
+        for company in company_all:
+            limits = ast.literal_eval(company.limits)
+            if limits.get('north') > lat > limits.get('south') \
+                    and limits.get('east') > long > limits.get('west'):
+                company_list.append(company)
+        return company_list

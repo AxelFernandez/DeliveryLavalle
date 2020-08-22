@@ -13,6 +13,13 @@ class PaymentMethod(models.Model):
         return self.description
 
 
+class CompanyCategory(models.Model):
+    description = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.description
+
+
 class Company(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
@@ -22,6 +29,7 @@ class Company(models.Model):
     photo = CloudinaryField('image')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
+    category = models.ForeignKey(CompanyCategory,on_delete=models.CASCADE)
     account_debit = models.FloatField()
     payment_method = models.ManyToManyField(PaymentMethod)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -30,12 +38,22 @@ class Company(models.Model):
         return self.name
 
 
+class ProductCategories(models.Model):
+    description = models.CharField(max_length=250)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.description
+
+
+
 class Products(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
     price = models.IntegerField()
     is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
     photo = CloudinaryField('image')
+    category = models.ForeignKey(ProductCategories, on_delete=models.CASCADE)
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -4,7 +4,9 @@ from core.views.Companyviews import RegistryCompany, CompanyRegistered, Configur
     update_available_company
 from core.views.MeliViews import SendMeliLink, UpdateMeliLink, process_payment
 from core.views.OrdersViews import OrderList, OrderDetail, ajax_order_list, cancel_order, get_next_state
-from core.views.ProductsViews import CreateProducts, ProductsList, ProductEdit, ProductDelete
+from core.views.ProductsViews import CreateProducts, ProductsList, ProductEdit, ProductDelete, CategoryProductList, \
+    CategoryProductUpdate, CategoryProductDelete, CategoryProductCreate
+
 from core.views.SalesViews import Sales, process_paid_cron_start, PeriodsPaymentServices, SalesInMonth
 from core.views.UserViews import change_stock_status
 
@@ -24,6 +26,11 @@ urlpatterns = [
     path('products', ProductsList.as_view(), name='product-list'),
     path('products/edit/<pk>', ProductEdit.as_view(), name='product-edit'),
     path('products/delete/<pk>', ProductDelete.as_view(), name='product-delete'),
+
+    path('category', CategoryProductList.as_view(), name='product-category-list'),
+    path('category/edit/<pk>', CategoryProductUpdate.as_view(), name='product-category-edit'),
+    path('category/delete/<pk>', CategoryProductDelete.as_view(), name='product-category-delete'),
+    path('category/create', CategoryProductCreate.as_view(), name='product-category-create'),
 
     # User
     path('change-user-status/<pk>', change_stock_status, name='change-stock-status'),

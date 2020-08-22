@@ -1,13 +1,13 @@
 from django.forms import ModelForm
 from django import forms
 
-from core.models import Company, Products, PaymentMethod, MeliLinks
+from core.models import Company, Products, PaymentMethod, MeliLinks, ProductCategories
 
 
 class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'address',  'phone', 'payment_method', 'available_now', 'photo', 'limits']
+        fields = ['name', 'description','category', 'address',  'phone', 'payment_method', 'available_now', 'photo', 'limits']
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -44,6 +44,12 @@ class FormCompany(forms.ModelForm):
                     'class': 'form-control',
                 }
             ),
+            'category': forms.Select(
+                attrs={
+                    'id': 'category',
+                    'class': 'form-control',
+                }
+            ),
             'payment_method': forms.CheckboxSelectMultiple(
                 attrs={
                     'id': 'payment_method',
@@ -66,7 +72,7 @@ class FormCompany(forms.ModelForm):
 class FormProducts(forms.ModelForm):
     class Meta:
         model = Products
-        fields = ['name', 'description', 'price', 'is_available', 'photo']
+        fields = ['name', 'description', 'price', 'category', 'is_available', 'photo']
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -85,6 +91,12 @@ class FormProducts(forms.ModelForm):
             'is_available': forms.Select(
                 attrs={
                     'id': 'available_now',
+                    'class': 'form-control',
+                }
+            ),
+            'category': forms.Select(
+                attrs={
+                    'id': 'category',
                     'class': 'form-control',
                 }
             ),
@@ -128,4 +140,22 @@ class FormMeliLinks(forms.ModelForm):
         }
         labels = {
             'link': '',
+        }
+
+
+class FormCategory(forms.ModelForm):
+    class Meta:
+        model = ProductCategories
+        fields = ['description']
+        widgets = {
+            'description': forms.TextInput(
+                attrs={
+                    'id': 'description',
+                    'class': 'form-control form-control-lg',
+                    'placeholder': 'Descripción de la Categoria',
+                }
+            )
+        }
+        labels = {
+            'description': '',
         }

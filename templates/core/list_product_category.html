@@ -1,0 +1,43 @@
+{% include 'base.html' %}
+{% include 'nav.html' %}
+{% load static %}
+
+<body>
+<div class="container-sm" id="cont">
+    <div class="card" style="margin-top: 60px;">
+        	<a href="{% url 'product-category-create'%}" class="btn btn-success">Cargar Categoria</a>
+
+       <div class="container">
+  <div class="row">
+    <div class="col-12">
+		<table class="table table-image">
+		  <thead>
+		    <tr>
+		      <th scope="col">Nombre</th>
+		      <th scope="col">Productos en esta Categoria</th>
+		      <th scope="col"></th>
+		      <th scope="col"></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+          {% for category in object_list %}
+		    <tr>
+				<td>{{category.description}}</td>
+				<td>{{category.products_in}}</td>
+		      <td><a class="btn btn-warning" href='{% url "product-category-edit" pk=category.id %}'>Editar</a></td>
+		      <td><a class="btn btn-danger" href='{% url "product-category-delete" pk=category.id %}'>Eliminar</a></td>
+
+		    </tr>
+          {% endfor %}
+
+		  </tbody>
+		</table>
+    </div>
+  </div>
+</div>
+    </div>
+	<br>
+   <a class="btn btn-primary" href="{% url 'product-list'%}">Ir a Productos</a>
+
+</body>
+</html>

@@ -47,5 +47,12 @@
         "fields": {
             "description": "Mercado Pago"
         }
+    },
+        {
+        "model": "core.companycategory",
+        "pk": 1,
+        "fields": {
+            "description": "Delivery de Comidas"
+        }
     }
 ]

@@ -2,8 +2,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 
-from core.form import FormProducts
-from core.models import Products, Company
+from core.form import FormProducts, FormCategory
+from core.models import Products, Company, ProductCategories
+from core.views.Companyviews import get_company
 
 
 class CreateProducts(LoginRequiredMixin, CreateView):
@@ -50,3 +51,40 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('product-list')
     template_name = 'core/delete_products.html'
 
+
+class CategoryProductCreate(LoginRequiredMixin, CreateView):
+    model = ProductCategories
+    success_url = reverse_lazy('product-category-list')
+    template_name = 'core/create_product_category.html'
+    form_class = FormCategory
+
+class CategoryProductUpdate(LoginRequiredMixin, UpdateView):
+    model = ProductCategories
+    success_url = reverse_lazy('product-category-list')
+    template_name = 'core/update_product_category.html'
+    form_class = FormCategory
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.company_id = get_company(self.request.user)
+        return super().form_valid(form)
+
+
+class CategoryProductDelete(LoginRequiredMixin, DeleteView):
+    model = ProductCategories
+    success_url = reverse_lazy('product-category-list')
+    template_name = 'core/delete_product_category.html'
+    form_class = FormCategory
+
+
+class CategoryProductList(LoginRequiredMixin,ListView):
+    model = ProductCategories
+    template_name = 'core/list_product_category.html'
+    form_class = FormCategory
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryProductList, self).get_context_data()
+        for category in self.object_list:
+            products = Products.objects.filter(category=category).count()
+            category.products_in = products
+        return context
