@@ -27,7 +27,7 @@ class OrderList(LoginRequiredMixin, ListView):
         context['ajax_active'] = settings.AJAX_ACTIVE
         for order in context['object_list']:
             order.products = []
-            order.next_state = core.STATES[order.state.id + 1]
+            order.next_state = get_next_state_str(order)
             query_order_products = DetailOrder.objects.filter(order_id=order.id)
             order.is_MP = False
             if order.payment_method.description == 'Mercado Pago':
@@ -44,7 +44,7 @@ class OrderList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         company_id = Company.objects.get(id_user=self.request.user)
-        query_set = Order.objects.filter(id_company=company_id).exclude(state=4).exclude(state=5).order_by('-date')
+        query_set = Order.objects.filter(id_company=company_id).exclude(state=5).exclude(state=6).order_by('-date')
         self.len_orders = len(query_set)
         return query_set
 
@@ -56,12 +56,28 @@ class OrderDetail(LoginRequiredMixin, DetailView):
 
 def get_next_state(request,pk):
     order = Order.objects.get(pk=pk)
-    if order.state.description != core.STATES[4]:  # If the order is not in the last state, add one state
-        order.state = State.objects.get(pk=order.state.id+1)
+    if order.state.description != core.STATES[5]:  # If the order is not in the last state, add one state
+        order_to_search = order.state.id+1
+        if order_to_search == 3 and order.retry_in_local:
+            order_to_search += 1
+        if order_to_search ==4 and not order.retry_in_local:
+            order_to_search += 1
+        order.state = State.objects.get(pk=order_to_search)
         order.save()
-    if order.state.description == core.STATES[4]:
+
+    if order.state.description == core.STATES[5]:
         add_debit(request.user,order)
     return HttpResponseRedirect(reverse('orders'))
+
+
+def get_next_state_str(order):
+    pk_to_search = order.state.id + 1
+    if pk_to_search == 3 and order.retry_in_local:
+        pk_to_search += 1
+    if pk_to_search == 4 and not order.retry_in_local:
+        pk_to_search += 1
+    state = core.STATES[pk_to_search]
+    return state
 
 
 def add_debit(user, order):
@@ -73,7 +89,7 @@ def add_debit(user, order):
 
 def cancel_order(request, pk):
     order = Order.objects.get(pk=pk)
-    order.state = State.objects.get(pk=5)
+    order.state = State.objects.get(pk=6)
     order.save()
     return HttpResponseRedirect(reverse('orders'))
 

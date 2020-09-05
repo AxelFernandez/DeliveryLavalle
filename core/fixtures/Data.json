@@ -24,12 +24,19 @@
         "model": "core.state",
         "pk": 4,
         "fields": {
-            "description": "Entregado"
+            "description": "Listo para Retirar"
         }
     },
     {
         "model": "core.state",
         "pk": 5,
+        "fields": {
+            "description": "Entregado"
+        }
+    },
+    {
+        "model": "core.state",
+        "pk": 6,
         "fields": {
             "description": "Cancelado"
         }
@@ -48,11 +55,42 @@
             "description": "Mercado Pago"
         }
     },
-        {
+    {
+        "model": "core.deliverymethod",
+        "pk": 1,
+        "fields": {
+            "description": "Entrega por Delivery"
+        }
+    },
+    {
+        "model": "core.deliverymethod",
+        "pk": 2,
+        "fields": {
+            "description": "Entrega en el Local"
+        }
+    },
+    {
         "model": "core.companycategory",
         "pk": 1,
         "fields": {
-            "description": "Delivery de Comidas"
+            "description": "Comida",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/pizza%20(2).png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 2,
+        "fields": {
+            "description": "Indumentaria",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/vestir.png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 3,
+        "fields": {
+            "description": "Beauty",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/productos-cosmeticos.png?alt=media"
         }
     }
 ]

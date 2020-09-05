@@ -14,7 +14,8 @@ import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
-from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder
+from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
+    CompanyCategory
 
 
 class ClientApi(APIView):
@@ -26,41 +27,33 @@ class ClientApi(APIView):
         if client_id is None:
             return Response({'message': 'Must specify an Client id'})
         client = Client.objects.get(pk=client_id)
-        content = {'id': client.pk,
-                   'phone': client.phone,
-                   'photo': client.photo,
+        content = {'clientid': client.pk,
                    'email': client.user.email,
-                   'name': "{} {}".format(client.user.first_name, client.user.last_name)
+                   'givenName': client.user.first_name,
+                   'familyName': client.user.last_name,
+                   'photo': client.photo,
+                   'phone': client.phone,
+                   'username': client.user.username,
                    }
         return Response(content)
 
     def post(self, request):
-        id = request.data.get("id")
-        first_name = request.data.get("first_name")
-        last_name = request.data.get("last_name")
+        id = request.data.get("clientId")
+
         phone = request.data.get("phone")
-        if id is None or first_name is None or last_name is None or phone is None:
-            return Response({'message': 'Not enought arguments  '
-                                        'Id {}, first Name is {}, last name is {}, phone is {}'.format(id, first_name,
-                                                                                                       last_name,
-                                                                                                       phone)},
-                            status=400)
+        if id is None or phone is None:
+            return Response({'message': 'Not enought arguments Id {}, first Name is {}, last name is {}, phone is {}'.format(id, phone)}, status=400)
         client = Client.objects.get(pk=id)
         client.phone = phone
         client.save()
-
-        user = User.objects.get(pk=client.user.pk)
-        user.first_name = first_name
-        user.last_name = last_name
-        user.save()
-
-        content = {
-            "id": client.pk,
-            "first_name": client.user.first_name,
-            "last_name": client.user.last_name,
-            "phone": client.phone,
-
-        }
+        content = {'clientid': client.pk,
+                   'email': client.user.email,
+                   'givenName': client.user.first_name,
+                   'familyName': client.user.last_name,
+                   'photo': client.photo,
+                   'phone': client.phone,
+                   'username': client.user.username,
+                   }
         return Response(content)
 
 
@@ -68,26 +61,20 @@ class GoogleView(APIView):
 
     # Send a Body {"token": TOKEN_HERE}
     def post(self, request):
-        payload = {'access_token': request.data.get("token"), 'alt': 'json'}  # validate the token
-        r = requests.get('https://www.googleapis.com/oauth2/v2/userinfo', params=payload)
-        data = json.loads(r.text)
-
-        if 'error' in data:
-            content = {'message': 'wrong google token / this google token is already expired.'}
-            return Response(content, status=400)
 
         # create user if not exist
         is_new = False
+        soft_account = False
         try:
-            user = User.objects.get(email=data['email'])
+            user = User.objects.get(email=request.data.get('email'))
         except User.DoesNotExist:
             user = User()
-            user.username = data['email']
+            user.username = request.data.get('email')
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = data['email']
-            user.first_name = data['given_name']
-            user.last_name = data['family_name']
+            user.email = request.data.get('email')
+            user.first_name = request.data.get('givenName')
+            user.last_name = request.data.get('familyName')
             is_new = True
             user.save()
         try:
@@ -95,12 +82,16 @@ class GoogleView(APIView):
         except Client.DoesNotExist:
             client = Client()
             client.user = user
-            client.photo = data['picture']
-            client.save()
+            client.photo = request.data.get('photo')
+            client.phone = request.data.get('phone')
 
+            if client.photo is None or client.phone is None:
+                soft_account = True
+            client.save()
         token = RefreshToken.for_user(user)  # generate token without username & password
         response = {"is_new": is_new,
-                    "client_id": client.pk,
+                    "completeRegistry": soft_account,
+                    "clientId": client.pk,
                     "username": user.username,
                     "access_token": str(token.access_token),
                     "refresh_token": str(token)
@@ -111,16 +102,26 @@ class GoogleView(APIView):
 class CompanyApi(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        lat = float(request.query_params.get('lat'))
-        long = float(request.query_params.get('long'))
+    def post(self, request):
+        category = request.data.get('description')
+        lat = float(request.data.get('lat'))
+        long = float(request.data.get('long'))
         if lat is None or long is None:
             return Response({'message': 'Latitude or Longitude not Found'}, status=400)
-        company_list = self.find_company_near(lat, long)
+        company_list = self.find_company_near(lat, long, category)
         company_array = []
+
         for company in company_list:
-            if company.available_now:
+            payment_array = []
+            delivery_array = []
+            if company.available_now == "SI":
+                for method in company.payment_method.all():
+                    payment_array.append(method.description)
+                for delivery_method in company.delivery_method.all():
+                    delivery_array.append(delivery_method.description)
                 company_response = {
+                    'paymentMethod': payment_array,
+                    'deliveryMethod': delivery_array,
                     'id': company.pk,
                     'name': company.name,
                     'description': company.description,
@@ -130,8 +131,12 @@ class CompanyApi(APIView):
                 company_array.append(company_response)
         return Response(company_array)
 
-    def find_company_near(self, lat, long):
-        company_all = Company.objects.all().order_by('category')
+    def find_company_near(self, lat, long, description=None):
+        if description is None:
+            company_all = Company.objects.all().order_by('category')
+        else:
+            category = CompanyCategories.objects.get(description = description)
+            company_all = Company.objects.filter(categoty=category)
         company_list = []
         for company in company_all:
             limits = ast.literal_eval(company.limits)
@@ -214,8 +219,23 @@ class AddressApi(APIView):
         address.client = Client.objects.get(user=self.request.user)
         address.save()
         return Response({
-            'address_id': address.pk
+            'addressId': address.pk
         })
+
+class CompanyCategories(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        categories = CompanyCategory.objects.all()
+        category_array = []
+        for category in categories:
+            item = {
+                'description': category.description,
+                'photo': category.photo,
+            }
+            category_array.append(item)
+
+        return Response(category_array)
 
 
 class OrderApi(APIView):

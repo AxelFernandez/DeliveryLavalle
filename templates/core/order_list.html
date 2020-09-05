@@ -20,6 +20,7 @@
                   </p>
                   <b class="card-text">Total del Pedido: ${{ order.total }}</b>
                 </div>
+                {%if order.retry_in_local %}
                 <ul class="list-group list-group-flush">
 
                     <li class="list-group-item bg-light">Direccion de Entrega: {{order.address.street}} {{order.address.number}}, {{order.address.district}} {{order.address.floor}}</li>
@@ -27,6 +28,14 @@
                     <li class="list-group-item bg-light">Punto a entregar en: <a href="https://maps.google.com/?q={{order.location}}">Ver en el Mapa <i class="fa fa-map-marker"></i> </a> </li>
                     <li class="list-group-item bg-light">Recibido: {{order.date|date:"d/m/Y H:i"}}</li>
                 </ul>
+                {%else%}
+                <ul class="list-group list-group-flush">
+
+                    <li class="list-group-item bg-light">Entrega en tu local</li>
+
+                </ul>
+
+                {%endif%}
                  <div class="card-body">
                      Productos Pedidos:
                     <table style="margin-left: 30px" class="table">

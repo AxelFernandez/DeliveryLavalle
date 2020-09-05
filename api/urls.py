@@ -1,7 +1,8 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from api.views import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, OrderApi
+from api.views import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, OrderApi, \
+    CompanyCategories
 
 urlpatterns = [
     path('google', GoogleView.as_view(), name='google'),
@@ -12,5 +13,6 @@ urlpatterns = [
     path('product', ProductApi.as_view(), name='product-api'),
     path('address', AddressApi.as_view(), name='address-api'),
     path('order', OrderApi.as_view(), name='order-api'),
+    path('company_category', CompanyCategories.as_view(), name='comapny-category-api'),
 
 ]

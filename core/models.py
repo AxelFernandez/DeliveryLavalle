@@ -13,8 +13,16 @@ class PaymentMethod(models.Model):
         return self.description
 
 
+class DeliveryMethod(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+
+
 class CompanyCategory(models.Model):
     description = models.CharField(max_length=150)
+    photo = models.CharField(max_length=3000)
 
     def __str__(self):
         return self.description
@@ -32,6 +40,7 @@ class Company(models.Model):
     category = models.ForeignKey(CompanyCategory,on_delete=models.CASCADE)
     account_debit = models.FloatField()
     payment_method = models.ManyToManyField(PaymentMethod)
+    delivery_method = models.ManyToManyField(DeliveryMethod)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -62,7 +71,7 @@ class Products(models.Model):
 
 class Client(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    phone = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=100, null=True, blank=True)
     photo = models.CharField(max_length=4000)
 
     def __str__(self):
@@ -89,8 +98,9 @@ class State(models.Model):
 class Order(models.Model):
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
-    address = models.ForeignKey(AddressSaved, on_delete= models.CASCADE)
+    address = models.ForeignKey(AddressSaved, null=True, blank=True, on_delete= models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    retry_in_local = models.BooleanField(default=False)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
     total = models.IntegerField()

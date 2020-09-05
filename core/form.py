@@ -7,7 +7,7 @@ from core.models import Company, Products, PaymentMethod, MeliLinks, ProductCate
 class FormCompany(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description','category', 'address',  'phone', 'payment_method', 'available_now', 'photo', 'limits']
+        fields = ['name', 'description','category', 'address',  'phone', 'payment_method', 'delivery_method', 'available_now', 'photo', 'limits']
         widgets = {
             'name': forms.TextInput(
                 attrs={
@@ -55,14 +55,22 @@ class FormCompany(forms.ModelForm):
                     'id': 'payment_method',
                     'label': 'hola'
                 }
+            ),
+            'delivery_method': forms.CheckboxSelectMultiple(
+                attrs={
+                    'id': 'delivery_method',
+                    'label': 'f'
+                }
             )
         }
         labels = {
             'name': '',
             'description': '',
             'address': '',
+            'category': 'Categoría',
             'phone': '',
             'payment_method': 'Selecciona los metodos de pago que Aceptas',
+            'delivery_method': 'Selecciona los metodos de entrega',
             'available_now': '¿Estás disponible para empezar a vender ahora?',
             'photo': 'Subí el logo de tu empresa',
             'limits': ''
