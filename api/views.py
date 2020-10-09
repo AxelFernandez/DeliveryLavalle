@@ -15,7 +15,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory
+    CompanyCategory, ProductCategories
 
 
 class ClientApi(APIView):
@@ -99,11 +99,26 @@ class GoogleView(APIView):
         return Response(response)
 
 
+class MethodApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        company_id = request.data
+        company = Company.objects.get(pk=company_id)
+        methods = []
+        for method in company.payment_method.all():
+            methods.append(method.description)
+        company_response = {
+            'methods': methods,
+        }
+        return Response(company_response)
+
+
 class CompanyApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        category = request.data.get('description')
+        category = request.data.get('category')
         lat = float(request.data.get('lat'))
         long = float(request.data.get('long'))
         if lat is None or long is None:
@@ -112,16 +127,14 @@ class CompanyApi(APIView):
         company_array = []
 
         for company in company_list:
-            payment_array = []
-            delivery_array = []
+            methods = []
             if company.available_now == "SI":
                 for method in company.payment_method.all():
-                    payment_array.append(method.description)
+                    methods.append(method.description)
                 for delivery_method in company.delivery_method.all():
-                    delivery_array.append(delivery_method.description)
+                    methods.append(delivery_method.description)
                 company_response = {
-                    'paymentMethod': payment_array,
-                    'deliveryMethod': delivery_array,
+                    'methods': methods,
                     'id': company.pk,
                     'name': company.name,
                     'description': company.description,
@@ -135,8 +148,8 @@ class CompanyApi(APIView):
         if description is None:
             company_all = Company.objects.all().order_by('category')
         else:
-            category = CompanyCategories.objects.get(description = description)
-            company_all = Company.objects.filter(categoty=category)
+            category = CompanyCategory.objects.get(description=description)
+            company_all = Company.objects.filter(category=category)
         company_list = []
         for company in company_all:
             limits = ast.literal_eval(company.limits)
@@ -149,15 +162,21 @@ class CompanyApi(APIView):
 class CompanyDetailApi(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        comapny_id = request.query_params.get('id')
+    def post(self, request):
+        comapny_id = request.data
         company = Company.objects.get(pk=comapny_id)
+        methods = []
+        for method in company.payment_method.all():
+            methods.append(method.description)
+        for delivery_method in company.delivery_method.all():
+            methods.append(delivery_method.description)
         company_response = {
+            'methods': methods,
+            'id': company.pk,
             'name': company.name,
             'description': company.description,
             'address': company.address,
             'photo': company.photo.url,
-            'limits': company.limits,
             'category': company.category.description,
         }
         return Response(company_response)
@@ -166,13 +185,19 @@ class CompanyDetailApi(APIView):
 class ProductApi(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def get(self, request):
-        comapny_id = request.query_params.get('id')
-        products = Products.objects.filter(id_company=comapny_id)
+    def post(self, request):
+        comapny_id = request.data.get('companyId')
+        categoty = request.data.get('category')
+        if categoty is None:
+            products = Products.objects.filter(id_company=comapny_id)
+        else:
+            category_object = ProductCategories.objects.get(description= categoty)
+            products = Products.objects.filter(id_company=comapny_id,category= category_object)
         products_array = []
         for product in products:
             if product.is_available:
                 item = {
+                    'id': product.pk,
                     'name': product.name,
                     'description': product.description,
                     'price': product.price,
@@ -181,6 +206,14 @@ class ProductApi(APIView):
                 }
                 products_array.append(item)
         return Response(products_array)
+
+class AddressDelete(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        id = request.data.get("id")
+        AddressSaved.objects.get(pk=id).delete()
+        return Response(id)
 
 
 class AddressApi(APIView):
@@ -192,7 +225,8 @@ class AddressApi(APIView):
         address_array = []
         for address in addresses:
             item = {
-                'street': address.item,
+                'id': address.pk,
+                'street': address.street,
                 'number': address.number,
                 'district': address.district,
                 'floor': address.floor,
@@ -237,6 +271,21 @@ class CompanyCategories(APIView):
 
         return Response(category_array)
 
+class ProductCategoriesByCompany(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        company_id = request.data
+        company = Company.objects.get(pk=company_id)
+        categories = ProductCategories.objects.filter(company = company)
+        category_array = []
+        for category in categories:
+            item = {
+                'description': category.description,
+            }
+            category_array.append(item)
+
+        return Response(category_array)
 
 class OrderApi(APIView):
     permission_classes = (IsAuthenticated,)
