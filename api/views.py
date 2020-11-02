@@ -5,7 +5,9 @@ from django.shortcuts import render
 # Create your views here.
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
+from django.utils import formats, timezone
 from django.utils.datetime_safe import datetime
+from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -15,7 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory, ProductCategories
+    CompanyCategory, ProductCategories, MeliLinks
 
 
 class ClientApi(APIView):
@@ -113,6 +115,21 @@ class MethodApi(APIView):
         }
         return Response(company_response)
 
+class MethodDeliveryApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        company_id = request.data
+        company = Company.objects.get(pk=company_id)
+        methods = []
+        for method in company.delivery_method.all():
+            methods.append(method.description)
+        company_response = {
+            'methods': methods,
+        }
+        return Response(company_response)
+
+
 
 class CompanyApi(APIView):
     permission_classes = (IsAuthenticated,)
@@ -137,6 +154,7 @@ class CompanyApi(APIView):
                     'methods': methods,
                     'id': company.pk,
                     'name': company.name,
+                    'phone': company.phone,
                     'description': company.description,
                     'photo': company.photo.url,
                     'category': company.category.description,
@@ -176,6 +194,7 @@ class CompanyDetailApi(APIView):
             'name': company.name,
             'description': company.description,
             'address': company.address,
+            'phone': company.phone,
             'photo': company.photo.url,
             'category': company.category.description,
         }
@@ -195,7 +214,8 @@ class ProductApi(APIView):
             products = Products.objects.filter(id_company=comapny_id,category= category_object)
         products_array = []
         for product in products:
-            if product.is_available:
+            # TODO: Please, Refactor me ASAP!
+            if product.is_available == "SI":
                 item = {
                     'id': product.pk,
                     'name': product.name,
@@ -291,20 +311,29 @@ class OrderApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        company = request.data.get("company")
-        address = request.data.get("address_id")
-        payment_method = request.data.get("payment_method")
+        company = request.data.get("companyId")
+        address = request.data.get("addressId")
+        payment_method = request.data.get("paymentMethod")
+        retry_in_local_request = request.data.get("retryInLocal")
         total = request.data.get("total")
         items = request.data.get("items")
         if  payment_method is None \
                 or total is None or items is None:
             return Response({'message': 'Some Atribute is not Found'}, status=400)
         client = Client.objects.get(user=self.request.user)
+        company = Company.objects.get(pk=company)
+
+        # TODO: I feel shame, Refactor This Pliiiis!!
+        if company.available_now == "NO":
+            return Response({'state': "Cancelado",
+                             'responseCode': 400})
 
         order = Order()
-        order.id_company = Company.objects.get(pk=company)
+        order.id_company = company
         order.state = State.objects.get(pk=1)
-        order.address = AddressSaved.objects.get(pk=address)
+        order.retry_in_local = retry_in_local_request
+        if not retry_in_local_request:
+            order.address = AddressSaved.objects.get(pk=address)
         order.client = client
         order.payment_method = PaymentMethod.objects.get(description=payment_method)
         order.total = int(total)
@@ -313,31 +342,158 @@ class OrderApi(APIView):
         for item in items:
             detail_order = DetailOrder()
             detail_order.order = order
-            detail_order.product = Products.objects.get(pk=item.get('product_id'))
+            detail_order.product = Products.objects.get(pk=item.get('id'))
             detail_order.quantity = item.get('quantity')
             detail_order.save()
 
-        response = {'date_created': order.date,
-                    'order_id': order.pk,
+        response = {'dateCreated': formats.date_format(timezone.localtime(order.date), "d/m/Y H:i"),
+                    'orderId': order.pk,
                     'state': order.state.description,
+                    'responseCode': 200
                     }
         return Response(response)
 
     def get(self, request):
         client = Client.objects.get(user=self.request.user)
-        orders = Order.objects.filter(client=client)
+        orders = Order.objects.filter(client=client).order_by('-pk')
+        if request.data.get("orderId") is not None:
+            id_order = request.data.get("orderId")
+            orders = Order.objects.get(pk=id_order)
         orders_array = []
         for order in orders:
-            address = "{} {}, {}".format(order.address.street,
-                                         order.address.number,
-                                         order.address.district)
+            details = DetailOrder.objects.filter(order=order)
+            detail_array = []
+            for detail in details:
+                product = Products.objects.get(pk=detail.product.id)
+                subtotal = product.price * detail.quantity
+                item_detail = {
+                    'id': product.id,
+                    'quantity': detail.quantity,
+                    'description': product.description,
+                    'subtotal': subtotal,
+                }
+                detail_array.append(item_detail)
+            company_order = order.id_company
+            methods = []
+            for method in company_order.payment_method.all():
+                methods.append(method.description)
+            for delivery_method in company_order.delivery_method.all():
+                methods.append(delivery_method.description)
+            address = {}
+            if not order.retry_in_local:
+                address_order = order.address
+                address = {
+                    'id': address_order.pk,
+                    'street': address_order.street,
+                    'number': address_order.number,
+                    'district': address_order.number,
+                    'floor': address_order.floor,
+                    'reference': address_order.reference,
+                }
+            company = {
+                'id': company_order.pk,
+                'name': company_order.name,
+                'description': company_order.description,
+                'photo': company_order.photo.url,
+                'phone': company_order.phone,
+                'address': company_order.address,
+                'methods': methods,
+                'category': company_order.category.description,
+            }
+            order.date = formats.date_format(timezone.localtime(order.date), "d/m/Y H:i")
             item = {
-                'company': order.id_company.name,
+                'id': order.pk,
+                'company': company,
                 'state': order.state.description,
                 'address': address,
-                'payment_method': order.payment_method.description,
+                'dateCreated': order.date,
+                'retryInLocal': order.retry_in_local,
+                'paymentMethod': order.payment_method.description,
                 'total': order.total,
+                'items': detail_array
             }
             orders_array.append(item)
 
         return Response(orders_array)
+
+
+class OrderById(APIView):
+    permission_classes = (IsAuthenticated,)
+
+
+    def post(self, request):
+        id_order = request.data
+        order = Order.objects.get(pk=id_order)
+        details = DetailOrder.objects.filter(order=order)
+        detail_array = []
+        for detail in details:
+            product = Products.objects.get(pk=detail.product.id)
+            subtotal = product.price * detail.quantity
+            item_detail = {
+                'id': product.id,
+                'quantity': detail.quantity,
+                'description': product.description,
+                'subtotal': subtotal,
+            }
+            detail_array.append(item_detail)
+        company_order = order.id_company
+        methods = []
+        for method in company_order.payment_method.all():
+            methods.append(method.description)
+        for delivery_method in company_order.delivery_method.all():
+            methods.append(delivery_method.description)
+        address = {}
+        if not order.retry_in_local:
+            address_order = order.address
+            address = {
+                'id': address_order.pk,
+                'street': address_order.street,
+                'number': address_order.number,
+                'district': address_order.number,
+                'floor': address_order.floor,
+                'reference': address_order.reference,
+            }
+        company = {
+            'id': company_order.pk,
+            'name': company_order.name,
+            'description': company_order.description,
+            'photo': company_order.photo.url,
+            'phone': company_order.phone,
+            'address': company_order.address,
+            'methods': methods,
+            'category': company_order.category.description,
+        }
+        item = {
+            'id': order.pk,
+            'company': company,
+            'state': order.state.description,
+            'address': address,
+            'dateCreated': order.date,
+            'retryInLocal': order.retry_in_local,
+            'paymentMethod': order.payment_method.description,
+            'total': order.total,
+            'items': detail_array
+        }
+        return Response(item)
+
+
+
+class MeliLinkApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self,request):
+        order_id = request.data
+        try:
+           meli_link = MeliLinks.objects.get(order= order_id)
+        except:
+            return Response(
+                {
+                    "isAvailable": False
+                }
+            )
+        return Response(
+            {
+                "isAvailable": True,
+                "link": meli_link.link
+            }
+        )

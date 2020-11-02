@@ -20,7 +20,7 @@
                   </p>
                   <b class="card-text">Total del Pedido: ${{ order.total }}</b>
                 </div>
-                {%if order.retry_in_local %}
+                {%if not order.retry_in_local %}
                 <ul class="list-group list-group-flush">
 
                     <li class="list-group-item bg-light">Direccion de Entrega: {{order.address.street}} {{order.address.number}}, {{order.address.district}} {{order.address.floor}}</li>
