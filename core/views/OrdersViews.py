@@ -1,3 +1,4 @@
+import requests
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
@@ -5,9 +6,10 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView
 
 import core
-from core.models import Company, Order, DetailOrder, MeliLinks, Products, State
+from core.models import Company, Order, DetailOrder, MeliLinks, Products, State, FirebaseToken
 from core.views.Companyviews import get_company
 from core.views.SalesViews import apply_usage
+from utils.env import get_env_variable
 
 
 def ajax_order_list(request):
@@ -64,11 +66,43 @@ def get_next_state(request,pk):
             order_to_search += 1
         order.state = State.objects.get(pk=order_to_search)
         order.save()
+        text_to_notification = get_text_to_notification_client(order_to_search)
+        title = "Novedades de "+order.id_company.name
+        send_notification_to_customers(order, text_to_notification, title)
 
     if order.state.description == core.STATES[5]:
         add_debit(request.user,order)
     return HttpResponseRedirect(reverse('orders'))
 
+
+def get_text_to_notification_client(number):
+    if number == 2:
+        return "Tu Pedido fue confirmado, y esta siendo preparado"
+    if number == 3:
+        return "Tu Pedido esta en Camino!"
+    if number == 4:
+        return "Tu pedido esta listo para retirar por el local del vendedor"
+    if number == 5:
+        return "Entregamos tu pedido, que lo disfrutes"
+
+
+def send_notification_to_customers(order, text, title):
+    tokens = FirebaseToken.objects.filter(user=order.client.user)
+    tokens_array = []
+    for token in tokens:
+        tokens_array.append(token.token)
+
+    payload = {"Authorization": "key="+get_env_variable('FIREBASE_TOKEN'),
+               "Content-Type": "application/json"
+               }
+    data = {"registration_ids": tokens_array,
+            "notification": {
+            "title": title,
+            "body": text
+          }
+        }.__str__().replace('\'', '"')
+    r = requests.post('https://fcm.googleapis.com/fcm/send', data=data, headers = payload)
+    r.text
 
 def get_next_state_str(order):
     pk_to_search = order.state.id + 1

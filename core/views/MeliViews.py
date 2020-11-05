@@ -7,6 +7,7 @@ from django.views.generic import CreateView, UpdateView
 
 from core.form import FormMeliLinks
 from core.models import MeliLinks, Order, PaymentService, MeLiTransaction
+from core.views.OrdersViews import send_notification_to_customers
 
 
 class SendMeliLink(LoginRequiredMixin, CreateView):
@@ -18,6 +19,9 @@ class SendMeliLink(LoginRequiredMixin, CreateView):
         if self.request.user.is_authenticated:
             self.object = form.save(commit=False)
             self.object.order = Order.objects.get(pk=self.kwargs['pk'])
+            title = "Esta disponible tu Link de Pago de " + self.object.order.id_company.name
+            body = "Entra a la app y buscalo en mis ordenes"
+            send_notification_to_customers(self.object.order, body, title)
             return super().form_valid(form)
         else:
             reverse('login')

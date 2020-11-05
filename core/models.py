@@ -47,6 +47,11 @@ class Company(models.Model):
         return self.name
 
 
+class FirebaseToken(models.Model):
+    token = models.CharField(max_length=1024)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
 class ProductCategories(models.Model):
     description = models.CharField(max_length=250)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)

@@ -17,7 +17,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory, ProductCategories, MeliLinks
+    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken
 
 
 class ClientApi(APIView):
@@ -497,3 +497,17 @@ class MeliLinkApi(APIView):
                 "link": meli_link.link
             }
         )
+
+
+class FirebaseTokenApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self,request):
+        token = request.data
+        user = User.objects.get(email = self.request.user.email)
+        firebase_token = FirebaseToken()
+        firebase_token.user = user
+        firebase_token.token = token
+        firebase_token.save()
+        return Response({"done": True})
+
