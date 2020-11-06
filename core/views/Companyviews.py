@@ -56,6 +56,10 @@ class ConfigurationCompany(LoginRequiredMixin,ListView):
         payment_method = []
         for method in company.payment_method.all():
             payment_method.append(method)
+        delivery_method = []
+        for delivery in company.delivery_method.all():
+            delivery_method.append(delivery)
+        context['delivery_method'] = delivery_method
         context['payment_method'] = payment_method
         return context
 

@@ -22,6 +22,10 @@
                             {% for method in payment_method %}
                               <div class="text col-sm">  <i class="fa fa-check"></i> {{method.description}}</div>
                             {% endfor %}
+                            <div class="row text-muted col-sm">Metodos de Entrega que Aceptas</div>
+                            {% for delivery in delivery_method %}
+                              <div class="text col-sm">  <i class="fa fa-check"></i> {{delivery.description}}</div>
+                            {% endfor %}
                             <div class="row text-muted col-sm">Estas Disponible para recibir pedidos?</div>
                             {%if item.available_now == 'SI'%}
                                 <a href="{% url 'update-available-company' pk=item.id redirect=request.resolver_match.url_name %}" style="max-width:80px" class="btn btn-success" >{{item.available_now}}</a>
