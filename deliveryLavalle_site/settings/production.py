@@ -18,8 +18,8 @@ import dj_database_url
 from utils.env import get_env_variable
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '53044701658-0om8q1mb78ojfdd29fq30cpbc5h33ppr.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'U8WDeC2DqmOzAN5qV7NFme3H'
@@ -39,7 +39,8 @@ SECRET_KEY = '9e+mjri=s6f0ttenw4wkligc3o!i%s__9()rv6uykt%krkp(j7'
 DEBUG = True
 
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.herokuapp.com',
-                 'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar']
+                 'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar',
+                 '157.245.220.32']
 
 JWT_AUTH = {
     # how long the original token is valid for
@@ -119,14 +120,14 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'delivery-lavalle',
-        'USER': 'name',
-        'PASSWORD': '',
+        'NAME': 'deliveryLavallepg',
+        'USER': 'deliuser',
+        'PASSWORD': 'password',
         'PORT': '',
     }
 }
-DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(DB_FROM_ENV)
+# DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(DB_FROM_ENV)
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
