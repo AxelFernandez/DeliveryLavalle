@@ -130,9 +130,7 @@ DATABASES = {
 # DATABASES['default'].update(DB_FROM_ENV)
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+STATICFILES_DIRS = '/home/axel/DeliveryLavalle/deliveryLavalle_site/settings/static'
 
 
 # Password validation
