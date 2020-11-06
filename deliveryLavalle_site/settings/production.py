@@ -40,7 +40,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.herokuapp.com',
                  'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar',
-                 'localhost', '157.245.220.32']
+                 'localhost', '161.35.104.138']
 
 JWT_AUTH = {
     # how long the original token is valid for
