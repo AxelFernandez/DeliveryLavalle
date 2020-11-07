@@ -27,6 +27,7 @@ urlpatterns = [
     path('', views.home),
     path('logout/', views.logout_view, name='logout'),
     path('tutorial_meli_link/', views.tutorial_meli_link, name='tutorial-meli-link'),
+    path('terminosycondiciones/', views.term_and_conditions, name='term-and-conditions'),
     path('', include(core_urls)),
     path('api/', include(api_urls)),
 

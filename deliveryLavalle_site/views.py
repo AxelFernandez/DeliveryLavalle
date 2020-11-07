@@ -45,3 +45,7 @@ def tutorial_meli_link(request):
         return render(request, 'deliveryLavalle_site/tutorial_meli_link.html')
     else:
         return render(request, 'deliveryLavalle_site/index.html')
+
+
+def term_and_conditions(request):
+    return render(request, 'deliveryLavalle_site/term_and_conditions.html')
