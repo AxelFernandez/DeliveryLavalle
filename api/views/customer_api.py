@@ -74,7 +74,7 @@ class GoogleView(APIView):
             user.username = request.data.get('email')
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = request.data.get('email')
+            user.email = request.data.get('email').split("@")[0]
             user.first_name = request.data.get('givenName')
             user.last_name = request.data.get('familyName')
             is_new = True
@@ -502,12 +502,14 @@ class MeliLinkApi(APIView):
 class FirebaseTokenApi(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self,request):
+    def post(self, request):
         token = request.data
         user = User.objects.get(email = self.request.user.email)
-        firebase_token = FirebaseToken()
-        firebase_token.user = user
-        firebase_token.token = token
-        firebase_token.save()
+        tokens = FirebaseToken.objects.filter(token=token)
+        if len(tokens) == 0:
+            firebase_token = FirebaseToken()
+            firebase_token.user = user
+            firebase_token.token = token
+            firebase_token.save()
         return Response({"done": True})
 

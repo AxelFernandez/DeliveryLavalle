@@ -19,7 +19,8 @@ from django.contrib.auth import logout
 from django.urls import path, include
 
 from core import urls as core_urls
-from api import urls as api_urls
+from api.urls import urls_customer as api_urls
+from api.urls import urls_sellers as api_urls_seller
 from deliveryLavalle_site import views
 
 urlpatterns = [
@@ -30,5 +31,6 @@ urlpatterns = [
     path('terminosycondiciones/', views.term_and_conditions, name='term-and-conditions'),
     path('', include(core_urls)),
     path('api/', include(api_urls)),
+    path('sellers/', include(api_urls_seller)),
 
 ]

@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from api.views import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, OrderApi, \
+from api.views.customer_api import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, OrderApi, \
     CompanyCategories, ProductCategoriesByCompany, AddressDelete, MethodApi, MethodDeliveryApi, OrderById, MeliLinkApi, \
     FirebaseTokenApi
 
