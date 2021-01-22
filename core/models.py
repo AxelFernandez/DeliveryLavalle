@@ -33,12 +33,13 @@ class Company(models.Model):
     description = models.CharField(max_length=150)
     phone = models.CharField(max_length=50)
     address = models.CharField(max_length=50)
-    available_now = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
+    available_now = models.BooleanField(default=True)
     photo = CloudinaryField('image')
     id_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     limits = models.CharField(max_length=1000)
     category = models.ForeignKey(CompanyCategory,on_delete=models.CASCADE)
     account_debit = models.FloatField()
+    average_rating = models.FloatField(default=0.0)
     payment_method = models.ManyToManyField(PaymentMethod)
     delivery_method = models.ManyToManyField(DeliveryMethod)
     creation_date = models.DateTimeField(auto_now_add=True)
@@ -50,11 +51,13 @@ class Company(models.Model):
 class FirebaseToken(models.Model):
     token = models.CharField(max_length=1024)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    is_seller = models.BooleanField(null=True, default=False)
 
 
 class ProductCategories(models.Model):
     description = models.CharField(max_length=250)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    company = models.ForeignKey(Company, on_delete=models.PROTECT, null=True)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.description
@@ -65,10 +68,11 @@ class Products(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=250)
     price = models.IntegerField()
-    is_available = models.CharField(max_length=2, choices=YES_NO_CHOICES, default="Si")
+    is_available = models.BooleanField(default=True)
     photo = CloudinaryField('image')
     category = models.ForeignKey(ProductCategories, on_delete=models.CASCADE)
     id_company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True, null=True)
 
     def __str__(self):
         return self.name
@@ -91,6 +95,7 @@ class AddressSaved(models.Model):
     reference = models.CharField(max_length=100, null=True, blank=True, default='')
     location = models.CharField(max_length=100, null=True, blank=True, default='')
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    is_active = models.BooleanField(default=True, null=True)
 
 
 class State(models.Model):
@@ -109,6 +114,14 @@ class Order(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     payment_method = models.ForeignKey(PaymentMethod, on_delete=models.CASCADE)
     total = models.IntegerField()
+
+
+class Reviews(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    description = models.CharField(max_length=250)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    rating = models.FloatField()
 
 
 class MeliLinks(models.Model):

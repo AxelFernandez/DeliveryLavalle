@@ -1,9 +1,10 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from api.views.customer_api import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, OrderApi, \
+from api.views.customer_api import GoogleView, ClientApi, CompanyApi, CompanyDetailApi, ProductApi, AddressApi, \
+    OrderApi, \
     CompanyCategories, ProductCategoriesByCompany, AddressDelete, MethodApi, MethodDeliveryApi, OrderById, MeliLinkApi, \
-    FirebaseTokenApi
+    FirebaseTokenApi, Rating, Review
 
 urlpatterns = [
     path('google', GoogleView.as_view(), name='google'),
@@ -22,5 +23,7 @@ urlpatterns = [
     path('firebase_token', FirebaseTokenApi.as_view(), name='firebase-token'),
     path('company_category', CompanyCategories.as_view(), name='comapny-category-api'),
     path('product_category', ProductCategoriesByCompany.as_view(), name='comapny-category-api'),
+    path('rating', Rating.as_view(), name='comapny-category-api'),
+    path('reviews', Review.as_view(), name='view-reviews'),
 
 ]

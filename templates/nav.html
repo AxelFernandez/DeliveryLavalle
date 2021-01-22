@@ -20,7 +20,7 @@
 
     <ul class="navbar-nav ml-auto">
         {% get_company user as company %}
-        {%if company.available_now == 'SI'%}
+        {%if company.available_now == 'SI' or company.available_now == 'True' %}
             <a href="{% url 'update-available-company' pk=company.id redirect=request.resolver_match.url_name%}" style="max-width:240px" class="btn btn-success" >Estas Abierto a Ordenes</a>
         {%else%}
             <a href="{% url 'update-available-company' pk=company.id redirect=request.resolver_match.url_name %}" style="max-width:240px" class="btn btn-danger">Has Cerrado</a>

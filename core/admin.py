@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.models import Company, Order, Products, PaymentMethod, DetailOrder, Client, State, PaymentService, \
-    AddressSaved, FirebaseToken
+    AddressSaved, FirebaseToken, ProductCategories, Reviews, MeliLinks
 
 admin.site.register(Company)
 admin.site.register(Order)
@@ -13,5 +13,8 @@ admin.site.register(DetailOrder)
 admin.site.register(Client)
 admin.site.register(PaymentService)
 admin.site.register(FirebaseToken)
+admin.site.register(ProductCategories)
+admin.site.register(Reviews)
+admin.site.register(MeliLinks)
 
 # Register your models here.

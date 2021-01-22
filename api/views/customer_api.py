@@ -1,5 +1,6 @@
 import ast
 
+from django.db.models import Avg
 from django.shortcuts import render
 
 # Create your views here.
@@ -8,6 +9,7 @@ from django.contrib.auth.hashers import make_password
 from django.utils import formats, timezone
 from django.utils.datetime_safe import datetime
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.utils import json
 from rest_framework.views import APIView
@@ -17,7 +19,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken
+    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken, Reviews
+from core.views.OrdersViews import send_notification_to_seller
 
 
 class ClientApi(APIView):
@@ -145,13 +148,14 @@ class CompanyApi(APIView):
 
         for company in company_list:
             methods = []
-            if company.available_now == "SI":
+            if company.available_now:
                 for method in company.payment_method.all():
                     methods.append(method.description)
                 for delivery_method in company.delivery_method.all():
                     methods.append(delivery_method.description)
                 company_response = {
                     'methods': methods,
+                    'rating': company.average_rating,
                     'id': company.pk,
                     'name': company.name,
                     'phone': company.phone,
@@ -193,6 +197,7 @@ class CompanyDetailApi(APIView):
             'id': company.pk,
             'name': company.name,
             'description': company.description,
+            'rating': company.average_rating,
             'address': company.address,
             'phone': company.phone,
             'photo': company.photo.url,
@@ -208,14 +213,14 @@ class ProductApi(APIView):
         comapny_id = request.data.get('companyId')
         categoty = request.data.get('category')
         if categoty is None:
-            products = Products.objects.filter(id_company=comapny_id)
+            products = Products.objects.filter(id_company=comapny_id, is_active=True)
         else:
-            category_object = ProductCategories.objects.get(description= categoty)
-            products = Products.objects.filter(id_company=comapny_id,category= category_object)
+            category_object = ProductCategories.objects.get(description=categoty)
+            products = Products.objects.filter(id_company=comapny_id, category=category_object, is_active=True)
         products_array = []
         for product in products:
             # TODO: Please, Refactor me ASAP!
-            if product.is_available == "SI":
+            if product.is_available:
                 item = {
                     'id': product.pk,
                     'name': product.name,
@@ -232,7 +237,9 @@ class AddressDelete(APIView):
 
     def post(self, request):
         id = request.data.get("id")
-        AddressSaved.objects.get(pk=id).delete()
+        address = AddressSaved.objects.get(pk=id)
+        address.is_active = False
+        address.save()
         return Response(id)
 
 
@@ -244,16 +251,17 @@ class AddressApi(APIView):
         addresses = AddressSaved.objects.filter(client=client)
         address_array = []
         for address in addresses:
-            item = {
-                'id': address.pk,
-                'street': address.street,
-                'number': address.number,
-                'district': address.district,
-                'floor': address.floor,
-                'reference': address.reference,
-                'location': address.location,
-            }
-            address_array.append(item)
+            if address.is_active:
+                item = {
+                    'id': address.pk,
+                    'street': address.street,
+                    'number': address.number,
+                    'district': address.district,
+                    'floor': address.floor,
+                    'reference': address.reference,
+                    'location': address.location,
+                }
+                address_array.append(item)
         return Response(address_array)
 
     def post(self, request):
@@ -271,6 +279,7 @@ class AddressApi(APIView):
         address.reference = reference
         address.location = location
         address.client = Client.objects.get(user=self.request.user)
+        address.isActive = True
         address.save()
         return Response({
             'addressId': address.pk
@@ -323,8 +332,7 @@ class OrderApi(APIView):
         client = Client.objects.get(user=self.request.user)
         company = Company.objects.get(pk=company)
 
-        # TODO: I feel shame, Refactor This Pliiiis!!
-        if company.available_now == "NO":
+        if not company.available_now:
             return Response({'state': "Cancelado",
                              'responseCode': 400})
 
@@ -351,6 +359,9 @@ class OrderApi(APIView):
                     'state': order.state.description,
                     'responseCode': 200
                     }
+        title = "Hay un nuevo pedido Pendiente"
+        text = "{} esta esperando a que lo confirmes".format(client.user.first_name)
+        send_notification_to_seller(order, text, title)
         return Response(response)
 
     def get(self, request):
@@ -499,17 +510,78 @@ class MeliLinkApi(APIView):
         )
 
 
+class Review(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        company = request.query_params.get('company')
+        reviews = Reviews.objects.filter(company=company)
+        response = []
+        for review in reviews:
+            item = {
+                'userName': "{} {}".format(review.user.first_name, review.user.last_name),
+                'rating': review.rating,
+                'description': review.description,
+            }
+            response.append(item)
+        return Response(response)
+
+
+class Rating(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        order_id = request.query_params.get('order')
+        try:
+            order = Order.objects.get(pk=order_id)
+            review = Reviews.objects.get(order=order)
+            return Response({
+                'description': review.description,
+                'rating': review.rating
+            })
+        except Reviews.DoesNotExist:
+            return Response({
+                'rating': -1
+            })
+
+    def post(self, request, *args, **kwargs):
+        order_id = request.data.get("order")
+        rating = request.data.get("rating")
+        description = request.data.get("description")
+        order = Order.objects.get(pk=order_id)
+        try:
+            review = Reviews()
+            review.order = order
+            review.description = description
+            review.rating = rating
+            review.company = order.id_company
+            review.user = request.user
+            review.save()
+            get_average_from_company(order.id_company)
+            return Response(review.pk)
+        except:
+            raise ValidationError()
+
+
 class FirebaseTokenApi(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        token = request.data
-        user = User.objects.get(email = self.request.user.email)
+        token = request.data.get("token")
+        is_seller = request.data.get("isSeller")
+        user = User.objects.get(email=request.user.email)
         tokens = FirebaseToken.objects.filter(token=token)
         if len(tokens) == 0:
             firebase_token = FirebaseToken()
             firebase_token.user = user
             firebase_token.token = token
+            firebase_token.is_seller = is_seller
             firebase_token.save()
         return Response({"done": True})
 
+
+def get_average_from_company(company):
+    avg = Reviews.objects.filter(company=company).aggregate(Avg('rating'))
+    rating = avg.get("rating__avg")
+    company.average_rating = round(rating, 1)
+    company.save()

@@ -90,7 +90,8 @@ def send_notification_to_customers(order, text, title):
     tokens = FirebaseToken.objects.filter(user=order.client.user)
     tokens_array = []
     for token in tokens:
-        tokens_array.append(token.token)
+        if not token.is_seller:
+            tokens_array.append(token.token)
 
     payload = {"Authorization": "key="+get_env_variable('FIREBASE_TOKEN'),
                "Content-Type": "application/json"
@@ -103,6 +104,25 @@ def send_notification_to_customers(order, text, title):
         }.__str__().replace('\'', '"')
     r = requests.post('https://fcm.googleapis.com/fcm/send', data=data, headers = payload)
     r.text
+
+
+def send_notification_to_seller(order, text, title):
+    tokens = FirebaseToken.objects.filter(user=order.client.user)
+    tokens_array = []
+    for token in tokens:
+        if token.is_seller:
+            tokens_array.append(token.token)
+
+    payload = {"Authorization": "key="+get_env_variable('FIREBASE_TOKEN'),
+               "Content-Type": "application/json"
+               }
+    data = {"registration_ids": tokens_array,
+            "notification": {
+            "title": title,
+            "body": text
+          }
+        }.__str__().replace('\'', '"')
+    requests.post('https://fcm.googleapis.com/fcm/send', data=data, headers = payload)
 
 def get_next_state_str(order):
     pk_to_search = order.state.id + 1
@@ -125,5 +145,8 @@ def cancel_order(request, pk):
     order = Order.objects.get(pk=pk)
     order.state = State.objects.get(pk=6)
     order.save()
+    title = "El Vendedor ha cancelado tu orden"
+    text = "Para mas informacion revisa tu orden en Pedidos"
+    send_notification_to_customers(order,text,title)
     return HttpResponseRedirect(reverse('orders'))
 
