@@ -19,7 +19,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken, Reviews
+    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken, Reviews, PaymentService
+from core.views.Companyviews import get_company
 from core.views.OrdersViews import send_notification_to_seller
 
 
@@ -47,7 +48,9 @@ class ClientApi(APIView):
 
         phone = request.data.get("phone")
         if id is None or phone is None:
-            return Response({'message': 'Not enought arguments Id {}, first Name is {}, last name is {}, phone is {}'.format(id, phone)}, status=400)
+            return Response({
+                'message': 'Not enought arguments Id {}, first Name is {}, last name is {}, phone is {}'.format(
+                    id, phone)}, status=400)
         client = Client.objects.get(pk=id)
         client.phone = phone
         client.save()
@@ -118,6 +121,7 @@ class MethodApi(APIView):
         }
         return Response(company_response)
 
+
 class MethodDeliveryApi(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -131,7 +135,6 @@ class MethodDeliveryApi(APIView):
             'methods': methods,
         }
         return Response(company_response)
-
 
 
 class CompanyApi(APIView):
@@ -232,6 +235,7 @@ class ProductApi(APIView):
                 products_array.append(item)
         return Response(products_array)
 
+
 class AddressDelete(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -285,6 +289,7 @@ class AddressApi(APIView):
             'addressId': address.pk
         })
 
+
 class CompanyCategories(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -300,13 +305,14 @@ class CompanyCategories(APIView):
 
         return Response(category_array)
 
+
 class ProductCategoriesByCompany(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         company_id = request.data
         company = Company.objects.get(pk=company_id)
-        categories = ProductCategories.objects.filter(company = company)
+        categories = ProductCategories.objects.filter(company=company)
         category_array = []
         for category in categories:
             item = {
@@ -315,6 +321,7 @@ class ProductCategoriesByCompany(APIView):
             category_array.append(item)
 
         return Response(category_array)
+
 
 class OrderApi(APIView):
     permission_classes = (IsAuthenticated,)
@@ -326,7 +333,7 @@ class OrderApi(APIView):
         retry_in_local_request = request.data.get("retryInLocal")
         total = request.data.get("total")
         items = request.data.get("items")
-        if  payment_method is None \
+        if payment_method is None \
                 or total is None or items is None:
             return Response({'message': 'Some Atribute is not Found'}, status=400)
         client = Client.objects.get(user=self.request.user)
@@ -431,7 +438,6 @@ class OrderApi(APIView):
 class OrderById(APIView):
     permission_classes = (IsAuthenticated,)
 
-
     def post(self, request):
         id_order = request.data
         order = Order.objects.get(pk=id_order)
@@ -488,14 +494,13 @@ class OrderById(APIView):
         return Response(item)
 
 
-
 class MeliLinkApi(APIView):
     permission_classes = (IsAuthenticated,)
 
-    def post(self,request):
+    def post(self, request):
         order_id = request.data
         try:
-           meli_link = MeliLinks.objects.get(order= order_id)
+            meli_link = MeliLinks.objects.get(order=order_id)
         except:
             return Response(
                 {

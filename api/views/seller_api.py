@@ -13,7 +13,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from core import models
 from core.models import Company, CompanyCategory, PaymentMethod, DeliveryMethod, Order, State, DetailOrder, Products, \
-    ProductCategories, MeliLinks
+    ProductCategories, MeliLinks, PaymentService
+from core.views.Companyviews import get_company
 from core.views.OrdersViews import get_next_state, cancel_order, send_notification_to_customers
 
 
@@ -163,7 +164,7 @@ class MeliLinkSeller(APIView):
         link = request.data.get("link")
         try:
             order = Order.objects.get(pk=order_id)
-            meli_link = MeliLinks.objects.get(order = order)
+            meli_link = MeliLinks.objects.get(order=order)
         except:
             meli_link = MeliLinks()
         try:
@@ -174,7 +175,9 @@ class MeliLinkSeller(APIView):
             body = "Entra a la app y buscalo en mis ordenes"
             send_notification_to_customers(order, body, title)
         except:
-            raise Exception("An error was found in the Meli Link Seller when is saved orderid: {} , Link: {}".format(order_id,link))
+            raise Exception(
+                "An error was found in the Meli Link Seller when is saved orderid: {} , Link: {}".format(order_id,
+                                                                                                         link))
         return Response(meli_link.pk)
 
 
@@ -476,3 +479,34 @@ def format_orders(orders):
     for order in orders:
         response.append(format_order_separate(order))
     return response
+
+
+class InvoiceApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        company = get_company(request.user)
+        invoices = PaymentService.objects.filter(company=company)
+        array_result = []
+        for invoice in invoices:
+            response = {
+                'period': invoice.period,
+                'mount': invoice.mount,
+                'status': invoice.payment_status,
+                'dateCreated': invoice.payment_date,
+                'datePayed': invoice.transaction_date,
+            }
+            array_result.append(response)
+        return Response(array_result)
+
+
+class InvoicePendingApi(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        company = get_company(request.user)
+        invoices = PaymentService.objects.filter(company=company, payment_status='Pendiente')
+        if len(invoices) == 0:
+            return Response(False)
+        else:
+            return Response(True)

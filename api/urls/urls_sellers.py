@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from api.views.customer_api import FirebaseTokenApi, CompanyCategories, Review, MeliLinkApi
 from api.views.seller_api import GoogleViewSeller, CreateCompany, GetOrdersPending, GetOrdersInProgress, \
     GetOrdersClosed, GetOrdersById, SetOrdersInNewState, CancelOrder, ProductsCategory, ProductCategoryDelete, Product, \
-    ProductDelete, AccountDebit, MeliLinkSeller
+    ProductDelete, AccountDebit, MeliLinkSeller, InvoiceApi, InvoicePendingApi
 
 urlpatterns = [
     path('google', GoogleViewSeller.as_view(), name='google'),
@@ -26,5 +26,7 @@ urlpatterns = [
     path('reviews', Review.as_view(), name='view-reviews'),
     path('sendMeliLink', MeliLinkSeller.as_view(), name='meli-link-seller'),
     path('getMeliLink', MeliLinkApi.as_view(), name='meli-link-customer'),
+    path('invoices', InvoiceApi.as_view(), name='invoices'),
+    path('hadPendingInvoices', InvoicePendingApi.as_view(), name='invoices-pending'),
 
 ]

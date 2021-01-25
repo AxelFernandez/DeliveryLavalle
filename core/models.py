@@ -146,6 +146,9 @@ class PaymentService(models.Model):
     description = models.CharField(max_length=45)
     period = models.CharField(max_length=45)
 
+    def __str__(self):
+        return "{} {}".format(self.period, self.company.name)
+
 
 class MeLiTransaction(models.Model):
     preference_id = models.CharField(max_length=100)
