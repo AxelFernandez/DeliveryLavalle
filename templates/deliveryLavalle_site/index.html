@@ -50,14 +50,7 @@
                 <li><a href="#team">Equipo</a></li>
                 <li><a href="#pricing">Precio</a></li>
                 <li><a href="#faq">Preguntas Frecuentes</a></li>
-                {% if request.user.is_authenticated %}
-                    <li class="get-started"><a href="{% url 'orders' %}">Bienvenido {{company.name}}</a></li>
-                    <li class="get-started"><a href="{% url 'logout' %}">Cerrar Sesion</a></li>
 
-                {%else%}
-
-                    <li class="get-started"><a href="{% url 'social:begin' 'google-oauth2' %}">Iniciar Sesion</a></li>
-                {%endif%}
             </ul>
         </nav><!-- .nav-menu -->
 
@@ -85,25 +78,6 @@
 </section><!-- End Hero -->
 
 <main id="main">
-
-    <!-- ======= Clients Section ======= -->
-    <section id="clients" class="clients clients">
-        <div class="container" >
-            <div class="section-title" data-aos="fade-up">
-                    <h2>Ya esta Disponible la pre-inscripcion de Vendedores</h2>
-                    <p>
-                        Si sos comerciante podés pre-inscribirte para comenzar a recibir informacion
-                    </p>
-            </div>
-        <nav class="nav-menu d-none d-lg-block row justify-content-md-center">
-            <ul>
-                <li class="get-started"><a href="https://forms.gle/cmaBtUUhsR4hBkVW7">Inscribite Aquí</a></li>
-            </ul>
-        </nav><!-- .nav-menu -->
-
-            </div>
-        </div>
-    </section><!-- End Clients Section -->
 
     <!-- ======= About Us Section ======= -->
     <section id="about" class="about">
@@ -277,7 +251,7 @@
                             <li>Podés empezar ya, y sin tarjeta</li>
                         </ul>
                         <div class="btn-wrap">
-                            <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn-buy">Registrate con Google</a>
+                            <a href="https://play.google.com/store/apps/developer?id=Axel+Fernandez" class="btn-buy">Descarga la App</a>
                         </div>
                     </div>
                 </div>
@@ -354,7 +328,7 @@
                 <div class="col-lg-7">
                     <p>
                         La plataforma lleva una cuenta por cada venta que realices, y entre el 1 y 10 de cada mes,
-                        podras pagar mediante una integracion a Mercado Pago con cualquier metodo de pago de Argentina.
+                        podras pagar mediante Mercado Pago con cualquier metodo de pago de Argentina.
                         Esto incluye Tarjetas de Debito, Credito, o incluso efectivo en Rapipago o Pago Facil
                     </p>
                 </div>

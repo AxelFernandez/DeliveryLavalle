@@ -73,13 +73,29 @@
         "model": "core.companycategory",
         "pk": 1,
         "fields": {
-            "description": "Comida",
-            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/pizza%20(2).png?alt=media"
+            "description": "Restaurantes",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/restaurant.png?alt=media"
         }
     },
     {
         "model": "core.companycategory",
         "pk": 2,
+        "fields": {
+            "description": "Cafeterias",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/cafe.png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 3,
+        "fields": {
+            "description": "Bebidas",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/drinks.png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 4,
         "fields": {
             "description": "Indumentaria",
             "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/vestir.png?alt=media"
@@ -87,10 +103,26 @@
     },
     {
         "model": "core.companycategory",
-        "pk": 3,
+        "pk": 5,
         "fields": {
-            "description": "Beauty",
+            "description": "Cosmeticos",
             "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/productos-cosmeticos.png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 6,
+        "fields": {
+            "description": "Mercados",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/market.png?alt=media"
+        }
+    },
+    {
+        "model": "core.companycategory",
+        "pk": 7,
+        "fields": {
+            "description": "Tiendas",
+            "photo": "https://firebasestorage.googleapis.com/v0/b/deliverylavalle.appspot.com/o/shop.png?alt=media"
         }
     }
 ]
