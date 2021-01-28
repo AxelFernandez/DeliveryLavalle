@@ -151,22 +151,22 @@ class CompanyApi(APIView):
 
         for company in company_list:
             methods = []
-            if company.available_now:
-                for method in company.payment_method.all():
-                    methods.append(method.description)
-                for delivery_method in company.delivery_method.all():
-                    methods.append(delivery_method.description)
-                company_response = {
-                    'methods': methods,
-                    'rating': company.average_rating,
-                    'id': company.pk,
-                    'name': company.name,
-                    'phone': company.phone,
-                    'description': company.description,
-                    'photo': company.photo.url,
-                    'category': company.category.description,
-                }
-                company_array.append(company_response)
+            for method in company.payment_method.all():
+                methods.append(method.description)
+            for delivery_method in company.delivery_method.all():
+                methods.append(delivery_method.description)
+            company_response = {
+                'methods': methods,
+                'rating': company.average_rating,
+                'id': company.pk,
+                'isOpen': company.available_now,
+                'name': company.name,
+                'phone': company.phone,
+                'description': company.description,
+                'photo': company.photo.url,
+                'category': company.category.description,
+            }
+            company_array.append(company_response)
         return Response(company_array)
 
     def find_company_near(self, lat, long, description=None):
@@ -222,7 +222,6 @@ class ProductApi(APIView):
             products = Products.objects.filter(id_company=comapny_id, category=category_object, is_active=True)
         products_array = []
         for product in products:
-            # TODO: Please, Refactor me ASAP!
             if product.is_available:
                 item = {
                     'id': product.pk,

@@ -499,6 +499,19 @@ class InvoiceApi(APIView):
             array_result.append(response)
         return Response(array_result)
 
+class CompanyAvailability(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        company = get_company(request.user)
+        return Response(company.available_now)
+
+    def post(self, request):
+        availability = request.data
+        company = get_company(request.user)
+        company.available_now = availability
+        company.save()
+        return Response(company.available_now)
 
 class InvoicePendingApi(APIView):
     permission_classes = (IsAuthenticated,)
