@@ -1,4 +1,5 @@
 import ast
+import requests
 
 from django.db.models import Avg
 from django.shortcuts import render
@@ -19,7 +20,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
 from core.models import Client, Company, Products, Order, State, AddressSaved, PaymentMethod, DetailOrder, \
-    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken, Reviews, PaymentService
+    CompanyCategory, ProductCategories, MeliLinks, FirebaseToken, Reviews, PaymentService, GoogleIdUsers
 from core.views.Companyviews import get_company
 from core.views.OrdersViews import send_notification_to_seller
 
@@ -33,14 +34,7 @@ class ClientApi(APIView):
         if client_id is None:
             return Response({'message': 'Must specify an Client id'})
         client = Client.objects.get(pk=client_id)
-        content = {'clientid': client.pk,
-                   'email': client.user.email,
-                   'givenName': client.user.first_name,
-                   'familyName': client.user.last_name,
-                   'photo': client.photo,
-                   'phone': client.phone,
-                   'username': client.user.username,
-                   }
+        content = format_client(client)
         return Response(content)
 
     def post(self, request):
@@ -54,14 +48,7 @@ class ClientApi(APIView):
         client = Client.objects.get(pk=id)
         client.phone = phone
         client.save()
-        content = {'clientid': client.pk,
-                   'email': client.user.email,
-                   'givenName': client.user.first_name,
-                   'familyName': client.user.last_name,
-                   'photo': client.photo,
-                   'phone': client.phone,
-                   'username': client.user.username,
-                   }
+        content = format_client(client)
         return Response(content)
 
 
@@ -73,25 +60,37 @@ class GoogleView(APIView):
         # create user if not exist
         is_new = False
         soft_account = False
+        url = "https://oauth2.googleapis.com/tokeninfo?id_token={}".format(request.data)
+        request = requests.get(url)
+        response = json.loads(request.text)
+        google_internal_id = response.get('sub')
+        if google_internal_id is None:
+            Response('Invalid Token', 400)
         try:
-            user = User.objects.get(email=request.data.get('email'))
-        except User.DoesNotExist:
+            user = GoogleIdUsers.objects.get(sub_google_id=google_internal_id).user
+        except GoogleIdUsers.DoesNotExist:
+
             user = User()
-            user.username = request.data.get('email')
+            user.username = response.get('name')
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = request.data.get('email').split("@")[0]
-            user.first_name = request.data.get('givenName')
-            user.last_name = request.data.get('familyName')
+            user.email = response.get('email')
+            user.first_name = response.get('given_name')
+            user.last_name = response.get('family_name')
             is_new = True
             user.save()
+
+            google_sub = GoogleIdUsers()
+            google_sub.sub_google_id = google_internal_id
+            google_sub.user = user
+            google_sub.save()
         try:
             client = Client.objects.get(user=user)
         except Client.DoesNotExist:
             client = Client()
             client.user = user
-            client.photo = request.data.get('photo')
-            client.phone = request.data.get('phone')
+            client.photo = response.get('picture')
+            client.phone = response.get('phone')
 
             if client.photo is None or client.phone is None:
                 soft_account = True
@@ -102,7 +101,8 @@ class GoogleView(APIView):
                     "clientId": client.pk,
                     "username": user.username,
                     "access_token": str(token.access_token),
-                    "refresh_token": str(token)
+                    "refresh_token": str(token),
+                    "user": format_client(client)
                     }
         return Response(response)
 
@@ -200,6 +200,7 @@ class CompanyDetailApi(APIView):
             'id': company.pk,
             'name': company.name,
             'description': company.description,
+            'isOpen': company.available_now,
             'rating': company.average_rating,
             'address': company.address,
             'phone': company.phone,
@@ -589,3 +590,14 @@ def get_average_from_company(company):
     rating = avg.get("rating__avg")
     company.average_rating = round(rating, 1)
     company.save()
+
+
+def format_client(client):
+    return {'clientid': client.pk,
+            'email': client.user.email,
+            'givenName': client.user.first_name,
+            'familyName': client.user.last_name,
+            'photo': client.photo,
+            'phone': client.phone,
+            'username': client.user.username,
+            }

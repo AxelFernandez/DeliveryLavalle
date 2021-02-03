@@ -160,3 +160,7 @@ class MeLiTransaction(models.Model):
     creation_date = models.DateTimeField(auto_now_add=True)
     payment_service = models.ForeignKey(PaymentService, on_delete=models.CASCADE)
 
+
+class GoogleIdUsers(models.Model):
+    sub_google_id = models.CharField(max_length=1024)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
