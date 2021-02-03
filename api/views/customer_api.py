@@ -593,7 +593,7 @@ def get_average_from_company(company):
 
 
 def format_client(client):
-    return {'clientid': client.pk,
+    return {'clientId': client.pk,
             'email': client.user.email,
             'givenName': client.user.first_name,
             'familyName': client.user.last_name,
