@@ -1,5 +1,7 @@
 import ast
 import urllib
+import requests
+import json
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.hashers import make_password
@@ -11,9 +13,10 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from api.views.customer_api import format_client
 from core import models
 from core.models import Company, CompanyCategory, PaymentMethod, DeliveryMethod, Order, State, DetailOrder, Products, \
-    ProductCategories, MeliLinks, PaymentService
+    ProductCategories, MeliLinks, PaymentService, GoogleIdUsers
 from core.views.Companyviews import get_company
 from core.views.OrdersViews import get_next_state, cancel_order, send_notification_to_customers
 
@@ -26,30 +29,51 @@ class GoogleViewSeller(APIView):
         # create user if not exist
         is_new = False
         soft_account = True
+        url = "https://oauth2.googleapis.com/tokeninfo?id_token={}".format(request.data)
+        request = requests.get(url)
+        response = json.loads(request.text)
+        google_internal_id = response.get('sub')
+        if google_internal_id is None:
+            Response('Invalid Token', 400)
         try:
-            user = User.objects.get(email=request.data.get('email'))
-        except User.DoesNotExist:
+            user = GoogleIdUsers.objects.get(sub_google_id=google_internal_id).user
+        except GoogleIdUsers.DoesNotExist:
+
             user = User()
-            user.username = request.data.get('email').split("@")[0]
+            user.username = response.get('name')
             # provider random default password
             user.password = make_password(BaseUserManager().make_random_password())
-            user.email = request.data.get('email')
-            user.first_name = request.data.get('givenName')
-            user.last_name = request.data.get('familyName')
+            user.email = response.get('email')
+            user.first_name = response.get('given_name')
+            user.last_name = response.get('family_name')
             is_new = True
             user.save()
+
+            google_sub = GoogleIdUsers()
+            google_sub.sub_google_id = google_internal_id
+            google_sub.user = user
+            google_sub.save()
         try:
             company = Company.objects.get(id_user=user)
         except Company.DoesNotExist:
             soft_account = False
 
         token = RefreshToken.for_user(user)  # generate token without username & password
+
+        user_formated = {
+                'email': user.email,
+                'givenName': user.first_name,
+                'familyName': user.last_name,
+                'photo': response.get("picture"),
+                'username': user.username,
+                }
         response = {"is_new": is_new,
                     "completeRegistry": soft_account,
                     "username": user.username,
                     "userId": user.pk,
                     "access_token": str(token.access_token),
-                    "refresh_token": str(token)
+                    "refresh_token": str(token),
+                    "user": user_formated
                     }
         return Response(response)
 
@@ -499,6 +523,7 @@ class InvoiceApi(APIView):
             array_result.append(response)
         return Response(array_result)
 
+
 class CompanyAvailability(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -512,6 +537,7 @@ class CompanyAvailability(APIView):
         company.available_now = availability
         company.save()
         return Response(company.available_now)
+
 
 class InvoicePendingApi(APIView):
     permission_classes = (IsAuthenticated,)
