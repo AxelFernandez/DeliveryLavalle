@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
+import sentry_sdk
 
 from utils.env import get_env_variable
 
@@ -41,6 +42,13 @@ DEBUG = True
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.herokuapp.com',
                  'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar',
                  'localhost', '161.35.104.138']
+sentry_sdk.init(
+    "https://8079f04551d2492fa5fdfa07f9470216@o519309.ingest.sentry.io/5629425",
+    send_default_pii=True,
+    traces_sample_rate=1.0,
+    environment="QA"
+
+)
 
 JWT_AUTH = {
     # how long the original token is valid for
@@ -116,16 +124,7 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'deliveryLavallepg',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
+
 DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(DB_FROM_ENV)
 

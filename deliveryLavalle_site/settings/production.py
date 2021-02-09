@@ -46,7 +46,8 @@ ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.her
 sentry_sdk.init(
     "https://8079f04551d2492fa5fdfa07f9470216@o519309.ingest.sentry.io/5629425",
     send_default_pii=True,
-    traces_sample_rate=1.0
+    traces_sample_rate=1.0,
+    environment="production"
 
 )
 
