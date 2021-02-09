@@ -118,7 +118,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
+WSGI_APPLICATION = 'deliveryLavalle_site.wsgi_qa.application'
 
 
 # Database
