@@ -73,7 +73,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap4',
     'cloudinary',
-    'whitenoise.runserver_nostatic'
+    'whitenoise.runserver_nostatic',
     'core',
 
 ]
