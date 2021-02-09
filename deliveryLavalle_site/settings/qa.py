@@ -124,19 +124,8 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'deliveryLavallepg',
-        'USER': 'name',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-    }
-}
-DB_FROM_ENV = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(DB_FROM_ENV)
 
+DATABASES = {'default': dj_database_url.config()}
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
