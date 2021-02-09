@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import datetime
 import os
+import sentry_sdk
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
@@ -41,6 +42,13 @@ DEBUG = False
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.herokuapp.com',
                  'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar',
                  'localhost', '161.35.104.138']
+
+sentry_sdk.init(
+    "https://8079f04551d2492fa5fdfa07f9470216@o519309.ingest.sentry.io/5629425",
+    send_default_pii=True,
+    traces_sample_rate=1.0
+
+)
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(weeks=5),
@@ -121,7 +129,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'deliveryLavalle_site.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -141,8 +148,8 @@ DATABASES = {
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static/'),
-    )
+    os.path.join(BASE_DIR, 'static/'),
+)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -162,7 +169,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -176,9 +182,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 LOGIN_URL = '/auth/login/google-oauth2/'
 
 LOGIN_REDIRECT_URL = '/company'
 LOGOUT_REDIRECT_URL = '/'
-

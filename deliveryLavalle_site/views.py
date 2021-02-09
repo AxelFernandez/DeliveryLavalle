@@ -5,6 +5,8 @@ from django.template.defaultfilters import register
 
 from core.models import Company, Client, Order, Products
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
 
 def home(request):
     context = {}

@@ -22,6 +22,7 @@ from core import urls as core_urls
 from api.urls import urls_customer as api_urls
 from api.urls import urls_sellers as api_urls_seller
 from deliveryLavalle_site import views
+from deliveryLavalle_site.views import trigger_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +33,6 @@ urlpatterns = [
     path('', include(core_urls)),
     path('api/', include(api_urls)),
     path('sellers/', include(api_urls_seller)),
+    path('sentry-debug/', trigger_error),
 
 ]
