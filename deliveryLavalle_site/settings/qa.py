@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'bootstrap4',
     'cloudinary',
+    'whitenoise.runserver_nostatic'
     'core',
 
 ]
@@ -96,6 +97,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware'
+
 ]
 
 ROOT_URLCONF = 'deliveryLavalle_site.urls'
@@ -131,6 +134,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'static/'),
     )
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
