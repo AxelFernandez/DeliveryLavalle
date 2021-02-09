@@ -76,7 +76,11 @@ class GoogleView(APIView):
             user.password = make_password(BaseUserManager().make_random_password())
             user.email = response.get('email')
             user.first_name = response.get('given_name')
-            user.last_name = response.get('family_name')
+            if response.get('family_name') is None:
+                user.last_name = ""
+            else:
+                user.last_name = response.get('family_name')
+
             is_new = True
             user.save()
 
