@@ -53,6 +53,7 @@ class ClientApi(APIView):
 
 
 class GoogleView(APIView):
+    # TODO: Refactor this for a common Login
 
     # Send a Body {"token": TOKEN_HERE}
     def post(self, request):
