@@ -129,11 +129,9 @@ WSGI_APPLICATION = 'deliveryLavalle_site.wsgi_qa.application'
 
 DATABASES = {'default': dj_database_url.config()}
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static/'),
-    )
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Password validation
