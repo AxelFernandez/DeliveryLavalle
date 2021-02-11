@@ -356,7 +356,7 @@ class Product(APIView):
         products = Products.objects.filter(id_company=company, is_active=True)
         products_array = []
         for product in products:
-            if product.is_active and product.is_available:
+            if product.is_active or product.is_available:
                 item = {
                     'id': product.pk,
                     'name': product.name,

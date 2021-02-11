@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import datetime
 import os
-import sentry_sdk
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import dj_database_url
@@ -42,14 +41,11 @@ DEBUG = False
 ALLOWED_HOSTS = ['delivery-lavalle.herokuapp.com', 'delivery-lavalle-sandbox.herokuapp.com',
                  'deliverylavalle.com.ar', 'www.deliverylavalle.com.ar',
                  'localhost', '161.35.104.138']
-
-sentry_sdk.init(
-    "https://8079f04551d2492fa5fdfa07f9470216@o519309.ingest.sentry.io/5629425",
-    send_default_pii=True,
-    traces_sample_rate=1.0,
-    environment="production"
-
-)
+BUGSNAG = {
+    'api_key': '8b913dc1db8482ecd3ec2a3a86d4f22f',
+    'project_root': PROJECT_DIR,
+    'release_stage': 'production'
+}
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(weeks=5),
@@ -106,6 +102,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'bugsnag.django.middleware.BugsnagMiddleware',
 ]
 
 ROOT_URLCONF = 'deliveryLavalle_site.urls'
