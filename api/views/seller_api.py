@@ -316,8 +316,8 @@ class ProductCategoryDelete(APIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        description = request.data.get('description')
-        category = ProductCategories.objects.get(description=description)
+        id = request.data.get('id')
+        category = ProductCategories.objects.get(pk=id)
         count_product = Products.objects.filter(category=category, is_active=True).count()
         if count_product != 0:
             return Response('', 400)
@@ -446,6 +446,7 @@ def format_category(categories):
     for category in categories:
         products = Products.objects.filter(category=category, is_active=True).count()
         item = {
+            'id': category.pk,
             'description': category.description,
             'quantity': products
         }
