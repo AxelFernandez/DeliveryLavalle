@@ -33,6 +33,5 @@ urlpatterns = [
     path('', include(core_urls)),
     path('api/', include(api_urls)),
     path('sellers/', include(api_urls_seller)),
-    path('sentry-debug/', trigger_error),
 
 ]
