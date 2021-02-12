@@ -317,7 +317,7 @@ class ProductCategoriesByCompany(APIView):
     def post(self, request):
         company_id = request.data
         company = Company.objects.get(pk=company_id)
-        categories = ProductCategories.objects.filter(company=company)
+        categories = ProductCategories.objects.filter(company=company, is_active=True)
         category_array = []
         for category in categories:
             item = {
