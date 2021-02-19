@@ -280,7 +280,11 @@ class AddressApi(APIView):
         floor = request.data.get("floor")
         reference = request.data.get("reference")
         location = request.data.get("location")
-        address = AddressSaved()
+        id = request.data.get("id")
+        if id is None:
+            address = AddressSaved()
+        else:
+            address = AddressSaved.objects.get(pk=id)
         address.street = street
         address.number = number
         address.district = district
@@ -580,14 +584,22 @@ class FirebaseTokenApi(APIView):
         token = request.data.get("token")
         is_seller = request.data.get("isSeller")
         user = User.objects.get(email=request.user.email)
-        tokens = FirebaseToken.objects.filter(token=token)
-        if len(tokens) == 0:
+        tokens = FirebaseToken.objects.filter(token=token).count()
+        if tokens == 0:
             firebase_token = FirebaseToken()
             firebase_token.user = user
             firebase_token.token = token
             firebase_token.is_seller = is_seller
             firebase_token.save()
         return Response({"done": True})
+
+    def put(self, request):
+        try:
+            token = request.data.get("token")
+            FirebaseToken.objects.filter(token=token).delete()
+            return Response({"done": True})
+        except Exception as e:
+            return Response(e)
 
 
 def get_average_from_company(company):

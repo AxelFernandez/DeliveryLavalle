@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 from api.views.customer_api import format_client
 from core import models
 from core.models import Company, CompanyCategory, PaymentMethod, DeliveryMethod, Order, State, DetailOrder, Products, \
@@ -363,22 +364,22 @@ class Product(APIView):
                     'description': product.description,
                     'price': product.price,
                     'photo': product.photo.url,
-                    'category': product.category.description,
+                    'category': product.category.pk,
                     'availableNow': product.is_available
                 }
                 products_array.append(item)
         return Response(products_array)
 
     def post(self, request):
-        name = request.data.get("name")
-        description = request.data.get("description")
+        name = request.data.get("name").__str__()
+        description = request.data.get("description").__str__()
+        category_description = request.data.get("category").__str__()
         price = request.data.get("price")
         available_now = request.data.get("availableNow")
         photo = request.data.get("image")
-        category_description = request.data.get("category")
         type = request.data.get("type")
         company = Company.objects.get(id_user=request.user)
-        category_selected = ProductCategories.objects.get(description=category_description)
+        category_selected = ProductCategories.objects.get(pk=category_description)
         if available_now.__str__() == "true" or available_now is True:
             available_now = True
         else:
@@ -389,8 +390,8 @@ class Product(APIView):
             id_product = request.data.get("id").__str__()
             product = Products.objects.get(pk=id_product)
         try:
-            product.name = name
-            product.description = description
+            product.name = requests.utils.unquote(name)
+            product.description = requests.utils.unquote(description)
             product.category = category_selected
             if photo is not None:
                 product.photo = photo
@@ -399,8 +400,8 @@ class Product(APIView):
             product.id_company = company
             product.is_active = True
             product.save()
-        except Exception():
-            return Response({"Error Saving This"}, 400)
+        except Exception as e:
+            raise e
         return Response(product.pk)
 
 
@@ -444,15 +445,19 @@ class AccountDebit(APIView):
 def format_category(categories):
     arrayCategory = []
     for category in categories:
-        products = Products.objects.filter(category=category, is_active=True).count()
-        item = {
-            'id': category.pk,
-            'description': category.description,
-            'quantity': products
-        }
+        item = format_category_separate(category)
         arrayCategory.append(item)
     return arrayCategory
 
+
+def format_category_separate(category):
+    products = Products.objects.filter(category=category, is_active=True).count()
+    item = {
+        'id': category.pk,
+        'description': category.description,
+        'quantity': products
+    }
+    return item
 
 def format_order_separate(order):
     details = DetailOrder.objects.filter(order=order)
