@@ -299,11 +299,10 @@ class ProductsCategory(APIView):
 
     def post(self, request):
         description = request.data.get('description')
-        type = request.data.get('type')
+        id = request.data.get('id')
         company = Company.objects.get(id_user=request.user)
-        if type == "edit":
-            description_old = request.data.get('descriptionOld')
-            category = ProductCategories.objects.get(description=description_old)
+        if id is not None:
+            category = ProductCategories.objects.get(pk=id)
         else:
             category = ProductCategories()
         category.company = company
@@ -374,28 +373,27 @@ class Product(APIView):
         name = request.data.get("name").__str__()
         description = request.data.get("description").__str__()
         category_description = request.data.get("category").__str__()
-        price = request.data.get("price")
+        price = request.data.get("price").__str__()
         available_now = request.data.get("availableNow")
         photo = request.data.get("image")
-        type = request.data.get("type")
+        id = request.data.get("id")
         company = Company.objects.get(id_user=request.user)
         category_selected = ProductCategories.objects.get(pk=category_description)
         if available_now.__str__() == "true" or available_now is True:
             available_now = True
         else:
             available_now = False
-        if type.__str__() == "add":
+        if id is None:
             product = Products()
         else:
-            id_product = request.data.get("id").__str__()
-            product = Products.objects.get(pk=id_product)
+            product = Products.objects.get(pk=id.__str__())
         try:
-            product.name = requests.utils.unquote(name)
-            product.description = requests.utils.unquote(description)
+            product.name = urllib.parse.unquote_plus(name)
+            product.description = urllib.parse.unquote_plus(description)
             product.category = category_selected
             if photo is not None:
                 product.photo = photo
-            product.price = int(price.__str__())
+            product.price = int(price)
             product.is_available = available_now
             product.id_company = company
             product.is_active = True
