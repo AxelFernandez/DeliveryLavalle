@@ -13,7 +13,6 @@ from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
 from api.views.customer_api import format_client
 from core import models
 from core.models import Company, CompanyCategory, PaymentMethod, DeliveryMethod, Order, State, DetailOrder, Products, \
@@ -35,7 +34,7 @@ class GoogleViewSeller(APIView):
         response = json.loads(request.text)
         google_internal_id = response.get('sub')
         if google_internal_id is None:
-            Response('Invalid Token', 400)
+            return Response('Invalid Token', 400)
         try:
             user = GoogleIdUsers.objects.get(sub_google_id=google_internal_id).user
         except GoogleIdUsers.DoesNotExist:
@@ -65,12 +64,12 @@ class GoogleViewSeller(APIView):
         token = RefreshToken.for_user(user)  # generate token without username & password
 
         user_formated = {
-                'email': user.email,
-                'givenName': user.first_name,
-                'familyName': user.last_name,
-                'photo': response.get("picture"),
-                'username': user.username,
-                }
+            'email': user.email,
+            'givenName': user.first_name,
+            'familyName': user.last_name,
+            'photo': response.get("picture"),
+            'username': user.username,
+        }
         response = {"is_new": is_new,
                     "completeRegistry": soft_account,
                     "username": user.username,
@@ -456,6 +455,7 @@ def format_category_separate(category):
         'quantity': products
     }
     return item
+
 
 def format_order_separate(order):
     details = DetailOrder.objects.filter(order=order)
