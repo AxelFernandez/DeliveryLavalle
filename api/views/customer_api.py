@@ -66,7 +66,7 @@ class GoogleView(APIView):
         response = json.loads(request.text)
         google_internal_id = response.get('sub')
         if google_internal_id is None:
-            Response('Invalid Token', 400)
+            return Response('Invalid Token', 400)
         try:
             user = GoogleIdUsers.objects.get(sub_google_id=google_internal_id).user
         except GoogleIdUsers.DoesNotExist:
